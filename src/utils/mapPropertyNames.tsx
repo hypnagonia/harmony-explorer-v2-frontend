@@ -1,7 +1,11 @@
-import { Address, Timestamp, BlockHash } from '../components/ui'
-import { Clone } from 'grommet-icons'
+import { Address, Timestamp, BlockHash, BlockNumber } from '../components/ui'
+import { Clone, FormPreviousLink, FormNextLink } from 'grommet-icons'
+import {
+  Link
+} from 'react-router-dom'
+
 import React from 'react'
-import {Block} from '../types'
+import { Block } from '../types'
 
 // todo rename block specific helpers
 
@@ -57,7 +61,17 @@ export const blockPropertySort: Record<string, number> = {
 
 export const blockPropertyDisplayValues: any = {
   // @ts-ignore
-  'number': (value: any) => <Address address={value} />,
+  'number': (value: any) => <>
+    <BlockNumber number={value} />
+    &nbsp;
+    {value > 0 && <Link to={`/block/${+value - 1}`}>
+      <FormPreviousLink size="small" color="accent-2" />
+    </Link>}
+    <Link to={`/block/${+value + 1}`}>
+      <FormNextLink size="small" color="accent-2" />
+    </Link>
+  </>,
+  'miner': (value: any) => <Address address={value} />,
   'hash': (value: any) => <BlockHash hash={value} />,
   'parentHash': (value: any) => <BlockHash hash={value} />,
   'timestamp': (value: any) => <Timestamp timestamp={value} />,
@@ -87,7 +101,7 @@ export const blockDisplayValues = (block: Block, key: string, value: any) => {
   }
 
   return <div>
-    {displayValue !=='0' && displayValue && <><Clone size="small" color="brand" />&nbsp;</>}
+    {displayValue !== '0' && displayValue && <><Clone size="small" color="brand" />&nbsp;</>}
     {displayValue || '—'}
   </div>
 }

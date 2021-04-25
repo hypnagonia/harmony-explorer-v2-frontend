@@ -1,14 +1,64 @@
-import React from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
+import { transport } from 'src/api/explorer'
+import { Search } from 'grommet-icons'
+import { Box, Grommet, TextInput } from 'grommet'
+import { grommet } from 'grommet/themes'
+import { useHistory } from 'react-router-dom'
 
-import { Search } from 'grommet-icons';
-import { Box, Grommet, TextInput } from 'grommet';
-import { grommet } from 'grommet/themes';
+let timeoutID: any | null = null
 
 export const SearchInput = () => {
+  const [value, setValue] = useState('')
+  const [readySubmit, setReadySubmit] = useState(false)
+
+  const history = useHistory()
+
+  useEffect(() => {
+    const exec = async () => {
+      // todo separate validation
+      const v = value.split(' ').join('')
+
+
+      setReadySubmit(false)
+      if ('' + +v === v && +v > 0) {
+        // is block number
+        history.push(`/block/${v}`)
+        return
+      }
+
+      if (v.length !== 66 && v.length !== 42) {
+        return
+      }
+      if (v.length === 66 && v[0] === '0' && v[1] === 'x') {
+        // is block hash
+        console.log('is hash')
+        const block = await transport('getBlockByHash', [0, v])
+        if (block) {
+          history.push(`/block/${v}`)
+          // setValue('')
+          return
+        }
+      }
+
+    }
+
+    exec()
+  }, [readySubmit])
+
+  const onChange = useCallback(event => {
+    const { value: newValue } = event.target
+    setValue(newValue)
+    clearTimeout(timeoutID)
+    timeoutID = setTimeout(() => setReadySubmit(true), 500)
+  }, [])
 
   return (
-      <Box width="100%"  pad={{left: 'medium', right: 'medium', top:'medium'}}>
-        <TextInput icon={<Search color="brand"/>} placeholder="Search by Address / Transaction Hash / Block / Token" />
-      </Box>
+    <Box width="100%" pad={{ left: 'medium', right: 'medium', top: 'medium' }}>
+      <TextInput
+        value={value}
+        onChange={onChange}
+        icon={<Search color="brand" />}
+        placeholder="Search by Address / Transaction Hash / Block / Token" />
+    </Box>
   )
 }
