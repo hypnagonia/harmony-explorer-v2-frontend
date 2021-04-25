@@ -1,7 +1,9 @@
-import { Address, Timestamp } from '../components/ui'
+import { Address, Timestamp, BlockHash } from '../components/ui'
 import { Clone } from 'grommet-icons'
 import React from 'react'
 import {Block} from '../types'
+
+// todo rename block specific helpers
 
 export const blockPropertyDisplayNames: Record<string, string> = {
   'number': 'Height',
@@ -56,6 +58,8 @@ export const blockPropertySort: Record<string, number> = {
 export const blockPropertyDisplayValues: any = {
   // @ts-ignore
   'number': (value: any) => <Address address={value} />,
+  'hash': (value: any) => <BlockHash hash={value} />,
+  'parentHash': (value: any) => <BlockHash hash={value} />,
   'timestamp': (value: any) => <Timestamp timestamp={value} />,
   'gasUsed': (value: any, block: Block) => <span>{value} ({+value / +block.gasLimit}%) </span>
 }

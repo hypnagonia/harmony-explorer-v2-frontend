@@ -19,8 +19,7 @@ import { grommet } from 'grommet/themes'
 
 import { Blank, CircleQuestion } from 'grommet-icons'
 
-
-export const columns = [
+const columns = [
   {
     property: 'key',
     // header: (e:any) <Text>Block</Text>,
