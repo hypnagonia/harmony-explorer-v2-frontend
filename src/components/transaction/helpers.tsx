@@ -12,7 +12,7 @@ export const transactionPropertyDisplayNames: Record<string, string> = {
   hash: 'Ethereum Hash',
   hash_harmony: 'Hash',
   value: 'Value',
-  blockNumber: 'Block number',
+  blockNumber: 'Block Number',
   from: 'From',
   gas: 'Gas',
   gasPrice: 'Gas Price',
@@ -115,7 +115,10 @@ export const transactionDisplayValues = (transaction: RPCTransactionHarmony, key
   }
 
   return <div>
-    {![0, '0','—'].includes(displayValue) && <><Clone size="small" color="brand" />&nbsp;</>}
+    {
+      !['shardID'].includes(key) &&
+      ![0, '0','—'].includes(displayValue) &&
+      <><Clone size="small" color="brand" />&nbsp;</>}
     {displayValue}
   </div>
 }

@@ -19,7 +19,6 @@ import { CircleQuestion, CaretDownFill, CaretUpFill } from 'grommet-icons'
 const columns = [
   {
     property: 'key',
-    // header: (e:any) <Text>Block</Text>,
     render: (e: any) => <div>
       <Tip
         dropProps={{ align: { left: 'right' } }}

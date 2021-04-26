@@ -14,6 +14,8 @@ export const BlockPage = () => {
   const [block, setBlock] = useState<Block | null>(null)
 
   useEffect(() => {
+    let cleanupFunction = false
+
     const exec = async () => {
       let block
       if ('' + +id === id) {
@@ -21,10 +23,15 @@ export const BlockPage = () => {
       } else {
         block = await transport('getBlockByHash', [0, id])
       }
-      setBlock(block as Block)
+      if (!cleanupFunction) {
+        setBlock(block as Block)
+      }
     }
     exec()
 
+    return () => {
+      cleanupFunction = true
+    }
   }, [id])
 
   if (!block) {

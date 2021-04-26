@@ -1,8 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import { transport } from 'src/api/explorer'
 import { Search } from 'grommet-icons'
-import { Box, Grommet, TextInput } from 'grommet'
-import { grommet } from 'grommet/themes'
+import { Box, TextInput } from 'grommet'
 import { useHistory } from 'react-router-dom'
 
 let timeoutID: any | null = null
@@ -31,14 +30,23 @@ export const SearchInput = () => {
       if (v.length === 66 && v[0] === '0' && v[1] === 'x') {
         // is block hash
         try {
-          await transport('getBlockByHash', [0, v])
-          history.push(`/block/${v}`)
-        } catch (e) {
-        }
-        // eth or harmony hash
-        try {
-          await transport('getTransactionByField', [0, 'hash', v])
-          history.push(`/tx/${v}`)
+          await Promise.all([
+            transport('getBlockByHash', [0, v])
+              .then((res) => {
+                if (!res) {
+                  return
+                }
+                history.push(`/block/${v}`)
+              }).catch(),
+            transport('getTransactionByField', [0, 'hash', v])
+              .then((res) => {
+                if (!res) {
+                  return
+                }
+                history.push(`/tx/${v}`)
+              }).catch()
+          ])
+          return
         } catch (e) {
         }
       }

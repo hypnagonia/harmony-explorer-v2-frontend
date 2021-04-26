@@ -1,7 +1,8 @@
 import { useONEExchangeRate } from '../../hooks/useONEExchangeRate'
+import { Text } from 'grommet'
 
 // @ts-ignore
-export const ONEValue = ({value}) => {
+export const ONEValue = ({ value }) => {
   const { lastPrice } = useONEExchangeRate()
 
   const bi = BigInt(value) / BigInt(10 ** 14)
@@ -12,9 +13,17 @@ export const ONEValue = ({value}) => {
       {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-        currency: 'USD' }
+        currency: 'USD'
+      }
     )
   }
 
-  return <>{v.toString()}&nbsp;{USDValue ? <>(${USDValue})</> : null}</>
+  return (
+    <>
+      <Text weight={v > 0 ? 'bold' : 'normal'} size="small">{v.toString()} ONE</Text>&nbsp;
+      {
+        USDValue ? <>(${USDValue})</> : null
+      }
+    </>
+  )
 }

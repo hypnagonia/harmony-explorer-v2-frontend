@@ -132,8 +132,8 @@ export const blockDisplayValues = (block: Block, key: string, value: any) => {
 
   return <div>
     {
-      !['transactions', 'staking_transactions'].includes(key) &&
-      !['0x', '0',0].includes(displayValue) &&
+      !['transactions', 'stakingTransactions', 'uncles', 'nonce'].includes(key) &&
+      !['0x', '0',0, null].includes(displayValue) &&
       <><Clone size="small" color="brand" />&nbsp;</>
     }
     {displayValue || '—'}
