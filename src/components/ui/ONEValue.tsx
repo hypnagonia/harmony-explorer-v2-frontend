@@ -7,7 +7,7 @@ export const ONEValue = ({value}) => {
   const bi = BigInt(value) / BigInt(10 ** 14)
   const v = parseInt(bi.toString()) / 10000
   let USDValue
-  if (lastPrice) {
+  if (lastPrice && v > 0) {
     USDValue = (v * +lastPrice).toLocaleString('en-US',
       {
         minimumFractionDigits: 2,
