@@ -28,7 +28,7 @@ export const SearchInput = () => {
         return
       }
       if (v.length === 66 && v[0] === '0' && v[1] === 'x') {
-        // is block hash
+        // is block hash or tx hash
         try {
           await Promise.all([
             transport('getBlockByHash', [0, v])
@@ -59,7 +59,7 @@ export const SearchInput = () => {
     const { value: newValue } = event.target
     setValue(newValue)
     clearTimeout(timeoutID)
-    timeoutID = setTimeout(() => setReadySubmit(true), 500)
+    timeoutID = setTimeout(() => setReadySubmit(true), 200)
   }, [])
 
   return (
