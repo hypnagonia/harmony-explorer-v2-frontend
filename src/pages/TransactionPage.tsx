@@ -5,8 +5,8 @@ import {
   useParams
 } from 'react-router-dom'
 import { transport } from 'src/api/explorer'
-import { useEffect, useState } from 'react'
-
+import React, { useEffect, useState } from 'react'
+import { Box, Tabs, Tab, Text } from 'grommet'
 
 export const TransactionPage = () => {
   // hash or number
@@ -30,5 +30,19 @@ export const TransactionPage = () => {
     return null
   }
 
-  return <TransactionDetails transaction={tx} />
+  return (
+    <>
+      <Tabs alignControls="start">
+        <Tab title={<Text size="small">Transaction Details</Text>}>
+          <TransactionDetails transaction={tx} />
+        </Tab>
+        <Tab title={<Text size="small">Internal Transactions</Text>}>
+          WIP
+        </Tab>
+        <Tab title={<Text size="small">Logs</Text>}>
+          WIP
+        </Tab>
+      </Tabs>
+    </>
+  )
 }

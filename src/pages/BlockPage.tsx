@@ -4,7 +4,7 @@ import {
   useParams
 } from 'react-router-dom'
 import { transport } from 'src/api/explorer'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 
 export const BlockPage = () => {
@@ -38,5 +38,12 @@ export const BlockPage = () => {
     return null
   }
 
-  return <BlockDetails block={block} />
+  return (
+    <>
+      <div>
+        <b>Block</b> #{block.number}
+      </div>
+      <BlockDetails block={block} />
+    </>
+  )
 }

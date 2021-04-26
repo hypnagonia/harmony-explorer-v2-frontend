@@ -63,9 +63,6 @@ export const BlockDetails: FunctionComponent<BlockDetailsProps> = ({ block }) =>
 
   return <>
     <Box flex align="start" justify="start">
-      <div>
-        <b>Block</b> #{block.number}
-      </div>
       <DataTable
         style={{ width: '100%' }}
         columns={columns}

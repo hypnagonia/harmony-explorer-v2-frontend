@@ -67,9 +67,6 @@ export const TransactionDetails: FunctionComponent<TransactionDetailsProps> = ({
 
   return <>
     <Box flex align="start" justify="start">
-      <div>
-        <b>Transaction Details</b>
-      </div>
       <DataTable
         style={{ width: '100%' }}
         columns={columns}
