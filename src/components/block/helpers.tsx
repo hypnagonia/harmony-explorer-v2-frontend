@@ -72,7 +72,7 @@ export const blockPropertySort: Record<string, number> = {
   'parentHash': 500,
   'receiptsRoot': 500,
   'sha3Uncles': 500,
-  'size': 500,
+  'size': 700,
   'stateRoot': 500,
   'transactions': 980,
   'stakingTransactions': 970,

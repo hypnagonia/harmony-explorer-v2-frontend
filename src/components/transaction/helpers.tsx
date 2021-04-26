@@ -2,7 +2,7 @@ import { Block, RPCTransactionHarmony } from '../../types'
 import { Clone, FormNextLink, FormPreviousLink } from 'grommet-icons'
 import React from 'react'
 import { blockPropertyDisplayValues } from '../block/helpers'
-import { Address, BlockHash, BlockNumber, Timestamp, TransactionHash } from '../ui'
+import { Address, BlockHash, BlockNumber, Timestamp, TransactionHash, ONEValue } from '../ui'
 import { Link } from 'react-router-dom'
 
 export const todo = {}
@@ -75,6 +75,7 @@ export const transactionPropertyDisplayValues: any = {
   // @ts-ignore
   'blockNumber': (value: any) => <BlockNumber number={value} />,
   'from': (value: any) => <Address address={value} />,
+  'value': (value: any) => <ONEValue value={value} />,
   'to': (value: any) => <Address address={value} />,
   'hash': (value: any) => <TransactionHash hash={value} />,
   'hash_harmony': (value: any) => <TransactionHash hash={value} />,
