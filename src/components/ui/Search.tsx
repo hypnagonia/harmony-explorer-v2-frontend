@@ -18,7 +18,6 @@ export const SearchInput = () => {
       // todo separate validation
       const v = value.split(' ').join('')
 
-
       setReadySubmit(false)
       if ('' + +v === v && +v > 0) {
         // is block number
@@ -31,15 +30,18 @@ export const SearchInput = () => {
       }
       if (v.length === 66 && v[0] === '0' && v[1] === 'x') {
         // is block hash
-        console.log('is hash')
-        const block = await transport('getBlockByHash', [0, v])
-        if (block) {
+        try {
+          await transport('getBlockByHash', [0, v])
           history.push(`/block/${v}`)
-          // setValue('')
-          return
+        } catch (e) {
+        }
+        // eth or harmony hash
+        try {
+          await transport('getTransactionByField', [0, 'hash', v])
+          history.push(`/tx/${v}`)
+        } catch (e) {
         }
       }
-
     }
 
     exec()

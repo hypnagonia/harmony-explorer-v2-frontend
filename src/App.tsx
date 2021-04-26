@@ -1,14 +1,15 @@
 import React from 'react'
 import './index.css';
 import { Box, Button, Heading, Grommet } from 'grommet'
-import { Notification, Configure } from 'grommet-icons'
+import {  Configure } from 'grommet-icons'
 import { BlockPage } from 'src/pages/BlockPage'
+import {FiatPrice} from 'src/components/ui'
+import { TransactionPage } from 'src/pages/TransactionPage'
 import {SearchInput} from './components/ui/Search'
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
 } from "react-router-dom"
 
 const AppBar = (props: any) => (
@@ -52,7 +53,10 @@ function App() {
     <Grommet theme={theme} full>
       <Box fill>
         <AppBar>
-          <Heading level="5" margin="none">Harmony Block Explorer</Heading>
+          <Heading level="5" margin="none">
+            Harmony Block Explorer<br/>
+            <FiatPrice/>
+          </Heading>
           <Button icon={<Configure size="medium"/>} onClick={() => {
           }} />
         </AppBar>
@@ -67,6 +71,9 @@ function App() {
           <Route path="/block/:id">
             <BlockPage/>
           </Route>
+            <Route path="/tx/:id">
+              <TransactionPage/>
+            </Route>
 
         </Switch>
 

@@ -1,30 +1,33 @@
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, useState } from 'react'
 import { Block } from '../../types'
-import {blockPropertyDisplayNames, blockPropertySort, blockDisplayValues} from '../../utils/mapPropertyNames'
-
+import {
+  blockPropertyDisplayNames,
+  blockPropertySort,
+  blockPropertyDescriptions,
+  blockDisplayValues
+} from './helpers'
+import { TipContent } from 'src/components/ui'
 import {
   Box,
-  Grommet,
-  Table,
-  TableBody,
-  TableCell,
-  TableFooter,
-  TableHeader,
-  TableRow,
-  Text,
-  Meter,
-  DataTable
+  DataTable,
+  Tip,
+  Anchor
 } from 'grommet'
-import { grommet } from 'grommet/themes'
 
-import { Blank, CircleQuestion } from 'grommet-icons'
+import { CircleQuestion, CaretDownFill, CaretUpFill } from 'grommet-icons'
 
 const columns = [
   {
     property: 'key',
     // header: (e:any) <Text>Block</Text>,
     render: (e: any) => <div>
-      <CircleQuestion size="small" />
+      <Tip
+        dropProps={{ align: { left: 'right' } }}
+        content={<TipContent message={blockPropertyDescriptions[e.key]} />}
+        plain
+      >
+        <span><CircleQuestion size="small" /></span>
+      </Tip>
       &nbsp;{blockPropertyDisplayNames[e.key] || e.key}
     </div>,
     size: '1/3'
@@ -45,20 +48,24 @@ type tableEntry = {
 }
 
 export const BlockDetails: FunctionComponent<BlockDetailsProps> = ({ block }) => {
-  const keys = Object.keys(block)
-  const sortedKeys = keys.sort((a,b) => blockPropertySort[b] - blockPropertySort[a])
+  const [showDetails, setShowDetails] = useState(true)
 
-  const blockData = sortedKeys.reduce((arr, key) => {
+  const keys = Object.keys(block)
+  const sortedKeys = keys.sort((a, b) => blockPropertySort[b] - blockPropertySort[a])
+  // show 8 till gas used
+  const filteredKeys = sortedKeys.filter((k, i) => showDetails || i < 8)
+  const blockData = filteredKeys
+    .reduce((arr, key) => {
     // @ts-ignore
-    const value = blockDisplayValues( block, key, block[key])
-    arr.push({ key, value} as tableEntry)
+    const value = blockDisplayValues(block, key, block[key])
+    arr.push({ key, value } as tableEntry)
     return arr
   }, [] as tableEntry[])
 
   return <>
     <Box flex align="start" justify="start">
       <div>
-      <b>Block</b> #{block.number}
+        <b>Block</b> #{block.number}
       </div>
       <DataTable
         style={{ width: '100%' }}
@@ -76,6 +83,14 @@ export const BlockDetails: FunctionComponent<BlockDetailsProps> = ({ block }) =>
           }
         }}
       />
+      <Anchor onClick={() => setShowDetails(!showDetails)}>
+        {showDetails
+          ? <>Show less&nbsp;
+            <CaretUpFill size="small" /></>
+          : <>Show more&nbsp;
+          <CaretDownFill size="small" /></>
+        }
+      </Anchor>
     </Box>
   </>
 }

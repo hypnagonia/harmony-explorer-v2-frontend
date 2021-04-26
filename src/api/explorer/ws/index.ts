@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client'
 
-const socket = io('ws://localhost:3001', {transports: ['websocket']})
+const socket = io('https://ws.explorer-v2.hmny.io', {transports: ['websocket']})
 
 socket.connect()
 
