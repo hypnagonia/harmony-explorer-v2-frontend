@@ -1,9 +1,19 @@
 import React from 'react'
 import { Box, Text } from "grommet"
 import { Group, Medium, Twitter } from 'grommet-icons'
+import styled from 'styled-components';
 
 import { theme } from 'src/theme'
 import { TelegramIcon } from 'src/components/ui/icons'
+
+const IconAhchor = styled.a`
+  opacity: 0.9;
+  transition: 0.17s ease all;
+  
+  &:hover {
+    opacity: 1;
+  }
+`;
 
 export function AppFooter() {
   const { CoolGray } = theme?.global?.palette;
@@ -11,19 +21,19 @@ export function AppFooter() {
   return (
     <Box background="white" justify="center" align="center" pad="medium">
       <Box gap="xsmall">
-        <Box direction="row" width="320px" justify="center" gap="medium">
-          <a href="https://harmony.one/team" target="_blank" rel="noreferrer">
+        <Box direction="row" width="320px" justify="center" align="center" gap="medium">
+          <IconAhchor href="https://harmony.one/team" target="_blank" rel="noreferrer">
             <Group size="24px" color={CoolGray} style={{ cursor: 'pointer'}} />
-          </a>
-          <a href="https://medium.com/harmony-one" target="_blank" rel="noreferrer">
-            <Medium size="24px" color={CoolGray} style={{ cursor: 'pointer'}} />
-          </a>
-          <a href="https://twitter.com/harmonyprotocol" target="_blank" rel="noreferrer">
+          </IconAhchor>
+          <IconAhchor href="https://medium.com/harmony-one" target="_blank" rel="noreferrer">
+            <Medium size="23px" color={CoolGray} style={{ cursor: 'pointer'}} />
+          </IconAhchor>
+          <IconAhchor href="https://twitter.com/harmonyprotocol" target="_blank" rel="noreferrer">
             <Twitter size="24px" color={CoolGray} style={{ cursor: 'pointer'}} />
-          </a>
-          <a href="https://t.me/harmony_one" target="_blank" rel="noreferrer">
-            <TelegramIcon size="24px" color={CoolGray} />
-          </a>
+          </IconAhchor>
+          <IconAhchor href="https://t.me/harmony_one" target="_blank" rel="noreferrer">
+            <TelegramIcon size="22px" color={CoolGray} />
+          </IconAhchor>
         </Box>
         {/*<Box direction="row" justify="center" align="center" gap="xsmall">*/}
         {/*  <Anchor color="minorText" size="small" weight="normal" href="/">Terms of Use</Anchor>*/}
