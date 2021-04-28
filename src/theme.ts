@@ -35,6 +35,6 @@ export const theme = {
     }
   },
   control: {
-    background: 'red'
+    backgroundColor: 'white'
   }
 }

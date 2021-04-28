@@ -1,46 +1,26 @@
 import React from 'react'
 import './index.css'
-import { Box, Button, Heading, Grommet } from 'grommet'
-import { Configure } from 'grommet-icons'
+import { Box, Grommet } from 'grommet'
 import { BrowserRouter as Router } from 'react-router-dom'
 
 import { Routes } from 'src/Routes'
-import { FiatPrice } from 'src/components/ui'
+import { AppHeader } from 'src/components/appHeader'
 import { AppFooter } from 'src/components/appFooter'
 
-import { SearchInput } from './components/ui/Search'
+import { SearchInput, BaseContainer } from 'src/components/ui'
 import { theme } from './theme';
-
-const AppBar = (props: any) => (
-  <Box
-    tag="header"
-    direction="row"
-    align="center"
-    justify="between"
-    background="brand"
-    pad={{ left: 'medium', right: 'small', vertical: 'small' }}
-    elevation="medium"
-    style={{ zIndex: '1' }}
-    {...props}
-
-  />
-)
 
 function App() {
   return (
     <Router>
       <Grommet theme={theme} full>
-        <Box fill background="#dedede">
-          <AppBar>
-            <Heading level="5" margin="none">
-              Harmony Block Explorer<br />
-              <FiatPrice />
-            </Heading>
-            <Button icon={<Configure size="medium" />} onClick={() => {}} />
-          </AppBar>
-          <SearchInput />
-          <Box direction="column" flex overflow={{ horizontal: 'scroll' }} pad="medium">
-            <Routes />
+        <Box fill background="#f3f3f3" style={{ margin: 'auto' }}>
+          <AppHeader />
+          <Box fill align="center">
+            <BaseContainer>
+              <SearchInput />
+              <Routes />
+            </BaseContainer>
           </Box>
           <AppFooter />
         </Box>

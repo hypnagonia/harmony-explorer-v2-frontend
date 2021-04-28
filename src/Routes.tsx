@@ -1,5 +1,6 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
+import { BasePage } from 'src/components/ui';
 import { BlockPage } from 'src/pages/BlockPage'
 import { TransactionPage } from 'src/pages/TransactionPage'
 
@@ -9,7 +10,7 @@ export function Routes() {
     <>
       <Switch>
         <Route exact path="/">
-          <div>Main Page</div>
+          <BasePage>Main Page</BasePage>
         </Route>
 
         <Route path="/block/:id">

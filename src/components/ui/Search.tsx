@@ -63,11 +63,12 @@ export const SearchInput = () => {
   }, [])
 
   return (
-    <Box width="100%" pad={{ left: 'medium', right: 'medium', top: 'medium' }}>
+    <Box width="100%" pad={{ vertical: 'medium' }}>
       <TextInput
         value={value}
         onChange={onChange}
         icon={<Search color="brand" />}
+        style={{ backgroundColor: 'white' }}
         placeholder="Search by Address / Transaction Hash / Block / Token" />
     </Box>
   )
