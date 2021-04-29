@@ -1,5 +1,7 @@
 import { TransactionDetails } from 'src/components/transaction/TransactionDetails'
 import { Block, RPCStakingTransactionHarmony } from '../types'
+import { BasePage } from 'src/components/ui';
+
 import {
   RouteComponentProps,
   useParams
@@ -31,7 +33,7 @@ export const TransactionPage = () => {
   }
 
   return (
-    <>
+    <BasePage margin={{ top: 'medium' }}>
       <Tabs alignControls="start">
         <Tab title={<Text size="small">Transaction Details</Text>}>
           <TransactionDetails transaction={tx} />
@@ -43,6 +45,6 @@ export const TransactionPage = () => {
           WIP
         </Tab>
       </Tabs>
-    </>
+    </BasePage>
   )
 }
