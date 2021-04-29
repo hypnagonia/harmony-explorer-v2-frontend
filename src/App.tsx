@@ -14,15 +14,15 @@ function App() {
   return (
     <Router>
       <Grommet theme={theme} full>
-        <Box fill background="#f3f3f3" style={{ margin: 'auto' }}>
-          <AppHeader />
-          <Box fill align="center">
+        <Box background="#f3f3f3" style={{ margin: 'auto', minHeight: '100%' }}>
+          <AppHeader style={{ flex: '0 0 auto'}} />
+          <Box align="center" style={{ flex: '1 1 100%'}}>
             <BaseContainer>
               <SearchInput />
               <Routes />
             </BaseContainer>
           </Box>
-          <AppFooter />
+          <AppFooter style={{ flex: '0 0 auto'}} />
         </Box>
       </Grommet>
     </Router>

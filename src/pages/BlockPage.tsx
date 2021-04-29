@@ -4,7 +4,10 @@ import {
   useParams
 } from 'react-router-dom'
 import { transport } from 'src/api/explorer'
+import { BasePage } from 'src/components/ui';
+
 import React, { useEffect, useState } from 'react'
+import { Heading } from "grommet";
 
 
 export const BlockPage = () => {
@@ -40,10 +43,12 @@ export const BlockPage = () => {
 
   return (
     <>
-      <div>
-        <b>Block</b> #{block.number}
-      </div>
-      <BlockDetails block={block} />
+      <Heading size="xsmall">
+        Block <b>#{block.number}</b>
+      </Heading>
+      <BasePage>
+        <BlockDetails block={block} />
+      </BasePage>
     </>
   )
 }

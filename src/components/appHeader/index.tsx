@@ -2,6 +2,7 @@ import React from 'react'
 import { Box, Button, Heading } from "grommet"
 import { FiatPrice, BaseContainer } from 'src/components/ui'
 import { Configure } from "grommet-icons";
+import {CSSProperties} from "styled-components";
 
 const HeaderLine = (props: any) => (
   <Box
@@ -16,9 +17,9 @@ const HeaderLine = (props: any) => (
   />
 )
 
-export function AppHeader() {
+export function AppHeader(props: { style: CSSProperties }) {
   return (
-    <HeaderLine>
+    <HeaderLine {...props}>
       <BaseContainer
         direction="row"
         align="center"

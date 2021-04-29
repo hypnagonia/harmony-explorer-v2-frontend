@@ -5,7 +5,7 @@ import { theme } from 'src/theme';
 
 const sizes = {
   minWidth: '466px',
-  maxWidth: '1368px',
+  maxWidth: '1408px',
 };
 
 
@@ -13,7 +13,7 @@ export const BaseContainer = (props: any) => {
   const { style } = props;
 
   return (
-    <Box {...props} style={{ ...sizes, width: '100%', flex: '1 1 auto', ...style }} />
+    <Box pad={{ horizontal: '20px'}} {...props}  style={{ ...sizes, width: '100%', flex: '1 1 auto', ...style }} />
   )
 }
 
