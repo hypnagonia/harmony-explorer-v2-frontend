@@ -19,7 +19,8 @@ export const theme = {
       brand: palette.Purple,
       border: palette.LightGrey,
       majorText: palette.MidnightBlue,
-      minorText: palette.CoolGray
+      minorText: palette.CoolGray,
+      iconMain: palette.ElectricBlue,
     },
     palette,
     font: {

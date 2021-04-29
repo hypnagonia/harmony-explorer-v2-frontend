@@ -6,6 +6,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { Routes } from 'src/Routes'
 import { AppHeader } from 'src/components/appHeader'
 import { AppFooter } from 'src/components/appFooter'
+import { Metrics } from 'src/components/metrics'
 
 import { SearchInput, BaseContainer } from 'src/components/ui'
 import { theme } from './theme';
@@ -19,6 +20,7 @@ function App() {
           <Box align="center" style={{ flex: '1 1 100%'}}>
             <BaseContainer>
               <SearchInput />
+              <Metrics />
               <Routes />
             </BaseContainer>
           </Box>
