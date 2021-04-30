@@ -33,7 +33,7 @@ export const TransactionPage = () => {
   }
 
   return (
-    <BasePage margin={{ top: 'medium' }}>
+    <BasePage>
       <Tabs alignControls="start">
         <Tab title={<Text size="small">Transaction Details</Text>}>
           <TransactionDetails transaction={tx} />

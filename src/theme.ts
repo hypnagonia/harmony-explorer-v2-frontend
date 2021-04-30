@@ -21,6 +21,7 @@ export const theme = {
       majorText: palette.MidnightBlue,
       minorText: palette.CoolGray,
       iconMain: palette.ElectricBlue,
+      mintGreen: palette.MintGreen,
     },
     palette,
     font: {
@@ -35,7 +36,15 @@ export const theme = {
       textDecoration: 'none'
     }
   },
-  control: {
-    backgroundColor: 'white'
+  dataTable: {
+    body: {
+      extend: () => `
+        tr:first-child {
+          th, td {
+            border: none !important;
+          }
+        }
+      `
+    }
   }
 }

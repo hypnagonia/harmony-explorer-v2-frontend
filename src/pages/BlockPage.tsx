@@ -43,7 +43,7 @@ export const BlockPage = () => {
 
   return (
     <>
-      <Heading size="xsmall">
+      <Heading size="xsmall" margin={{ top: '0' }}>
         Block <b>#{block.number}</b>
       </Heading>
       <BasePage>
