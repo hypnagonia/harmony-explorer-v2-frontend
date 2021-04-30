@@ -4,6 +4,7 @@ export const palette = {
   CoolGray: '#758796',
   Purple: '#7127e9',
   ElectricBlue: '#00AEE9',
+  ElectricBlueLight: '#e8f3ff',
   MintGreen: '#69FABD',
   MidnightBlue: '#1B295E',
 }
@@ -21,11 +22,13 @@ export const theme = {
       majorText: palette.MidnightBlue,
       minorText: palette.CoolGray,
       iconMain: palette.ElectricBlue,
+      tableRow: palette.ElectricBlueLight,
       mintGreen: palette.MintGreen,
     },
     palette,
     font: {
-      family: 'Nunito',
+      // family: 'Nunito',
+      family: 'Fira Sans',
       size: '14px',
       height: '20px'
     }
@@ -38,10 +41,22 @@ export const theme = {
   },
   dataTable: {
     body: {
-      extend: () => `
+      extend: (props: any) => `
         tr:first-child {
           th, td {
             border: none !important;
+          }
+        }
+        
+        tr {
+          th, td {
+            padding: 16px 12px;
+          }
+        }
+        
+        tr:nth-child(even) {
+          th, td {
+             background-color: ${props.theme.global.colors.tableRow};
           }
         }
       `

@@ -62,7 +62,7 @@ export const BlockDetails: FunctionComponent<BlockDetailsProps> = ({ block }) =>
   }, [] as tableEntry[])
 
   return <>
-    <Box flex align="start" justify="start">
+    <Box flex align="start" justify="start" margin={{ top: '-46px' }} style={{ overflow: 'hidden' }}>
       <DataTable
         style={{ width: '100%' }}
         columns={columns}

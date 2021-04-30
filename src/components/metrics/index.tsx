@@ -1,11 +1,12 @@
 import React from 'react'
 import { Box, Text } from "grommet"
-import { FiatPrice, BasePage } from 'src/components/ui'
-import { formatNumber } from 'src/components/ui/utils';
-import { Ascend } from "grommet-icons";
-import styled from 'styled-components';
-import {theme} from "../../theme";
-import {useONEExchangeRate} from "../../hooks/useONEExchangeRate";
+import { BasePage } from 'src/components/ui'
+import { formatNumber } from 'src/components/ui/utils'
+import { LatencyIcon } from 'src/components/ui/icons'
+import { Transaction, LineChart, Cubes } from "grommet-icons"
+import styled from 'styled-components'
+import {theme} from "../../theme"
+import {useONEExchangeRate} from "../../hooks/useONEExchangeRate"
 
 export function Metrics() {
   const { LightGrey } = theme?.global?.palette;
@@ -42,12 +43,12 @@ function ONEPrice() {
   return (
     <Box direction="row" align="stretch">
       <Box pad={{ left: 'xsmall', right: 'small' }} justify="center" align="center">
-        <Ascend size="32px" color="brand" />
+        <LineChart size="32px" color="brand" />
       </Box>
       <Box align="start">
         <Text size="small" color="minorText">{'ONE PRICE'}</Text>
         <Box direction="row" gap="xsmall" align="baseline">
-          <Text size="small" weight="bold" >$ {formatNumber(lastPrice)}</Text>
+          <Text size="small" weight="bold">$ {formatNumber(lastPrice)}</Text>
           <Text size="11px" weight="bold" color={priceChangePercent > 0 ? '#2cb32c' : '#d23540'}>
             ({priceChangePercent > 0 ? '+' : ''}{formatNumber(priceChangePercent)}%)
           </Text>
@@ -63,7 +64,7 @@ function BlockCount() {
   return (
     <Box direction="row" align="stretch">
       <Box pad={{ left: 'xsmall', right: 'small' }} justify="center" align="center">
-        <Ascend size="32px" color="brand" />
+        <Transaction size="32px" color="brand" />
       </Box>
       <Box align="start">
         <Text size="small" color="minorText">{'TRANSACTIONS COUNT'}</Text>
@@ -79,10 +80,10 @@ function ShardCount() {
   return (
     <Box direction="row" align="stretch">
       <Box pad={{ left: 'xsmall', right: 'small' }} justify="center" align="center">
-        <Ascend size="32px" color="brand" />
+        <Cubes size="32px" color="brand" />
       </Box>
       <Box align="start">
-        <Text size="small" color="minorText">{'SHARDS'}</Text>
+        <Text size="small" color="minorText">{'SHARD COUNT'}</Text>
         <Text size="small" weight="bold" >{formatNumber(count)}</Text>
       </Box>
     </Box>
@@ -95,7 +96,7 @@ function BlockLatency() {
   return (
     <Box direction="row" align="stretch">
       <Box pad={{ left: 'xsmall', right: 'small' }} justify="center" align="center">
-        <Ascend size="32px" color="brand" />
+        <LatencyIcon size="30px" color="brand" />
       </Box>
       <Box align="start">
         <Text size="small" color="minorText">{'BLOCK LATENCY'}</Text>
