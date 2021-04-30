@@ -1,20 +1,20 @@
 export const palette = {
-  LightGrey: '#e7ecf7',
-  Grey: '#b1b1b1',
-  CoolGray: '#758796',
-  Purple: '#7127e9',
-  ElectricBlue: '#00AEE9',
-  ElectricBlueLight: '#e8f3ff',
-  MintGreen: '#69FABD',
-  MidnightBlue: '#1B295E',
-}
+  LightGrey: "#e7ecf7",
+  Grey: "#b1b1b1",
+  CoolGray: "#758796",
+  Purple: "#7127e9",
+  ElectricBlue: "#00AEE9",
+  ElectricBlueLight: "#e8f3ff",
+  MintGreen: "#69FABD",
+  MidnightBlue: "#1B295E",
+};
 
 export const theme = {
   global: {
     focus: {
       border: {
-        color: 'transparent'
-      }
+        color: "transparent",
+      },
     },
     colors: {
       brand: palette.Purple,
@@ -28,16 +28,16 @@ export const theme = {
     palette,
     font: {
       // family: 'Nunito',
-      family: 'Fira Sans',
-      size: '14px',
-      height: '20px'
-    }
+      family: "Fira Sans",
+      size: "14px",
+      height: "20px",
+    },
   },
   anchor: {
-    textDecoration: 'none',
+    textDecoration: "none",
     hover: {
-      textDecoration: 'none'
-    }
+      textDecoration: "none",
+    },
   },
   dataTable: {
     body: {
@@ -59,7 +59,7 @@ export const theme = {
              background-color: ${props.theme.global.colors.tableRow};
           }
         }
-      `
-    }
-  }
-}
+      `,
+    },
+  },
+};
