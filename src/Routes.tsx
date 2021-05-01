@@ -1,16 +1,20 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
-import { BasePage } from 'src/components/ui';
 import { BlockPage } from 'src/pages/BlockPage'
+import { MainPage } from 'src/pages/MainPage'
 import { TransactionPage } from 'src/pages/TransactionPage'
-
+import { AllBlocksPage } from 'src/pages/AllBlocksPage'
 
 export function Routes() {
   return (
     <>
       <Switch>
         <Route exact path="/">
-          <BasePage>Main Page</BasePage>
+          <MainPage />
+        </Route>
+
+        <Route exact path="/blocks">
+          <AllBlocksPage />
         </Route>
 
         <Route path="/block/:id">

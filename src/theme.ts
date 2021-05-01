@@ -39,18 +39,26 @@ export const theme = {
       textDecoration: "none",
     },
   },
+  button: {
+    // backgroundColor: "transparent",
+    color: "brand",
+    borderColor: 'brand'
+  },
   dataTable: {
     body: {
       extend: (props: any) => `
         tr:first-child {
           th, td {
-            border: none !important;
+            border: none;
           }
         }
         
         tr {
           th, td {
             padding: 16px 12px;
+          }
+          td:last-child {
+            text-align: right;
           }
         }
         

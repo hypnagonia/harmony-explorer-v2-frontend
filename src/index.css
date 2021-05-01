@@ -4,3 +4,12 @@ a {
     text-decoration: none;
     outline: 0;
 }
+
+.g-table-header thead tr th {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.g-table-header thead tr th:last-child {
+    text-align: right;
+}

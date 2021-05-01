@@ -68,7 +68,7 @@ export const SearchInput = () => {
         value={value}
         onChange={onChange}
         icon={<Search color="brand" />}
-        style={{ backgroundColor: 'white' }}
+        style={{ backgroundColor: 'white', fontWeight: 500 }}
         placeholder="Search by Address / Transaction Hash / Block / Token" />
     </Box>
   )
