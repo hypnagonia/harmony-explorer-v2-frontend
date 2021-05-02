@@ -26,8 +26,8 @@ export function PaginationNavigator(props: PaginationNavigator) {
     const newFilter = JSON.parse(JSON.stringify(filter)) as Filter;
     const innerFilter = newFilter.filters.find((i) => i.property === property);
     if (innerFilter) {
-      innerFilter.type = 'lte';
-      innerFilter.value = maxBlockNumber + limit
+      innerFilter.type = 'lt';
+      innerFilter.value = maxBlockNumber + limit + 1
     }
 
     onChange(newFilter);
