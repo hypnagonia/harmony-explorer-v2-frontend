@@ -1,8 +1,8 @@
-import React from 'react';
-import {Box, Text, Select } from "grommet";
+import React from "react";
+import { Box, Text, Select } from "grommet";
 import { Filter } from "src/types";
 import { FormPrevious, FormNext } from "grommet-icons";
-import {formatNumber} from "../utils";
+import { formatNumber } from "../utils";
 
 interface PaginationNavigator {
   filter: Filter;
@@ -18,37 +18,36 @@ export function PaginationNavigator(props: PaginationNavigator) {
 
   const onPrevClick = () => {
     const newFilter = JSON.parse(JSON.stringify(filter)) as Filter;
-    const innerFilter = newFilter.filters.find(i => i.property === property);
-    if(innerFilter) {
-      innerFilter.type = 'gt';
-      innerFilter.value = Math.max(+innerFilter.value - limit, 0);
-    };
+    const innerFilter = newFilter.filters.find((i) => i.property === property);
+    if (innerFilter) {
+      innerFilter.type = 'lt';
+      innerFilter.value = Math.min(+innerFilter.value + limit, totalElements);
+    }
 
     onChange(newFilter);
   };
 
   const onNextClick = () => {
     const newFilter = JSON.parse(JSON.stringify(filter)) as Filter;
-    const innerFilter = newFilter.filters.find(i => i.property === property);
-    if(innerFilter) {
-      innerFilter.type = 'gt';
-      innerFilter.value = Math.min(+innerFilter.value + limit, totalElements);
-    };
+    const innerFilter = newFilter.filters.find((i) => i.property === property);
+    if (innerFilter) {
+      innerFilter.type = 'lt';
+      innerFilter.value = Math.max(+innerFilter.value - limit, 0);
+    }
 
     onChange(newFilter);
   };
 
-
   return (
     <Box>
       <Pagination
-        currentPage={+(+value/limit).toFixed(0) + 1}
+        currentPage={+((totalElements - +value) / limit).toFixed(0) + 1}
         totalPages={+(Number(totalElements) / limit).toFixed(0)}
         onPrevPageClick={onPrevClick}
         onNextPageClick={onNextClick}
       />
     </Box>
-  )
+  );
 }
 interface PaginationProps {
   currentPage: number;
@@ -61,13 +60,13 @@ function Pagination(props: PaginationProps) {
   const { currentPage, totalPages, onPrevPageClick, onNextPageClick } = props;
   return (
     <Box direction="row" gap="small">
-      <FormPrevious onClick={onPrevPageClick} style={{ cursor: 'pointer' }} />
-      <Text style={{ fontWeight: 'bold' }}>{formatNumber(+currentPage)}</Text>
+      <FormPrevious onClick={onPrevPageClick} style={{ cursor: "pointer" }} />
+      <Text style={{ fontWeight: "bold" }}>{formatNumber(+currentPage)}</Text>
       <Text style={{ fontWeight: 300 }}>/</Text>
       <Text style={{ fontWeight: 300 }}>{formatNumber(+totalPages)}</Text>
-      <FormNext onClick={onNextPageClick} style={{ cursor: 'pointer' }}/>
+      <FormNext onClick={onNextPageClick} style={{ cursor: "pointer" }} />
     </Box>
-  )
+  );
 }
 
 interface ElementsPerPage {
@@ -76,7 +75,7 @@ interface ElementsPerPage {
   options?: number[];
 }
 
-const defaultOptions: string[] = ['10', '25', '50', '100'];
+const defaultOptions: string[] = ["10", "25", "50", "100"];
 
 export function PaginationRecordsPerPage(props: ElementsPerPage) {
   const { filter, options = defaultOptions, onChange } = props;
@@ -90,7 +89,7 @@ export function PaginationRecordsPerPage(props: ElementsPerPage) {
 
   return (
     <Box direction="row" gap="small" align="center">
-      <Box style={{ width: '95px' }}>
+      <Box style={{ width: "95px" }}>
         <Select
           options={options}
           value={limit.toString()}
@@ -99,6 +98,5 @@ export function PaginationRecordsPerPage(props: ElementsPerPage) {
       </Box>
       <Text size="small">records per page</Text>
     </Box>
-
-  )
+  );
 }

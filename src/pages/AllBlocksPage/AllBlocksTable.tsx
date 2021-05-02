@@ -66,9 +66,7 @@ function getColumns(props: any) {
           Shard Id
         </Text>
       ),
-      render: (data: Block) => (
-        <Text size="small">{0}</Text>
-      ),
+      render: (data: Block) => <Text size="small">{0}</Text>,
     },
     {
       property: "gasUsed",
@@ -78,7 +76,9 @@ function getColumns(props: any) {
         </Text>
       ),
       render: (data: Block) => (
-        <Text size="small">{formatNumber(+data.gasUsed)} / { formatNumber(+data.gasLimit)}</Text>
+        <Text size="small">
+          {formatNumber(+data.gasUsed)} / {formatNumber(+data.gasLimit)}
+        </Text>
       ),
     },
     {
@@ -88,9 +88,7 @@ function getColumns(props: any) {
           Size
         </Text>
       ),
-      render: (data: Block) => (
-        <Text size="small">{data.size}</Text>
-      ),
+      render: (data: Block) => <Text size="small">{data.size}</Text>,
     },
     {
       property: "transactions",
@@ -123,7 +121,7 @@ const initFilter: Filter = {
   limit: 10,
   orderBy: "number",
   orderDirection: "desc",
-  filters: [{ type: "gt", property: "number", value: 0 }],
+  filters: [{ type: "lt", property: "number", value: 100 }],
 };
 
 export function AllBlocksTable() {
@@ -132,6 +130,29 @@ export function AllBlocksTable() {
   const [filter, setFilter] = useState<Filter>(initFilter);
 
   const history = useHistory();
+
+  useEffect(() => {
+    const getCount = async () => {
+      try {
+        let res = (await transport("getCount", [0, "blocks"])) || ({} as any);
+        setCount(res.count as number);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getCount().then(() => {
+      const newFilter = JSON.parse(JSON.stringify(filter)) as Filter;
+      const innerFilter = newFilter.filters.find(
+        (i) => i.property === "number"
+      );
+      if (innerFilter && count) {
+        innerFilter.value = +count;
+      }
+
+      setFilter(newFilter);
+    });
+  }, []);
 
   useEffect(() => {
     const getBlocks = async () => {
@@ -144,18 +165,6 @@ export function AllBlocksTable() {
     };
     getBlocks();
   }, [filter]);
-
-  useEffect(() => {
-    const getCount = async () => {
-      try {
-        let res = (await transport("getCount", [0, "blocks"])) || ({} as any);
-        setCount(res.count as number);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getCount();
-  }, []);
 
   if (!blocks.length) {
     return (
@@ -172,7 +181,8 @@ export function AllBlocksTable() {
     <>
       <Box direction="row" justify="between" margin={{ bottom: "small" }}>
         <Text margin={{ left: "small" }}>
-          <b>{filter.limit}</b> blocks shown, from <b>#{beginValue}</b> to <b>#{endValue}</b>
+          <b>{filter.limit}</b> blocks shown, from <b>#{beginValue}</b> to{" "}
+          <b>#{endValue}</b>
         </Text>
         <PaginationNavigator
           onChange={setFilter}

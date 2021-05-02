@@ -1,12 +1,13 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Box, Text, DataChart } from "grommet";
-import { BasePage } from "src/components/ui";
+import {BasePage, reintervate} from "src/components/ui";
 import { formatNumber } from "src/components/ui/utils";
 import { LatencyIcon } from "src/components/ui/icons";
 import { Transaction, LineChart, Cubes } from "grommet-icons";
 import styled from "styled-components";
 import { theme } from "../../theme";
 import { useONEExchangeRate } from "../../hooks/useONEExchangeRate";
+import {transport} from "../../api/explorer/ws";
 
 export function Metrics() {
   const { LightGrey } = theme?.global?.palette;
@@ -24,7 +25,7 @@ export function Metrics() {
       >
         <ONEPrice />
         <Line horizontal />
-        <BlockCount />
+        <TransactionsCount />
       </Box>
       <Box
         justify="between"
@@ -88,8 +89,21 @@ function ONEPrice() {
   );
 }
 
-function BlockCount() {
-  const count = 142945;
+function TransactionsCount() {
+  const [count, setCount] = useState<string>('');
+
+  useEffect(() => {
+    const getCount = async () => {
+      try {
+        let res = (await transport("getCount", [0, "transactions"])) || ({} as any);
+        setCount(res.count as string);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    reintervate(getCount, 30000);
+
+  }, []);
 
   return (
     <Box direction="row" align="stretch">
@@ -105,7 +119,7 @@ function BlockCount() {
           {"TRANSACTIONS COUNT"}
         </Text>
         <Text size="small" weight="bold">
-          {formatNumber(count)}
+          {formatNumber(+count)}
         </Text>
       </Box>
     </Box>
