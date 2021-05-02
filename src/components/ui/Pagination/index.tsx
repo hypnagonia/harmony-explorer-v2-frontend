@@ -17,9 +17,10 @@ export function PaginationNavigator(props: PaginationNavigator) {
   const { filters, limit = 10 } = filter;
   const { value } = filters[0];
 
-  const minBlockNumber = blocks.reduce((a,b) =>
-    (a === -1 || a > +b.number) ? +b.number : a, -1)
-  const maxBlockNumber = blocks.reduce((a,b) => Math.max(a, +b.number), 0)
+  const blockNumbers = blocks.map(b => +b.number)
+  const minBlockNumber = blockNumbers.reduce((a,b) =>
+    (a === -1 || a > b) ? b : a, -1)
+  const maxBlockNumber = blockNumbers.reduce((a,b) => Math.max(a, b), 0)
 
   const onPrevClick = () => {
     const newFilter = JSON.parse(JSON.stringify(filter)) as Filter;
