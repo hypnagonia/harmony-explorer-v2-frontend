@@ -20,7 +20,6 @@ function App() {
           <Box align="center" style={{ flex: '1 1 100%'}}>
             <BaseContainer>
               <SearchInput />
-              <Metrics />
               <Routes />
             </BaseContainer>
           </Box>

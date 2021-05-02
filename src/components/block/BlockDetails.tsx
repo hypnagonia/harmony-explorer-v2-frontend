@@ -62,7 +62,7 @@ export const BlockDetails: FunctionComponent<BlockDetailsProps> = ({ block }) =>
   }, [] as tableEntry[])
 
   return <>
-    <Box flex align="start" justify="start" margin={{ top: '-46px' }} style={{ overflow: 'hidden' }}>
+    <Box flex align="center" justify="start" margin={{ top: '-46px' }} style={{ overflow: 'hidden' }}>
       <DataTable
         className={'g-table-body-last-col-right'}
         style={{ width: '100%' }}
@@ -80,7 +80,7 @@ export const BlockDetails: FunctionComponent<BlockDetailsProps> = ({ block }) =>
           }
         }}
       />
-      <Anchor onClick={() => setShowDetails(!showDetails)}>
+      <Anchor onClick={() => setShowDetails(!showDetails)} margin={{ top: "medium" }}>
         {showDetails
           ? <>Show less&nbsp;
             <CaretUpFill size="small" /></>

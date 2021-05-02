@@ -68,7 +68,7 @@ export function RelativeTimer(props: IRelativeTimer) {
   }
 
   return (
-    <Text size="small" style={{ minWidth: '125px' }} color="majorText">
+    <Text size="small" style={{ minWidth: '125px' }} color="minorText">
       {formattedValue}
     </Text>
   );

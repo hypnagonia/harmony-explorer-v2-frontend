@@ -12,33 +12,19 @@ function getColumns(props: any) {
   const { history } = props;
   return [
     {
-      property: "miner",
-      primaryKey: true,
+      property: "shard",
       header: (
-        <Text color="minorText" style={{ fontWeight: 300 }}>
-          Miner
+        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+          Shard Id
         </Text>
       ),
-      render: (data: Block) => <Address address={data.miner} isShort />,
-    },
-    {
-      property: "timestamp",
-      header: (
-        <Text color="minorText" style={{ fontWeight: 300 }}>
-          Timestamp
-        </Text>
-      ),
-      render: (data: Block) => (
-        <Text size="small">
-          {dayjs(data.timestamp).format("YYYY-MM-DD, HH:mm:ss")}
-        </Text>
-      ),
+      render: (data: Block) => <Text size="small">{0}</Text>,
     },
     {
       property: "number",
       header: (
-        <Text color="minorText" style={{ fontWeight: 300 }}>
-          Block
+        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+          Height
         </Text>
       ),
       render: (data: Block) => (
@@ -55,27 +41,41 @@ function getColumns(props: any) {
       ),
     },
     {
+      property: "timestamp",
+      header: (
+        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+          Timestamp
+        </Text>
+      ),
+      render: (data: Block) => (
+        <Box direction="row" gap="xsmall">
+          <Text size="small">
+            {dayjs(data.timestamp).format("YYYY-MM-DD, HH:mm:ss")},
+          </Text>
+          <RelativeTimer date={Date.now()} updateInterval={1000} />
+        </Box>
+      ),
+    },
+    {
+      property: "miner",
+      primaryKey: true,
+      header: (
+        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+          Miner
+        </Text>
+      ),
+      render: (data: Block) => <Address address={data.miner} isShort />,
+    },
+    {
       property: "transactions",
       header: (
-        <Text color="minorText" style={{ fontWeight: 300 }}>
-          Transactions
+        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+          Txs
         </Text>
       ),
       render: (data: Block) => (
         <Text size="small">{data.transactions.length}</Text>
       ),
-    },
-    {
-      property: "age",
-      header: (
-        <Text color="minorText" style={{ fontWeight: 300 }}>
-          Age
-        </Text>
-      ),
-      render: (data: Block) => (
-        <RelativeTimer date={Date.now()} updateInterval={1000} />
-      ),
-      width: "130px",
     },
   ];
 }
@@ -93,6 +93,7 @@ export function LatestBlocksTable() {
   const history = useHistory();
   const [blocks, setBlocks] = useState<Block[]>([]);
   useEffect(() => {
+    let tId = 0 as any;
     const exec = async () => {
       try {
         let blocks = await transport("getBlocks", [0, filter]);
@@ -101,7 +102,13 @@ export function LatestBlocksTable() {
         console.log(err);
       }
     };
-    reintervate(exec, 3000);
+
+    exec();
+    tId = window.setInterval(exec, 3000);
+
+    return () => {
+      clearTimeout(tId);
+    }
   }, []);
 
   if (!blocks.length) {

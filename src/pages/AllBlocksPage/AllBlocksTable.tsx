@@ -17,33 +17,19 @@ function getColumns(props: any) {
   const { history } = props;
   return [
     {
-      property: "miner",
-      primaryKey: true,
+      property: "shard",
       header: (
-        <Text color="minorText" style={{ fontWeight: 300 }}>
-          Miner
+        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+          Shard Id
         </Text>
       ),
-      render: (data: Block) => <Address address={data.miner} isShort />,
-    },
-    {
-      property: "timestamp",
-      header: (
-        <Text color="minorText" style={{ fontWeight: 300 }}>
-          Timestamp
-        </Text>
-      ),
-      render: (data: Block) => (
-        <Text size="small">
-          {dayjs(data.timestamp).format("YYYY-MM-DD, HH:mm:ss")}
-        </Text>
-      ),
+      render: (data: Block) => <Text size="small">{0}</Text>,
     },
     {
       property: "number",
       header: (
-        <Text color="minorText" style={{ fontWeight: 300 }}>
-          Block
+        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+          Height
         </Text>
       ),
       render: (data: Block) => (
@@ -60,40 +46,35 @@ function getColumns(props: any) {
       ),
     },
     {
-      property: "shard",
+      property: "timestamp",
       header: (
-        <Text color="minorText" style={{ fontWeight: 300 }}>
-          Shard Id
-        </Text>
-      ),
-      render: (data: Block) => <Text size="small">{0}</Text>,
-    },
-    {
-      property: "gasUsed",
-      header: (
-        <Text color="minorText" style={{ fontWeight: 300 }}>
-          Gas Used / Gas Limit
+        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+          Timestamp
         </Text>
       ),
       render: (data: Block) => (
-        <Text size="small">
-          {formatNumber(+data.gasUsed)} / {formatNumber(+data.gasLimit)}
-        </Text>
+        <Box direction="row" gap="xsmall">
+          <Text size="small">
+            {dayjs(data.timestamp).format("YYYY-MM-DD, HH:mm:ss")},
+          </Text>
+          <RelativeTimer date={Date.now()} updateInterval={1000} />
+        </Box>
       ),
     },
     {
-      property: "size",
+      property: "miner",
+      primaryKey: true,
       header: (
-        <Text color="minorText" style={{ fontWeight: 300 }}>
-          Size
+        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+          Miner
         </Text>
       ),
-      render: (data: Block) => <Text size="small">{data.size}</Text>,
+      render: (data: Block) => <Address address={data.miner} isShort />,
     },
     {
       property: "transactions",
       header: (
-        <Text color="minorText" style={{ fontWeight: 300 }}>
+        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
           Transactions
         </Text>
       ),
@@ -102,16 +83,17 @@ function getColumns(props: any) {
       ),
     },
     {
-      property: "age",
+      property: "gasUsed",
       header: (
-        <Text color="minorText" style={{ fontWeight: 300 }}>
-          Age
+        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+          Gas Used / Gas Limit
         </Text>
       ),
       render: (data: Block) => (
-        <RelativeTimer date={Date.now()} updateInterval={1000} />
+        <Text size="small">
+          {formatNumber(+data.gasUsed)} / {formatNumber(+data.gasLimit)}
+        </Text>
       ),
-      width: "130px",
     },
   ];
 }

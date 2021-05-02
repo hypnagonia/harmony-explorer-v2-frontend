@@ -68,6 +68,7 @@ export const TransactionDetails: FunctionComponent<TransactionDetailsProps> = ({
   return <>
     <Box flex align="start" justify="start">
       <DataTable
+        className={'g-table-body-last-col-right'}
         style={{ width: '100%' }}
         columns={columns}
         data={txData}
