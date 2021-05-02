@@ -1,5 +1,5 @@
 export function formatNumber(num: number, options?: object): string {
-  if(!num) return '';
+  if(num === undefined) return '';
 
   return num.toLocaleString('en-US', options);
 }

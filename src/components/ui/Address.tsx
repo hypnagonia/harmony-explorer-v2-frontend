@@ -1,6 +1,15 @@
-import React from 'react'
+import React from "react";
 
-// @ts-ignore
-export const Address = ({address}) => {
-  return <span>{address}</span>
+interface IAddress {
+  address: string;
+  isShort?: boolean;
 }
+
+export const Address = (props: IAddress) => {
+  const { address, isShort } = props;
+  return (
+    <span>
+      {isShort ? `${address.substr(0, 4)}...${address.substr(-4)}` : address}
+    </span>
+  );
+};

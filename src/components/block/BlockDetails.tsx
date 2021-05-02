@@ -64,6 +64,7 @@ export const BlockDetails: FunctionComponent<BlockDetailsProps> = ({ block }) =>
   return <>
     <Box flex align="start" justify="start" margin={{ top: '-46px' }} style={{ overflow: 'hidden' }}>
       <DataTable
+        className={'g-table-body-last-col-right'}
         style={{ width: '100%' }}
         columns={columns}
         data={blockData}

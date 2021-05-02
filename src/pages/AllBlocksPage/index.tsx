@@ -9,7 +9,6 @@ export function AllBlocksPage() {
     <BaseContainer pad={{ horizontal: '0' }}>
       <Heading size="small" margin={{ bottom: 'medium', top: '0' }}>Blocks</Heading>
       <BasePage>
-        Pagination soon
         <AllBlocksTable />
       </BasePage>
     </BaseContainer>
