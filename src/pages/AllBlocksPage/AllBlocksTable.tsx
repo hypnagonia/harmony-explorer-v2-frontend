@@ -103,7 +103,9 @@ const initFilter: Filter = {
   limit: 10,
   orderBy: "number",
   orderDirection: "desc",
-  filters: [{ type: "lt", property: "number", value: 100 }],
+  filters: [
+     { type: "gte", property: "number", value: 0 }
+    ],
 };
 
 export function AllBlocksTable() {
@@ -163,13 +165,14 @@ export function AllBlocksTable() {
     <>
       <Box direction="row" justify="between" margin={{ bottom: "small" }}>
         <Text margin={{ left: "small" }}>
-          <b>{filter.limit}</b> blocks shown, from <b>#{beginValue}</b> to{" "}
-          <b>#{endValue}</b>
+          <b>{filter.limit}</b> blocks shown, from <b>#{endValue}</b> to{" "}
+          <b>#{beginValue}</b>
         </Text>
         <PaginationNavigator
           onChange={setFilter}
           filter={filter}
           totalElements={count}
+          blocks={blocks}
           property="number"
         />
       </Box>
@@ -193,6 +196,7 @@ export function AllBlocksTable() {
       <Box direction="row" justify="between" margin={{ top: "medium" }}>
         <PaginationRecordsPerPage filter={filter} onChange={setFilter} />
         <PaginationNavigator
+          blocks={blocks}
           onChange={setFilter}
           filter={filter}
           totalElements={count}

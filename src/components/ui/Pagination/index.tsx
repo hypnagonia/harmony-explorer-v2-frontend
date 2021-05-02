@@ -1,27 +1,32 @@
 import React from "react";
 import { Box, Text, Select } from "grommet";
-import { Filter } from "src/types";
+import { Block, Filter } from 'src/types'
 import { FormPrevious, FormNext } from "grommet-icons";
 import { formatNumber } from "../utils";
 
 interface PaginationNavigator {
   filter: Filter;
+  blocks: Block[];
   totalElements: number;
   onChange: (filter: Filter) => void;
   property: string;
 }
 
 export function PaginationNavigator(props: PaginationNavigator) {
-  const { totalElements, filter, onChange, property } = props;
+  const { blocks, totalElements, filter, onChange, property } = props;
   const { filters, limit = 10 } = filter;
   const { value } = filters[0];
+
+  const minBlockNumber = blocks.reduce((a,b) =>
+    (a === -1 || a > +b.number) ? +b.number : a, -1)
+  const maxBlockNumber = blocks.reduce((a,b) => Math.max(a, +b.number), 0)
 
   const onPrevClick = () => {
     const newFilter = JSON.parse(JSON.stringify(filter)) as Filter;
     const innerFilter = newFilter.filters.find((i) => i.property === property);
     if (innerFilter) {
-      innerFilter.type = 'lt';
-      innerFilter.value = Math.min(+innerFilter.value + limit, totalElements);
+      innerFilter.type = 'lte';
+      innerFilter.value = maxBlockNumber + limit
     }
 
     onChange(newFilter);
@@ -32,7 +37,7 @@ export function PaginationNavigator(props: PaginationNavigator) {
     const innerFilter = newFilter.filters.find((i) => i.property === property);
     if (innerFilter) {
       innerFilter.type = 'lt';
-      innerFilter.value = Math.max(+innerFilter.value - limit, 0);
+      innerFilter.value = minBlockNumber
     }
 
     onChange(newFilter);
@@ -61,9 +66,9 @@ function Pagination(props: PaginationProps) {
   return (
     <Box direction="row" gap="small">
       <FormPrevious onClick={onPrevPageClick} style={{ cursor: "pointer" }} />
-      <Text style={{ fontWeight: "bold" }}>{formatNumber(+currentPage)}</Text>
+     {/* <Text style={{ fontWeight: "bold" }}>{formatNumber(+currentPage)}</Text>
       <Text style={{ fontWeight: 300 }}>/</Text>
-      <Text style={{ fontWeight: 300 }}>{formatNumber(+totalPages)}</Text>
+      <Text style={{ fontWeight: 300 }}>{formatNumber(+totalPages)}</Text>*/}
       <FormNext onClick={onNextPageClick} style={{ cursor: "pointer" }} />
     </Box>
   );
