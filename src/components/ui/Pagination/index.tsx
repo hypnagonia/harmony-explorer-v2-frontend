@@ -23,15 +23,10 @@ export function PaginationNavigator(props: PaginationNavigator) {
   );
   const maxBlockNumber = blockNumbers.reduce((a, b) => Math.max(a, b), 0);
 
-
-  console.log({minBlockNumber, maxBlockNumber})
-
   const onPrevClick = () => {
     const newFilter = JSON.parse(JSON.stringify(filter)) as Filter;
     const innerFilter = newFilter.filters.find((i) => i.property === property);
-    console.log('prev')
     if (innerFilter) {
-      console.log('prev2')
       innerFilter.type = "lt";
       innerFilter.value = maxBlockNumber + limit + 1;
     }
@@ -42,9 +37,7 @@ export function PaginationNavigator(props: PaginationNavigator) {
   const onNextClick = () => {
     const newFilter = JSON.parse(JSON.stringify(filter)) as Filter;
     const innerFilter = newFilter.filters.find((i) => i.property === property);
-    console.log('next')
     if (innerFilter) {
-      console.log('next2')
       innerFilter.type = "lt";
       innerFilter.value = minBlockNumber;
     }
