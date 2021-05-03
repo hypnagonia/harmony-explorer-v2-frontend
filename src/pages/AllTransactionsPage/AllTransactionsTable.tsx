@@ -133,7 +133,7 @@ export function AllTransactionsTable() {
   useEffect(() => {
     const getCount = async () => {
       try {
-        let res = (await transport("getCount", [0, "blocks"])) || ({} as any);
+        let res = (await transport("getCount", [0, "transactions"])) || ({} as any);
         setCount(res.count as number);
       } catch (err) {
         console.log(err);
@@ -187,15 +187,16 @@ export function AllTransactionsTable() {
 
       >
         <Text>
-          <b>{filter.limit}</b> transactions shown, from <b>#{formatNumber(+endValue)}</b> to{" "}
-          <b>#{formatNumber(+beginValue)}</b>
+          <b>{filter.limit}</b> transactions shown
+          {/*from <b>#{formatNumber(+endValue)}</b> to{" "}
+          <b>#{formatNumber(+beginValue)}</b>*/}
         </Text>
         <PaginationNavigator
           onChange={setFilter}
           filter={filter}
           totalElements={count}
           blocks={blocks}
-          property="number"
+          property="block_number"
         />
       </Box>
       <DataTable

@@ -11,27 +11,22 @@ interface PaginationNavigator {
   property: string;
 }
 
-export function PaginationNavigator(props: PaginationNavigator) {
+export function PaginationBlockNavigator(props: PaginationNavigator) {
   const { blocks, totalElements, filter, onChange, property } = props;
   const { filters, limit = 10 } = filter;
   const { value } = filters[0];
 
-  const blockNumbers = blocks.map((b) => +b.blockNumber);
+  const blockNumbers = blocks.map((b) => +b.number);
   const minBlockNumber = blockNumbers.reduce(
     (a, b) => (a === -1 || a > b ? b : a),
     -1
   );
   const maxBlockNumber = blockNumbers.reduce((a, b) => Math.max(a, b), 0);
 
-
-  console.log({minBlockNumber, maxBlockNumber})
-
   const onPrevClick = () => {
     const newFilter = JSON.parse(JSON.stringify(filter)) as Filter;
     const innerFilter = newFilter.filters.find((i) => i.property === property);
-    console.log('prev')
     if (innerFilter) {
-      console.log('prev2')
       innerFilter.type = "lt";
       innerFilter.value = maxBlockNumber + limit + 1;
     }
@@ -42,9 +37,7 @@ export function PaginationNavigator(props: PaginationNavigator) {
   const onNextClick = () => {
     const newFilter = JSON.parse(JSON.stringify(filter)) as Filter;
     const innerFilter = newFilter.filters.find((i) => i.property === property);
-    console.log('next')
     if (innerFilter) {
-      console.log('next2')
       innerFilter.type = "lt";
       innerFilter.value = minBlockNumber;
     }
@@ -91,7 +84,7 @@ interface ElementsPerPage {
 
 const defaultOptions: string[] = ["10", "25", "50", "100"];
 
-export function PaginationRecordsPerPage(props: ElementsPerPage) {
+export function PaginationBlockRecordsPerPage(props: ElementsPerPage) {
   const { filter, options = defaultOptions, onChange } = props;
   const { limit = 10 } = filter;
 

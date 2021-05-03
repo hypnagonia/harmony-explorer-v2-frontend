@@ -9,8 +9,8 @@ import {
   Address,
   formatNumber,
   RelativeTimer,
-  PaginationNavigator,
-  PaginationRecordsPerPage,
+  PaginationBlockNavigator,
+  PaginationBlockRecordsPerPage,
 } from "src/components/ui";
 
 function getColumns(props: any) {
@@ -175,7 +175,7 @@ export function AllBlocksTable() {
           <b>{filter.limit}</b> blocks shown, from <b>#{formatNumber(+endValue)}</b> to{" "}
           <b>#{formatNumber(+beginValue)}</b>
         </Text>
-        <PaginationNavigator
+        <PaginationBlockNavigator
           onChange={setFilter}
           filter={filter}
           totalElements={count}
@@ -201,8 +201,8 @@ export function AllBlocksTable() {
         }}
       />
       <Box direction="row" justify="between" margin={{ top: "medium" }}>
-        <PaginationRecordsPerPage filter={filter} onChange={setFilter} />
-        <PaginationNavigator
+        <PaginationBlockRecordsPerPage filter={filter} onChange={setFilter} />
+        <PaginationBlockNavigator
           blocks={blocks}
           onChange={setFilter}
           filter={filter}
