@@ -1,5 +1,5 @@
 import { useONEExchangeRate } from '../../hooks/useONEExchangeRate'
-import { Text } from 'grommet'
+import { Text, Box } from 'grommet'
 
 // @ts-ignore
 export const ONEValue = ({ value }) => {
@@ -20,7 +20,7 @@ export const ONEValue = ({ value }) => {
 
   return (
     <>
-      <Text weight={v > 0 ? 'bold' : 'normal'} size="small">{v.toString()} ONE</Text>&nbsp;
+      <Text weight={v > 0 ? 'bold' : 'normal'} size="small" margin={{ right: 'xxmall' }}>{v.toString()} ONE</Text>
       {
         USDValue ? <>(${USDValue})</> : null
       }

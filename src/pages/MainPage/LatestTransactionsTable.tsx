@@ -27,7 +27,16 @@ function getColumns(props: any) {
         </Text>
       ),
       render: (data: RPCTransactionHarmony) => (
+        <Text
+          size="small"
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            history.push(`/tx/${data.hash}`);
+          }}
+          color="brand"
+        >
           <Address address={data.hash} isShort />
+        </Text>
       ),
     },
     {
@@ -56,7 +65,7 @@ function getColumns(props: any) {
       property: "age",
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
-          Age
+          Timestamp
         </Text>
       ),
       render: (data: RPCTransactionHarmony) => (
@@ -119,8 +128,6 @@ export function LatestTransactionsTable() {
       </Box>
     );
   }
-
-  console.log(transactions);
 
   return (
     <DataTable

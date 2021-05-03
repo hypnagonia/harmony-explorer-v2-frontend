@@ -10,7 +10,7 @@ import {
   formatNumber,
   RelativeTimer,
   PaginationBlockNavigator,
-  PaginationBlockRecordsPerPage,
+  PaginationRecordsPerPage,
 } from "src/components/ui";
 
 function getColumns(props: any) {
@@ -201,7 +201,7 @@ export function AllBlocksTable() {
         }}
       />
       <Box direction="row" justify="between" margin={{ top: "medium" }}>
-        <PaginationBlockRecordsPerPage filter={filter} onChange={setFilter} />
+        <PaginationRecordsPerPage filter={filter} onChange={setFilter} />
         <PaginationBlockNavigator
           blocks={blocks}
           onChange={setFilter}

@@ -73,7 +73,7 @@ function ONEPrice() {
         </Text>
         <Box direction="row" gap="xsmall" align="baseline">
           <Text size="small" weight="bold">
-            $ {formatNumber(lastPrice)}
+            $ {(+lastPrice).toFixed(2)}
           </Text>
           <Text
             size="11px"

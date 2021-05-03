@@ -15,13 +15,12 @@ export function MainPage() {
       <Metrics />
       <Box direction="row" gap="medium">
         <BasePage style={{ flex: "1 1 50%" }}>
-          <Text
-            size="large"
-            weight="bold"
-            margin={{ left: "small", bottom: "small" }}
-          >
-            Latest Blocks
-          </Text>
+          <Box border={{ size: "xsmall", side: 'bottom' }} pad={{ bottom: 'small'}} margin={{ bottom: 'small' }}>
+            <Text size="large" weight="bold">
+              Latest Blocks
+            </Text>
+          </Box>
+
           <LatestBlocksTable />
           <Button
             margin={{ top: "medium" }}
@@ -31,13 +30,11 @@ export function MainPage() {
           </Button>
         </BasePage>
         <BasePage style={{ flex: "1 1 50%" }}>
-          <Text
-            size="large"
-            weight="bold"
-            margin={{ left: "small", bottom: "small" }}
-          >
-            Latest Transactions
-          </Text>
+          <Box border={{ size: "xsmall", side: 'bottom' }} pad={{ bottom: 'small'}} margin={{ bottom: 'small' }}>
+            <Text size="large" weight="bold">
+              Latest Transactions
+            </Text>
+          </Box>
           <LatestTransactionsTable />
           <Button
             margin={{ top: "medium" }}

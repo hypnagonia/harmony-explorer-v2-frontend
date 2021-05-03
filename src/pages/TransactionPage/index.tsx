@@ -1,5 +1,6 @@
 import { TransactionDetails } from 'src/components/transaction/TransactionDetails'
-import { Block, RPCStakingTransactionHarmony } from '../types'
+import { InternalTransactionList } from 'src/components/transaction/InternalTransactionList'
+import { Block, RPCStakingTransactionHarmony } from '../../types'
 import { BasePage } from 'src/components/ui';
 
 import {
@@ -39,7 +40,7 @@ export const TransactionPage = () => {
           <TransactionDetails transaction={tx} />
         </Tab>
         <Tab title={<Text size="small">Internal Transactions</Text>}>
-          WIP
+          <InternalTransactionList blockHash={tx.blockHash} />
         </Tab>
         <Tab title={<Text size="small">Logs</Text>}>
           WIP

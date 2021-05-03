@@ -5,18 +5,18 @@ import { FormPrevious, FormNext } from "grommet-icons";
 
 interface PaginationNavigator {
   filter: Filter;
-  blocks: any[];
+  elements: any[];
   totalElements: number;
   onChange: (filter: Filter) => void;
   property: string;
 }
 
 export function PaginationNavigator(props: PaginationNavigator) {
-  const { blocks, totalElements, filter, onChange, property } = props;
+  const { elements, totalElements, filter, onChange, property } = props;
   const { filters, limit = 10 } = filter;
   const { value } = filters[0];
 
-  const blockNumbers = blocks.map((b) => +b.blockNumber);
+  const blockNumbers = elements.map((b) => +b.blockNumber);
   const minBlockNumber = blockNumbers.reduce(
     (a, b) => (a === -1 || a > b ? b : a),
     -1

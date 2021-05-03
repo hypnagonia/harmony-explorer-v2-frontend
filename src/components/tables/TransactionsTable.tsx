@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import dayjs from "dayjs";
 
-import { transport } from "src/api/explorer";
 import { Box, DataTable, Text, Spinner } from "grommet";
 import { Filter, RPCTransactionHarmony } from "src/types";
 import { useHistory } from "react-router-dom";
+import { FormNextLink } from "grommet-icons";
 import {
   Address,
   formatNumber,
   RelativeTimer,
   PaginationNavigator,
   PaginationRecordsPerPage,
+  ONEValue,
 } from "src/components/ui";
+import dayjs from "dayjs";
 
 function getColumns(props: any) {
   const { history } = props;
@@ -23,7 +24,13 @@ function getColumns(props: any) {
           Shard
         </Text>
       ),
-      render: (data: RPCTransactionHarmony) => <Text size="small">{0}</Text>,
+      render: (data: RPCTransactionHarmony) => (
+        <Box direction="row" gap="3px" align="center">
+          <Text size="small">{0}</Text>
+          <FormNextLink size="small" color="brand" style={{ marginBottom: '2px' }} />
+          <Text size="small">{0}</Text>
+        </Box>
+      ),
     },
     {
       property: "hash",
@@ -33,7 +40,16 @@ function getColumns(props: any) {
         </Text>
       ),
       render: (data: RPCTransactionHarmony) => (
-        <Address address={data.hash} isShort />
+        <Text
+          size="small"
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            history.push(`/tx/${data.hash}`);
+          }}
+          color="brand"
+        >
+          <Address address={data.hash} isShort />
+        </Text>
       ),
     },
     {
@@ -62,12 +78,15 @@ function getColumns(props: any) {
       property: "age",
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
-          Age
+          Timestamp
         </Text>
       ),
       render: (data: RPCTransactionHarmony) => (
         <Box direction="row" gap="xsmall">
-          <RelativeTimer date={new Date(data.timestamp)} updateInterval={1000} />
+          <Text size="small">
+            {dayjs(data.timestamp).format("YYYY-MM-DD, HH:mm:ss")},
+          </Text>
+          <RelativeTimer date={data.timestamp} updateInterval={1000} />
         </Box>
       ),
     },
@@ -79,22 +98,20 @@ function getColumns(props: any) {
         </Text>
       ),
       render: (data: RPCTransactionHarmony) => (
-        <Text size="small">
-          {formatNumber(+data.blockNumber)}
-        </Text>
+        <Text size="small">{formatNumber(+data.blockNumber)}</Text>
       ),
     },
     {
       property: "value",
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
-          Value
+          ONEValue
         </Text>
       ),
       render: (data: RPCTransactionHarmony) => (
-        <Text size="small">
-          {formatNumber(+data.value)}
-        </Text>
+        <Box justify="center">
+          <ONEValue value={data.value}/>
+        </Box>
       ),
     },
     {
@@ -105,76 +122,31 @@ function getColumns(props: any) {
         </Text>
       ),
       render: (data: RPCTransactionHarmony) => (
-        <Text size="small">
-          {data.gas}
-        </Text>
+        <Text size="small">{data.gas}</Text>
       ),
     },
   ];
 }
 
-const initFilter: Filter = {
-  offset: 0,
-  limit: 10,
-  orderBy: "block_number",
-  orderDirection: "desc",
-  filters: [
-     { type: "gte", property: "block_number", value: 0 }
-    ],
-};
+interface TransactionTableProps {
+  data: any[];
+  totalElements: number;
+  limit: number;
+  filter: Filter;
+  setFilter: (filter: Filter) => void;
+}
 
-export function AllTransactionsTable() {
-  const [blocks, setBlocks] = useState<RPCTransactionHarmony[]>([]);
-  const [count, setCount] = useState<number>(0);
-  const [filter, setFilter] = useState<Filter>(initFilter);
-
+export function TransactionsTable(props: TransactionTableProps) {
   const history = useHistory();
+  const { data, totalElements, limit, filter, setFilter } = props;
 
-  useEffect(() => {
-    const getCount = async () => {
-      try {
-        let res = (await transport("getCount", [0, "transactions"])) || ({} as any);
-        setCount(res.count as number);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    getCount().then(() => {
-      const newFilter = JSON.parse(JSON.stringify(filter)) as Filter;
-      const innerFilter = newFilter.filters.find(
-        (i) => i.property === "number"
-      );
-      if (innerFilter && count) {
-        innerFilter.value = +count;
-      }
-
-      setFilter(newFilter);
-    });
-  }, []);
-
-  useEffect(() => {
-    const getBlocks = async () => {
-      try {
-        let blocks = await transport("getTransactions", [0, filter]);
-        setBlocks(blocks as RPCTransactionHarmony[]);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getBlocks();
-  }, [filter]);
-
-  if (!blocks.length) {
+  if (!data.length) {
     return (
       <Box style={{ height: "700px" }} justify="center" align="center">
         <Spinner />
       </Box>
     );
   }
-
-  const beginValue = blocks[0].blockNumber;
-  const endValue = blocks.slice(-1)[0].blockNumber;
 
   return (
     <>
@@ -184,18 +156,17 @@ export function AllTransactionsTable() {
         pad={{ bottom: "small" }}
         margin={{ bottom: "small" }}
         border={{ size: "xsmall", side: "bottom", color: "border" }}
-
       >
         <Text>
-          <b>{filter.limit}</b> transactions shown
+          <b>{limit}</b> transactions shown
           {/*from <b>#{formatNumber(+endValue)}</b> to{" "}
           <b>#{formatNumber(+beginValue)}</b>*/}
         </Text>
         <PaginationNavigator
           onChange={setFilter}
           filter={filter}
-          totalElements={count}
-          blocks={blocks}
+          totalElements={totalElements}
+          elements={data}
           property="block_number"
         />
       </Box>
@@ -203,7 +174,7 @@ export function AllTransactionsTable() {
         className={"g-table-header"}
         style={{ width: "100%" }}
         columns={getColumns({ history })}
-        data={blocks}
+        data={data}
         step={10}
         border={{
           header: {
@@ -219,10 +190,10 @@ export function AllTransactionsTable() {
       <Box direction="row" justify="between" margin={{ top: "medium" }}>
         <PaginationRecordsPerPage filter={filter} onChange={setFilter} />
         <PaginationNavigator
-          blocks={blocks}
+          elements={data}
           onChange={setFilter}
           filter={filter}
-          totalElements={count}
+          totalElements={totalElements}
           property="number"
         />
       </Box>
