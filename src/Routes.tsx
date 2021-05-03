@@ -4,6 +4,7 @@ import { BlockPage } from 'src/pages/BlockPage'
 import { MainPage } from 'src/pages/MainPage'
 import { TransactionPage } from 'src/pages/TransactionPage'
 import { AllBlocksPage } from 'src/pages/AllBlocksPage'
+import { AllTransactionsPage } from 'src/pages/AllTransactionsPage'
 
 export function Routes() {
   return (
@@ -19,6 +20,10 @@ export function Routes() {
 
         <Route path="/block/:id">
           <BlockPage />
+        </Route>
+
+        <Route path="/transactions">
+          <AllTransactionsPage />
         </Route>
 
         <Route path="/tx/:id">

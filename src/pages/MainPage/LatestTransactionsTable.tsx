@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 
 import { transport } from "src/api/explorer";
 import {Box, DataTable, Spinner, Text} from "grommet";
-import { Block } from "src/types";
+import { RPCTransactionHarmony, Transaction } from "src/types";
 import { useHistory } from "react-router-dom";
 import { formatNumber, RelativeTimer, Address } from "src/components/ui";
 
@@ -17,63 +17,65 @@ function getColumns(props: any) {
           Shard
         </Text>
       ),
-      render: (data: Block) => <Text size="small">{0}</Text>,
+      render: (data: RPCTransactionHarmony) => <Text size="small">{0}</Text>,
     },
     {
-      property: "number",
+      property: "hash",
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
-          Height
+          Hash
         </Text>
       ),
-      render: (data: Block) => (
-        <Text
-          size="small"
-          style={{ cursor: "pointer" }}
-          onClick={() => {
-            history.push(`/block/${data.number}`);
-          }}
-          color="brand"
-        >
-          {formatNumber(+data.number)}
-        </Text>
+      render: (data: RPCTransactionHarmony) => (
+          <Address address={data.hash} isShort />
       ),
     },
     {
-      property: "timestamp",
+      property: "from",
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
-          Timestamp
+          From
         </Text>
       ),
-      render: (data: Block) => (
+      render: (data: RPCTransactionHarmony) => (
+        <Address address={data.from} isShort />
+      ),
+    },
+    {
+      property: "to",
+      header: (
+        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+          To
+        </Text>
+      ),
+      render: (data: RPCTransactionHarmony) => (
+        <Address address={data.to} isShort />
+      ),
+    },
+    {
+      property: "age",
+      header: (
+        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+          Age
+        </Text>
+      ),
+      render: (data: RPCTransactionHarmony) => (
         <Box direction="row" gap="xsmall">
-          <Text size="small">
-            {dayjs(data.timestamp).format("YYYY-MM-DD, HH:mm:ss")},
-          </Text>
-          <RelativeTimer date={Date.now()} updateInterval={1000} />
+          <RelativeTimer date={new Date(data.timestamp)} updateInterval={1000} />
         </Box>
       ),
     },
     {
-      property: "miner",
-      primaryKey: true,
+      property: "gas",
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
-          Miner
+          Gas
         </Text>
       ),
-      render: (data: Block) => <Address address={data.miner} isShort />,
-    },
-    {
-      property: "transactions",
-      header: (
-        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
-          Txs
+      render: (data: RPCTransactionHarmony) => (
+        <Text size="small">
+          {data.gas}
         </Text>
-      ),
-      render: (data: Block) => (
-        <Text size="small">{data.transactions.length}</Text>
       ),
     },
   ];
@@ -82,21 +84,21 @@ function getColumns(props: any) {
 const filter = {
   offset: 0,
   limit: 10,
-  orderBy: "number",
+  orderBy: "block_number",
   orderDirection: "desc",
   value: 0,
   filters: [],
 };
 
-export function LatestBlocksTable() {
+export function LatestTransactionsTable() {
   const history = useHistory();
-  const [blocks, setBlocks] = useState<Block[]>([]);
+  const [transactions, setTransactions] = useState<RPCTransactionHarmony[]>([]);
   useEffect(() => {
     let tId = 0 as any;
     const exec = async () => {
       try {
-        let blocks = await transport("getBlocks", [0, filter]);
-        setBlocks(blocks as Block[]);
+        let trxs = await transport("getTransactions", [0, filter]);
+        setTransactions(trxs as RPCTransactionHarmony[]);
       } catch (err) {
         console.log(err);
       }
@@ -110,7 +112,7 @@ export function LatestBlocksTable() {
     }
   }, []);
 
-  if (!blocks.length) {
+  if (!transactions.length) {
     return (
       <Box style={{ height: "700px" }} justify="center" align="center">
         <Spinner />
@@ -118,12 +120,14 @@ export function LatestBlocksTable() {
     );
   }
 
+  console.log(transactions);
+
   return (
     <DataTable
       className={"g-table-header"}
       style={{ width: "100%" }}
       columns={getColumns({ history })}
-      data={blocks}
+      data={transactions}
       step={10}
       border={{
         header: {

@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 
 import { transport } from "src/api/explorer";
 import { Box, DataTable, Text, Spinner } from "grommet";
-import { Block, Filter } from "src/types";
+import { Filter, RPCTransactionHarmony } from "src/types";
 import { useHistory } from "react-router-dom";
 import {
   Address,
@@ -23,75 +23,90 @@ function getColumns(props: any) {
           Shard
         </Text>
       ),
-      render: (data: Block) => <Text size="small">{0}</Text>,
+      render: (data: RPCTransactionHarmony) => <Text size="small">{0}</Text>,
     },
     {
-      property: "number",
+      property: "hash",
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
-          Height
+          Hash
         </Text>
       ),
-      render: (data: Block) => (
-        <Text
-          size="small"
-          style={{ cursor: "pointer" }}
-          onClick={() => {
-            history.push(`/block/${data.number}`);
-          }}
-          color="brand"
-        >
-          {formatNumber(+data.number)}
-        </Text>
+      render: (data: RPCTransactionHarmony) => (
+        <Address address={data.hash} isShort />
       ),
     },
     {
-      property: "timestamp",
+      property: "from",
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
-          Timestamp
+          From
         </Text>
       ),
-      render: (data: Block) => (
+      render: (data: RPCTransactionHarmony) => (
+        <Address address={data.from} isShort />
+      ),
+    },
+    {
+      property: "to",
+      header: (
+        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+          To
+        </Text>
+      ),
+      render: (data: RPCTransactionHarmony) => (
+        <Address address={data.to} isShort />
+      ),
+    },
+    {
+      property: "age",
+      header: (
+        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+          Age
+        </Text>
+      ),
+      render: (data: RPCTransactionHarmony) => (
         <Box direction="row" gap="xsmall">
-          <Text size="small">
-            {dayjs(data.timestamp).format("YYYY-MM-DD, HH:mm:ss")},
-          </Text>
-          <RelativeTimer date={Date.now()} updateInterval={1000} />
+          <RelativeTimer date={new Date(data.timestamp)} updateInterval={1000} />
         </Box>
       ),
     },
     {
-      property: "miner",
-      primaryKey: true,
+      property: "block_number",
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
-          Miner
+          Block number
         </Text>
       ),
-      render: (data: Block) => <Address address={data.miner} isShort />,
-    },
-    {
-      property: "transactions",
-      header: (
-        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
-          Transactions
-        </Text>
-      ),
-      render: (data: Block) => (
-        <Text size="small">{data.transactions.length}</Text>
-      ),
-    },
-    {
-      property: "gasUsed",
-      header: (
-        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
-          Gas Used / Gas Limit
-        </Text>
-      ),
-      render: (data: Block) => (
+      render: (data: RPCTransactionHarmony) => (
         <Text size="small">
-          {formatNumber(+data.gasUsed)} / {formatNumber(+data.gasLimit)}
+          {formatNumber(+data.blockNumber)}
+        </Text>
+      ),
+    },
+    {
+      property: "value",
+      header: (
+        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+          Value
+        </Text>
+      ),
+      render: (data: RPCTransactionHarmony) => (
+        <Text size="small">
+          {formatNumber(+data.value)}
+        </Text>
+      ),
+    },
+    {
+      property: "gas",
+      header: (
+        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+          Gas
+        </Text>
+      ),
+      render: (data: RPCTransactionHarmony) => (
+        <Text size="small">
+          {data.gas}
         </Text>
       ),
     },
@@ -101,15 +116,15 @@ function getColumns(props: any) {
 const initFilter: Filter = {
   offset: 0,
   limit: 10,
-  orderBy: "number",
+  orderBy: "block_number",
   orderDirection: "desc",
   filters: [
-     { type: "gte", property: "number", value: 0 }
+     { type: "gte", property: "block_number", value: 0 }
     ],
 };
 
-export function AllBlocksTable() {
-  const [blocks, setBlocks] = useState<Block[]>([]);
+export function AllTransactionsTable() {
+  const [blocks, setBlocks] = useState<RPCTransactionHarmony[]>([]);
   const [count, setCount] = useState<number>(0);
   const [filter, setFilter] = useState<Filter>(initFilter);
 
@@ -141,8 +156,8 @@ export function AllBlocksTable() {
   useEffect(() => {
     const getBlocks = async () => {
       try {
-        let blocks = await transport("getBlocks", [0, filter]);
-        setBlocks(blocks as Block[]);
+        let blocks = await transport("getTransactions", [0, filter]);
+        setBlocks(blocks as RPCTransactionHarmony[]);
       } catch (err) {
         console.log(err);
       }
@@ -158,8 +173,8 @@ export function AllBlocksTable() {
     );
   }
 
-  const beginValue = blocks[0].number;
-  const endValue = blocks.slice(-1)[0].number;
+  const beginValue = blocks[0].blockNumber;
+  const endValue = blocks.slice(-1)[0].blockNumber;
 
   return (
     <>
@@ -172,7 +187,7 @@ export function AllBlocksTable() {
 
       >
         <Text>
-          <b>{filter.limit}</b> blocks shown, from <b>#{formatNumber(+endValue)}</b> to{" "}
+          <b>{filter.limit}</b> transactions shown, from <b>#{formatNumber(+endValue)}</b> to{" "}
           <b>#{formatNumber(+beginValue)}</b>
         </Text>
         <PaginationNavigator

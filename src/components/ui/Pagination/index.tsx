@@ -1,12 +1,11 @@
 import React from "react";
 import { Box, Text, Select } from "grommet";
-import { Block, Filter } from 'src/types'
+import { Filter } from "src/types";
 import { FormPrevious, FormNext } from "grommet-icons";
-import { formatNumber } from "../utils";
 
 interface PaginationNavigator {
   filter: Filter;
-  blocks: Block[];
+  blocks: any[];
   totalElements: number;
   onChange: (filter: Filter) => void;
   property: string;
@@ -17,17 +16,19 @@ export function PaginationNavigator(props: PaginationNavigator) {
   const { filters, limit = 10 } = filter;
   const { value } = filters[0];
 
-  const blockNumbers = blocks.map(b => +b.number)
-  const minBlockNumber = blockNumbers.reduce((a,b) =>
-    (a === -1 || a > b) ? b : a, -1)
-  const maxBlockNumber = blockNumbers.reduce((a,b) => Math.max(a, b), 0)
+  const blockNumbers = blocks.map((b) => +b.number);
+  const minBlockNumber = blockNumbers.reduce(
+    (a, b) => (a === -1 || a > b ? b : a),
+    -1
+  );
+  const maxBlockNumber = blockNumbers.reduce((a, b) => Math.max(a, b), 0);
 
   const onPrevClick = () => {
     const newFilter = JSON.parse(JSON.stringify(filter)) as Filter;
     const innerFilter = newFilter.filters.find((i) => i.property === property);
     if (innerFilter) {
-      innerFilter.type = 'lt';
-      innerFilter.value = maxBlockNumber + limit + 1
+      innerFilter.type = "lt";
+      innerFilter.value = maxBlockNumber + limit + 1;
     }
 
     onChange(newFilter);
@@ -37,8 +38,8 @@ export function PaginationNavigator(props: PaginationNavigator) {
     const newFilter = JSON.parse(JSON.stringify(filter)) as Filter;
     const innerFilter = newFilter.filters.find((i) => i.property === property);
     if (innerFilter) {
-      innerFilter.type = 'lt';
-      innerFilter.value = minBlockNumber
+      innerFilter.type = "lt";
+      innerFilter.value = minBlockNumber;
     }
 
     onChange(newFilter);
@@ -67,7 +68,7 @@ function Pagination(props: PaginationProps) {
   return (
     <Box direction="row" gap="small">
       <FormPrevious onClick={onPrevPageClick} style={{ cursor: "pointer" }} />
-     {/* <Text style={{ fontWeight: "bold" }}>{formatNumber(+currentPage)}</Text>
+      {/* <Text style={{ fontWeight: "bold" }}>{formatNumber(+currentPage)}</Text>
       <Text style={{ fontWeight: 300 }}>/</Text>
       <Text style={{ fontWeight: 300 }}>{formatNumber(+totalPages)}</Text>*/}
       <FormNext onClick={onNextPageClick} style={{ cursor: "pointer" }} />
