@@ -100,11 +100,15 @@ export const blockPropertyDisplayValues: any = {
     value.map(tx => <>
       <Clone size="small" color="brand" />&nbsp;
       <TransactionHash key={tx} hash={tx} /><br/></>) : null,
+  'stakingTransactions': (value: any[]) => value.length > 0 ?
+    value.map(tx => <>
+      <Clone size="small" color="brand" />&nbsp;
+      <TransactionHash link="staking-tx" key={tx} hash={tx} /><br/></>) : null,
   'miner': (value: any) => <Address address={value} />,
   'hash': (value: any) => <BlockHash hash={value} />,
   'parentHash': (value: any) => <BlockHash hash={value} />,
   'timestamp': (value: any) => <Timestamp timestamp={value} />,
-  'gasUsed': (value: any, block: Block) => <span>{value} ({+value / +block.gasLimit}%) </span>
+  'gasUsed': (value: any, block: Block) => <span>{value} ({+value / +block.gasLimit}%) </span>,
 }
 
 export const blockDisplayValues = (block: Block, key: string, value: any) => {

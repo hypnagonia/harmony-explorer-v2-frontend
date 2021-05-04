@@ -3,8 +3,10 @@ import { Switch, Route } from 'react-router-dom'
 import { BlockPage } from 'src/pages/BlockPage'
 import { MainPage } from 'src/pages/MainPage'
 import { TransactionPage } from 'src/pages/TransactionPage'
+import { StakingTransactionPage } from 'src/pages/StackingTransactionPage'
 import { AllBlocksPage } from 'src/pages/AllBlocksPage'
 import { AllTransactionsPage } from 'src/pages/AllTransactionsPage'
+
 
 export function Routes() {
   return (
@@ -28,6 +30,10 @@ export function Routes() {
 
         <Route path="/tx/:id">
           <TransactionPage />
+        </Route>
+
+        <Route path="/staking-tx/:id">
+          <StakingTransactionPage />
         </Route>
       </Switch>
       </>

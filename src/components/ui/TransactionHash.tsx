@@ -1,9 +1,9 @@
-import React from 'react'
+import React from "react";
 
-import {AnchorLink} from './AnchorLink'
+import { AnchorLink } from "./AnchorLink";
 
 // @ts-ignore
-export const TransactionHash = ({ hash }) => {
-  const link = `/tx/${hash}`
-  return <AnchorLink to={link} label={hash} />
-}
+export const TransactionHash = ({ hash, link = 'tx' }) => {
+  const url = `/${link}/${hash}`;
+  return <AnchorLink to={url} label={hash} />;
+};

@@ -17,3 +17,7 @@ a {
 .g-table-body-last-col-right tbody td:last-child {
     text-align: left !important;
 }
+
+.g-table-no-header thead {
+    display: none;
+}

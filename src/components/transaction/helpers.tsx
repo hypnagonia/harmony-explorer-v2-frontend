@@ -9,8 +9,8 @@ import {
   Timestamp,
   TransactionHash,
   ONEValue,
+  StakingTransactionTypeValue,
 } from "../ui";
-import { Link } from "react-router-dom";
 import { Box } from "grommet";
 
 export const todo = {};
@@ -33,6 +33,26 @@ export const transactionPropertyDisplayNames: Record<string, string> = {
   toShardID: "To Shard ID",
   transactionIndex: "Transaction Index",
   v: "v",
+  type: "Type",
+  amount: "Amount",
+
+  name: 'Name',
+  commissionRate: 'Commission Rate',
+  maxCommissionRate: 'Max Commission Rate',
+  maxChangeRate: 'Max Change Rate',
+  minSelfDelegation: 'Min Self Delegation',
+  maxTotalDelegation: 'Max Total Delegation',
+  website: 'Website',
+  identity: 'Identity',
+  securityContract: 'Security Contract',
+  details: 'Details',
+  slotPubKeys: 'Details',
+
+  slotPubKeyToAdd: 'Slot Pub Key To Add',
+  slotPubKeyToRemove: 'Slot Pub Key To Remove',
+
+  delegatorAddress: "Delegator Address",
+  validatorAddress: "Validator Address",
 };
 
 export const transactionPropertySort: Record<string, number> = {
@@ -83,6 +103,34 @@ export const transactionPropertyDescriptions: Record<string, string> = {
   v: "Value for the transaction's signature",
   r: "Value for the transaction's signature",
   s: "Value for the transaction's signature",
+  validatorAddress: 'Validator address',
+  delegatorAddress: 'Delegator address',
+  amount: 'Stake amount for validator',
+  name: 'Validator name',
+  commissionRate: 'Validator commission rate',
+  maxCommissionRate: 'Validator commission rate',
+  maxChangeRate: 'validator max commission rate change',
+  minSelfDelegation: 'Min how much validator self delegates',
+  maxTotalDelegation: 'Max total delegation to validator',
+  website: 'Validator website',
+  identity: 'Validator kyc identity',
+  securityContact: 'Validator security contact',
+  details: 'Additional validator info',
+  slotPubKeys: 'Validator bls pub keys',
+  slotPubKeyToAdd: 'Validator bls pub key to add',
+  slotPubKeyToRemove: 'Validator bls pub key to remove',
+};
+
+const delegatePropertyDescriptionsExtend: Record<string, string> = {
+  amount: 'Amount for delegation to validator',
+  validatorAddress: 'Delegation validator address',
+  delegatorAddress: 'Delegation delegator address',
+};
+
+const undelegatePropertyDescriptionsExtend: Record<string, string> = {
+  amount: 'Amount for undelegation to delegator',
+  validatorAddress: 'Undelegation validator address',
+  delegatorAddress: 'Undelegation delegator address',
 };
 
 export const transactionPropertyDisplayValues: any = {
@@ -107,6 +155,23 @@ export const transactionPropertyDisplayValues: any = {
       {tx.toShardID}
     </span>
   ),
+  type: (value: any) => <StakingTransactionTypeValue type={value} />,
+  amount: (value: any) => <ONEValue value={value} />,
+  name: (value: any) => <span>{value}</span>,
+  delegatorAddress: (value: any) => <Address address={value} />,
+  validatorAddress: (value: any) => <Address address={value} />,
+  commissionRate: (value: any) => <span>{value}</span>,
+  maxCommissionRate: (value: any) => <span>{value}</span>,
+  maxChangeRate: (value: any) => <span>{value}</span>,
+  minSelfDelegation: (value: any) => <span>{value}</span>,
+  maxTotalDelegation: (value: any) => <span>{value}</span>,
+  website: (value: any) => <a href={value}>{value}</a>,
+  identity: (value: any) => <span>{value}</span>,
+  securityContact: (value: any) => <span>{value}</span>,
+  details: (value: any) => <span>{value}</span>,
+  slotPubKeys: (value: any) => <span>{value}</span>,
+  slotPubKeyToAdd: (value: any) => <span>{value}</span>,
+  slotPubKeyToRemove: (value: any) => <span>{value}</span>,
 };
 
 export const transactionDisplayValues = (
@@ -114,7 +179,7 @@ export const transactionDisplayValues = (
   key: string,
   value: any
 ) => {
-  if (["blockHash", "toShardID"].includes(key)) {
+  if (["blockHash", "toShardID", "msg"].includes(key)) {
     return;
   }
 

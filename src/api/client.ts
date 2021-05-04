@@ -21,8 +21,13 @@ export function getTransactions(params: any[]) {
   return transport('getTransactions', params) as Promise<RPCTransactionHarmony[]>;
 }
 
+// TODO почему RPCStakingTransactionHarmony в обычной транзакции
 export function getTransactionByField(params: any[]) {
   return transport('getTransactionByField', params) as Promise<RPCStakingTransactionHarmony>;
+}
+
+export function getStakingTransactionByField(params: any[]) {
+  return transport('getStakingTransactionsByField', params) as Promise<RPCStakingTransactionHarmony>;
 }
 
 export function getInternalTransactionsByField(params: any[]) {
