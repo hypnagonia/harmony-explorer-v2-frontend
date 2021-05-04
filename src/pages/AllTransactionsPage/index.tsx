@@ -4,7 +4,7 @@ import { BasePage, BaseContainer } from "src/components/ui";
 import { TransactionsTable } from "../../components/tables/TransactionsTable";
 import { Filter, RPCTransactionHarmony } from "../../types";
 import { useHistory } from "react-router";
-import { transport } from "../../api/explorer/ws";
+import { getTransactions, getCount } from 'src/api/client';
 
 const initFilter: Filter = {
   offset: 0,
@@ -16,23 +16,22 @@ const initFilter: Filter = {
 
 export function AllTransactionsPage() {
   const [trxs, setTrxs] = useState<RPCTransactionHarmony[]>([]);
-  const [count, setCount] = useState<number>(0);
+  const [count, setCount] = useState<string>('');
   const [filter, setFilter] = useState<Filter>(initFilter);
 
   const history = useHistory();
 
   useEffect(() => {
-    const getCount = async () => {
+    const getRes = async () => {
       try {
-        let res =
-          (await transport("getCount", [0, "transactions"])) || ({} as any);
-        setCount(res.count as number);
+        let res = await getCount([0, "transactions"]);
+        setCount(res.count);
       } catch (err) {
         console.log(err);
       }
     };
 
-    getCount().then(() => {
+    getRes().then(() => {
       const newFilter = JSON.parse(JSON.stringify(filter)) as Filter;
       const innerFilter = newFilter.filters.find(
         (i) => i.property === "block_number"
@@ -46,15 +45,15 @@ export function AllTransactionsPage() {
   }, []);
 
   useEffect(() => {
-    const getBlocks = async () => {
+    const getElements = async () => {
       try {
-        let trxs = await transport("getTransactions", [0, filter]);
+        let trxs = await getTransactions([0, filter]);
         setTrxs(trxs as RPCTransactionHarmony[]);
       } catch (err) {
         console.log(err);
       }
     };
-    getBlocks();
+    getElements();
   }, [filter]);
 
   const { limit = 10 } = filter;

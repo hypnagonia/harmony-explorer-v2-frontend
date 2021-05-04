@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
-import { transport } from "src/api/explorer";
 import { Box, DataTable, Text, Spinner } from "grommet";
 import { Block, Filter } from "src/types";
 import { useHistory } from "react-router-dom";
@@ -12,6 +11,7 @@ import {
   PaginationBlockNavigator,
   PaginationRecordsPerPage,
 } from "src/components/ui";
+import { getBlocks, getCount } from 'src/api/client';
 
 function getColumns(props: any) {
   const { history } = props;
@@ -57,7 +57,7 @@ function getColumns(props: any) {
           <Text size="small">
             {dayjs(data.timestamp).format("YYYY-MM-DD, HH:mm:ss")},
           </Text>
-          <RelativeTimer date={Date.now()} updateInterval={1000} />
+          <RelativeTimer date={data.timestamp} updateInterval={1000} />
         </Box>
       ),
     },
@@ -69,7 +69,7 @@ function getColumns(props: any) {
           Miner
         </Text>
       ),
-      render: (data: Block) => <Address address={data.miner} isShort />,
+      render: (data: Block) => <Address address={data.miner} />,
     },
     {
       property: "transactions",
@@ -79,7 +79,7 @@ function getColumns(props: any) {
         </Text>
       ),
       render: (data: Block) => (
-        <Text size="small">{data.transactions.length}</Text>
+        <Text size="small">{data.transactions.length + data.stakingTransactions.length}</Text>
       ),
     },
     {
@@ -110,22 +110,22 @@ const initFilter: Filter = {
 
 export function AllBlocksTable() {
   const [blocks, setBlocks] = useState<Block[]>([]);
-  const [count, setCount] = useState<number>(0);
+  const [count, setCount] = useState<string>('');
   const [filter, setFilter] = useState<Filter>(initFilter);
 
   const history = useHistory();
 
   useEffect(() => {
-    const getCount = async () => {
+    const getRes = async () => {
       try {
-        let res = (await transport("getCount", [0, "blocks"])) || ({} as any);
-        setCount(res.count as number);
+        let res = await getCount([0, "blocks"]);
+        setCount(res.count);
       } catch (err) {
         console.log(err);
       }
     };
 
-    getCount().then(() => {
+    getRes().then(() => {
       const newFilter = JSON.parse(JSON.stringify(filter)) as Filter;
       const innerFilter = newFilter.filters.find(
         (i) => i.property === "number"
@@ -139,15 +139,15 @@ export function AllBlocksTable() {
   }, []);
 
   useEffect(() => {
-    const getBlocks = async () => {
+    const getElements = async () => {
       try {
-        let blocks = await transport("getBlocks", [0, filter]);
+        let blocks = await getBlocks([0, filter]);
         setBlocks(blocks as Block[]);
       } catch (err) {
         console.log(err);
       }
     };
-    getBlocks();
+    getElements();
   }, [filter]);
 
   if (!blocks.length) {
@@ -178,7 +178,7 @@ export function AllBlocksTable() {
         <PaginationBlockNavigator
           onChange={setFilter}
           filter={filter}
-          totalElements={count}
+          totalElements={+count}
           blocks={blocks}
           property="number"
         />
@@ -206,7 +206,7 @@ export function AllBlocksTable() {
           blocks={blocks}
           onChange={setFilter}
           filter={filter}
-          totalElements={count}
+          totalElements={+count}
           property="number"
         />
       </Box>

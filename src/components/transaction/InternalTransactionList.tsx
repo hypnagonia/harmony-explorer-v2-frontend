@@ -2,11 +2,11 @@ import React, {useEffect, useState} from 'react';
 import {Box} from "grommet";
 
 import { TransactionsTable } from "src/components/tables/TransactionsTable";
-import {transport} from "../../api/explorer/ws";
 import {Filter, InternalTransaction } from "src/types";
+import { getInternalTransactionsByField } from 'src/api/client';
 
 interface InternalTransactionListProps {
-  blockHash: string;
+  hash: string;
 }
 
 const initFilter: Filter = {
@@ -17,18 +17,17 @@ const initFilter: Filter = {
   filters: [{ type: "gte", property: "block_number", value: 0 }],
 };
 
-// TODO: вызвать правильный метод с правильными фильтрами
-
 export function InternalTransactionList(props: InternalTransactionListProps) {
   const [trxs, setTrxs] = useState<InternalTransaction[]>([]);
   const [filter, setFilter] = useState<Filter>(initFilter);
 
-  const { blockHash } = props;
+  const { hash } = props;
 
   useEffect(() => {
     const getElements = async () => {
       try {
-        let trxs = await transport("getTransactions", [0, filter]);
+        //TODO прицепить фильтр
+        let trxs = await getInternalTransactionsByField([0, 'transaction_hash', hash, filter]);
         setTrxs(trxs as InternalTransaction[]);
       } catch (err) {
         console.log(err);
@@ -44,6 +43,8 @@ export function InternalTransactionList(props: InternalTransactionListProps) {
       <TransactionsTable
         data={trxs}
         totalElements={100}
+        showIfEmpty
+        emptyText={"No Internal Transactions for this hash " + hash}
         limit={+limit}
         filter={filter}
         setFilter={setFilter}

@@ -1,8 +1,8 @@
 import React, { useCallback, useState, useEffect } from 'react'
-import { transport } from 'src/api/explorer'
 import { Search } from 'grommet-icons'
 import { Box, TextInput } from 'grommet'
 import { useHistory } from 'react-router-dom'
+import { getBlockByHash, getTransactionByField } from "src/api/client";
 
 let timeoutID: any | null = null
 
@@ -31,14 +31,14 @@ export const SearchInput = () => {
         // is block hash or tx hash
         try {
           await Promise.all([
-            transport('getBlockByHash', [0, v])
+            getBlockByHash([0, v])
               .then((res) => {
                 if (!res) {
                   return
                 }
                 history.push(`/block/${v}`)
               }).catch(),
-            transport('getTransactionByField', [0, 'hash', v])
+            getTransactionByField([0, 'hash', v])
               .then((res) => {
                 if (!res) {
                   return

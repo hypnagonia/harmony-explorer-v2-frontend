@@ -27,7 +27,11 @@ function getColumns(props: any) {
       render: (data: RPCTransactionHarmony) => (
         <Box direction="row" gap="3px" align="center">
           <Text size="small">{0}</Text>
-          <FormNextLink size="small" color="brand" style={{ marginBottom: '2px' }} />
+          <FormNextLink
+            size="small"
+            color="brand"
+            style={{ marginBottom: "2px" }}
+          />
           <Text size="small">{0}</Text>
         </Box>
       ),
@@ -53,6 +57,28 @@ function getColumns(props: any) {
       ),
     },
     {
+      property: "block_number",
+      header: (
+        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+          Block number
+        </Text>
+      ),
+      render: (data: RPCTransactionHarmony) => {
+        return (
+          <Text
+            size="small"
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              history.push(`/block/${data.blockNumber}`);
+            }}
+            color="brand"
+          >
+            {formatNumber(+data.blockNumber)}
+          </Text>
+        );
+      },
+    },
+    {
       property: "from",
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
@@ -60,7 +86,9 @@ function getColumns(props: any) {
         </Text>
       ),
       render: (data: RPCTransactionHarmony) => (
-        <Address address={data.from} isShort />
+        <Text size="small">
+          <Address address={data.from} />
+        </Text>
       ),
     },
     {
@@ -71,34 +99,9 @@ function getColumns(props: any) {
         </Text>
       ),
       render: (data: RPCTransactionHarmony) => (
-        <Address address={data.to} isShort />
-      ),
-    },
-    {
-      property: "age",
-      header: (
-        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
-          Timestamp
+        <Text size="small">
+          <Address address={data.to} />
         </Text>
-      ),
-      render: (data: RPCTransactionHarmony) => (
-        <Box direction="row" gap="xsmall">
-          <Text size="small">
-            {dayjs(data.timestamp).format("YYYY-MM-DD, HH:mm:ss")},
-          </Text>
-          <RelativeTimer date={data.timestamp} updateInterval={1000} />
-        </Box>
-      ),
-    },
-    {
-      property: "block_number",
-      header: (
-        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
-          Block number
-        </Text>
-      ),
-      render: (data: RPCTransactionHarmony) => (
-        <Text size="small">{formatNumber(+data.blockNumber)}</Text>
       ),
     },
     {
@@ -110,19 +113,28 @@ function getColumns(props: any) {
       ),
       render: (data: RPCTransactionHarmony) => (
         <Box justify="center">
-          <ONEValue value={data.value}/>
+          <ONEValue value={data.value} />
         </Box>
       ),
     },
     {
-      property: "gas",
+      property: "timestamp",
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
-          Gas
+          Timestamp
         </Text>
       ),
       render: (data: RPCTransactionHarmony) => (
-        <Text size="small">{data.gas}</Text>
+        <Box direction="row" gap="xsmall" justify="end">
+          <Text size="small">
+            {dayjs(data.timestamp).format("YYYY-MM-DD, HH:mm:ss")},
+          </Text>
+          <RelativeTimer
+            date={data.timestamp}
+            updateInterval={1000}
+            style={{ minWidth: "auto" }}
+          />
+        </Box>
       ),
     },
   ];
@@ -134,18 +146,26 @@ interface TransactionTableProps {
   limit: number;
   filter: Filter;
   setFilter: (filter: Filter) => void;
+  showIfEmpty?: boolean;
+  emptyText?: string;
 }
 
 export function TransactionsTable(props: TransactionTableProps) {
   const history = useHistory();
-  const { data, totalElements, limit, filter, setFilter } = props;
+  const { data, totalElements, limit, filter, setFilter, showIfEmpty, emptyText = 'No data to display' } = props;
 
-  if (!data.length) {
+  if (!data.length && !showIfEmpty) {
     return (
       <Box style={{ height: "700px" }} justify="center" align="center">
         <Spinner />
       </Box>
     );
+  }
+
+  if(!data.length) {
+    return <Box style={{ height: '120px' }} justify="center" align="center">
+      <Text size="small">{emptyText}</Text>
+    </Box>
   }
 
   return (
@@ -158,7 +178,7 @@ export function TransactionsTable(props: TransactionTableProps) {
         border={{ size: "xsmall", side: "bottom", color: "border" }}
       >
         <Text>
-          <b>{limit}</b> transactions shown
+          <b>{Math.min(limit, data.length)}</b> transaction{data.length !== 1 ? 's' : ''} shown
           {/*from <b>#{formatNumber(+endValue)}</b> to{" "}
           <b>#{formatNumber(+beginValue)}</b>*/}
         </Text>

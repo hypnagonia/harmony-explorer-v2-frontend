@@ -6,6 +6,7 @@ import {Box, DataTable, Spinner, Text} from "grommet";
 import { Block } from "src/types";
 import { useHistory } from "react-router-dom";
 import { formatNumber, RelativeTimer, Address } from "src/components/ui";
+import { getBlocks } from 'src/api/client';
 
 function getColumns(props: any) {
   const { history } = props;
@@ -73,7 +74,7 @@ function getColumns(props: any) {
         </Text>
       ),
       render: (data: Block) => (
-        <Text size="small">{data.transactions.length}</Text>
+        <Text size="small">{data.transactions.length + data.stakingTransactions.length}</Text>
       ),
     },
   ];
@@ -95,7 +96,7 @@ export function LatestBlocksTable() {
     let tId = 0 as any;
     const exec = async () => {
       try {
-        let blocks = await transport("getBlocks", [0, filter]);
+        let blocks = await getBlocks([0, filter]);
         setBlocks(blocks as Block[]);
       } catch (err) {
         console.log(err);

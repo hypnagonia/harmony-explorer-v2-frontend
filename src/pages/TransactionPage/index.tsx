@@ -1,36 +1,32 @@
-import { TransactionDetails } from 'src/components/transaction/TransactionDetails'
-import { InternalTransactionList } from 'src/components/transaction/InternalTransactionList'
-import { Block, RPCStakingTransactionHarmony } from '../../types'
-import { BasePage } from 'src/components/ui';
+import { TransactionDetails } from "src/components/transaction/TransactionDetails";
+import { InternalTransactionList } from "src/components/transaction/InternalTransactionList";
+import { RPCStakingTransactionHarmony } from "src/types";
+import { BasePage } from "src/components/ui";
 
-import {
-  RouteComponentProps,
-  useParams
-} from 'react-router-dom'
-import { transport } from 'src/api/explorer'
-import React, { useEffect, useState } from 'react'
-import { Box, Tabs, Tab, Text } from 'grommet'
+import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Tabs, Tab, Text } from "grommet";
+import { getTransactionByField } from "src/api/client";
 
 export const TransactionPage = () => {
   // hash or number
   // @ts-ignore
-  const { id } = useParams()
-  const [tx, setTx] = useState<RPCStakingTransactionHarmony | null>(null)
+  const { id } = useParams();
+  const [tx, setTx] = useState<RPCStakingTransactionHarmony | null>(null);
 
   useEffect(() => {
     const exec = async () => {
-      let tx
+      let tx;
       if (id.length === 66) {
-        tx = await transport('getTransactionByField', [0, 'hash', id])
+        tx = await getTransactionByField([0, "hash", id]);
       }
-      setTx(tx as RPCStakingTransactionHarmony)
-    }
-    exec()
-
-  }, [id])
+      setTx(tx as RPCStakingTransactionHarmony);
+    };
+    exec();
+  }, [id]);
 
   if (!tx) {
-    return null
+    return null;
   }
 
   return (
@@ -40,12 +36,10 @@ export const TransactionPage = () => {
           <TransactionDetails transaction={tx} />
         </Tab>
         <Tab title={<Text size="small">Internal Transactions</Text>}>
-          <InternalTransactionList blockHash={tx.blockHash} />
+          <InternalTransactionList hash={tx.hash} />
         </Tab>
-        <Tab title={<Text size="small">Logs</Text>}>
-          WIP
-        </Tab>
+        <Tab title={<Text size="small">Logs</Text>}>WIP</Tab>
       </Tabs>
     </BasePage>
-  )
-}
+  );
+};

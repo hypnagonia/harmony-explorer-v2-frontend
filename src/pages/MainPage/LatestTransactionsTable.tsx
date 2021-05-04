@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import dayjs from "dayjs";
 
-import { transport } from "src/api/explorer";
 import {Box, DataTable, Spinner, Text} from "grommet";
-import { RPCTransactionHarmony, Transaction } from "src/types";
+import { RPCTransactionHarmony } from "src/types";
 import { useHistory } from "react-router-dom";
-import { formatNumber, RelativeTimer, Address } from "src/components/ui";
+import { RelativeTimer, Address } from "src/components/ui";
+import { getTransactions } from "src/api/client";
 
 function getColumns(props: any) {
   const { history } = props;
@@ -106,7 +105,7 @@ export function LatestTransactionsTable() {
     let tId = 0 as any;
     const exec = async () => {
       try {
-        let trxs = await transport("getTransactions", [0, filter]);
+        let trxs = await getTransactions( [0, filter]);
         setTransactions(trxs as RPCTransactionHarmony[]);
       } catch (err) {
         console.log(err);

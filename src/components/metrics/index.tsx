@@ -1,13 +1,15 @@
 import React, {useEffect, useState} from "react";
 import { Box, Text, DataChart } from "grommet";
-import {BasePage, reintervate} from "src/components/ui";
+import { BasePage } from "src/components/ui";
 import { formatNumber } from "src/components/ui/utils";
 import { LatencyIcon } from "src/components/ui/icons";
 import { Transaction, LineChart, Cubes } from "grommet-icons";
 import styled from "styled-components";
 import { theme } from "../../theme";
 import { useONEExchangeRate } from "../../hooks/useONEExchangeRate";
-import {transport} from "../../api/explorer/ws";
+
+import { getCount } from "src/api/client";
+
 
 export function Metrics() {
   const { LightGrey } = theme?.global?.palette;
@@ -93,16 +95,21 @@ function TransactionsCount() {
   const [count, setCount] = useState<string>('');
 
   useEffect(() => {
-    const getCount = async () => {
+    let tId = 0;
+    const getRes = async () => {
       try {
-        let res = (await transport("getCount", [0, "transactions"])) || ({} as any);
-        setCount(res.count as string);
+        let res = await getCount([0, "transactions"]);
+        setCount(res.count);
       } catch (err) {
         console.log(err);
       }
     };
-    reintervate(getCount, 30000);
+    getRes();
+    tId = window.setInterval(getRes, 30000);
 
+    return () => {
+      clearTimeout(tId);
+    }
   }, []);
 
   return (

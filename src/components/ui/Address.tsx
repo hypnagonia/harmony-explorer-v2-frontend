@@ -7,6 +7,11 @@ interface IAddress {
 
 export const Address = (props: IAddress) => {
   const { address, isShort } = props;
+
+  if(!address) {
+    return null;
+  }
+
   return (
     <span>
       {isShort ? `${address.substr(0, 4)}...${address.substr(-4)}` : address}
