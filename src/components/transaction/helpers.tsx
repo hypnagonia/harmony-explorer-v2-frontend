@@ -1,31 +1,39 @@
-import { Block, RPCTransactionHarmony } from '../../types'
-import { Clone, FormNextLink, FormPreviousLink } from 'grommet-icons'
-import React from 'react'
-import { blockPropertyDisplayValues } from '../block/helpers'
-import { Address, BlockHash, BlockNumber, Timestamp, TransactionHash, ONEValue } from '../ui'
-import { Link } from 'react-router-dom'
+import { Block, RPCTransactionHarmony } from "../../types";
+import { Clone, FormNextLink, FormPreviousLink } from "grommet-icons";
+import React from "react";
+import { blockPropertyDisplayValues } from "../block/helpers";
+import {
+  Address,
+  BlockHash,
+  BlockNumber,
+  Timestamp,
+  TransactionHash,
+  ONEValue,
+} from "../ui";
+import { Link } from "react-router-dom";
+import { Box } from "grommet";
 
-export const todo = {}
+export const todo = {};
 
 export const transactionPropertyDisplayNames: Record<string, string> = {
-  shardID: 'Shard ID',
-  hash: 'Ethereum Hash',
-  hash_harmony: 'Hash',
-  value: 'Value',
-  blockNumber: 'Block Number',
-  from: 'From',
-  gas: 'Gas',
-  gasPrice: 'Gas Price',
-  input: 'Input',
-  nonce: 'Nonce',
-  r: 'r',
-  s: 's',
-  timestamp: 'Timestamp',
-  to: 'To',
-  toShardID: 'To Shard ID',
-  transactionIndex: 'Transaction Index',
-  v: 'v'
-}
+  shardID: "Shard ID",
+  hash: "Ethereum Hash",
+  hash_harmony: "Hash",
+  value: "Value",
+  blockNumber: "Block Number",
+  from: "From",
+  gas: "Gas",
+  gasPrice: "Gas Price",
+  input: "Input",
+  nonce: "Nonce",
+  r: "r",
+  s: "s",
+  timestamp: "Timestamp",
+  to: "To",
+  toShardID: "To Shard ID",
+  transactionIndex: "Transaction Index",
+  v: "v",
+};
 
 export const transactionPropertySort: Record<string, number> = {
   shardID: 1000,
@@ -45,80 +53,104 @@ export const transactionPropertySort: Record<string, number> = {
   timestamp: 750,
   toShardID: 1,
   transactionIndex: 350,
-  v: 0
-}
+  v: 0,
+};
 
 export const transactionPropertyDescriptions: Record<string, string> = {
-  'shardID': 'The shard number where the transaction belongs.',
-  'blockNumber': 'The number of the block in which the transaction was recorded.',
-  'hash': 'A TxHash or transaction hash is a unique 66 characters identifier that is generated whenever a transaction is executed.',
-  'hash_harmony': 'A TxHash or transaction hash is a unique 66 characters identifier that is generated whenever a transaction is executed. Shard ID is also involved in calculation of Harmony Hash.',
-  'from': 'The sending party of the transaction (could be from a contract address).',
-  'to': 'The receiving party of the transaction (could be a contract address).',
-  'value': 'The value being transacted in ONE and fiat value.',
-  'gas': 'The exact units of gas that was used for the transaction.',
-  'transactionIndex': 'Transaction\'s number in the block',
-  'gasUsed': 'The exact units of gas that was used for the transaction.',
-  'gasPrice': 'Cost per unit of gas specified for the transaction, in ONE. The higher the gas price the higher chance of getting included in a block.',
-  'input': 'Additional information that is required for the transaction.',
-  'gasLimit': 'Total gas limit provided by all transactions in the block.',
-  'timestamp': 'The date and time at which a transaction is mined.',
-  'difficulty': 'The amount of effort required to mine a new block. The difficulty algorithm may adjust according to time.',
-  'nonce': 'Sequential running number for an address, beginning with 0 for the first transaction. For example, if the nonce of a transaction is 10, it would be the 11th transaction sent from the sender\'s address',
-  'size': 'The block size is actually determined by the block\'s gas limit.',
-  'v': 'Value for the transaction\'s signature',
-  'r': 'Value for the transaction\'s signature',
-  's': 'Value for the transaction\'s signature',
-}
+  shardID: "The shard number where the transaction belongs.",
+  blockNumber: "The number of the block in which the transaction was recorded.",
+  hash:
+    "A TxHash or transaction hash is a unique 66 characters identifier that is generated whenever a transaction is executed.",
+  hash_harmony:
+    "A TxHash or transaction hash is a unique 66 characters identifier that is generated whenever a transaction is executed. Shard ID is also involved in calculation of Harmony Hash.",
+  from:
+    "The sending party of the transaction (could be from a contract address).",
+  to: "The receiving party of the transaction (could be a contract address).",
+  value: "The value being transacted in ONE and fiat value.",
+  gas: "The exact units of gas that was used for the transaction.",
+  transactionIndex: "Transaction's number in the block",
+  gasUsed: "The exact units of gas that was used for the transaction.",
+  gasPrice:
+    "Cost per unit of gas specified for the transaction, in ONE. The higher the gas price the higher chance of getting included in a block.",
+  input: "Additional information that is required for the transaction.",
+  gasLimit: "Total gas limit provided by all transactions in the block.",
+  timestamp: "The date and time at which a transaction is mined.",
+  difficulty:
+    "The amount of effort required to mine a new block. The difficulty algorithm may adjust according to time.",
+  nonce:
+    "Sequential running number for an address, beginning with 0 for the first transaction. For example, if the nonce of a transaction is 10, it would be the 11th transaction sent from the sender's address",
+  size: "The block size is actually determined by the block's gas limit.",
+  v: "Value for the transaction's signature",
+  r: "Value for the transaction's signature",
+  s: "Value for the transaction's signature",
+};
 
 export const transactionPropertyDisplayValues: any = {
   // @ts-ignore
-  'blockNumber': (value: any) => <BlockNumber number={value} />,
-  'from': (value: any) => <Address address={value} />,
-  'value': (value: any) => <ONEValue value={value} />,
-  'to': (value: any) => <Address address={value} />,
-  'hash': (value: any) => <TransactionHash hash={value} />,
-  'hash_harmony': (value: any) => <TransactionHash hash={value} />,
-  'blockHash': (value: any) => <BlockHash hash={value} />,
-  'timestamp': (value: any) => <Timestamp timestamp={value} />,
-  'gasUsed': (value: any, tx: RPCTransactionHarmony) => <span>{value} ({+value / +tx.gas}%) </span>,
-  'shardID': (value: any, tx: RPCTransactionHarmony) => <span>{value}<FormNextLink size="small" color="accent-2"/>{tx.toShardID}</span>
-}
+  blockNumber: (value: any) => <BlockNumber number={value} />,
+  from: (value: any) => <Address address={value} />,
+  value: (value: any) => <ONEValue value={value} />,
+  to: (value: any) => <Address address={value} />,
+  hash: (value: any) => <TransactionHash hash={value} />,
+  hash_harmony: (value: any) => <TransactionHash hash={value} />,
+  blockHash: (value: any) => <BlockHash hash={value} />,
+  timestamp: (value: any) => <Timestamp timestamp={value} />,
+  gasUsed: (value: any, tx: RPCTransactionHarmony) => (
+    <span>
+      {value} ({+value / +tx.gas}%){" "}
+    </span>
+  ),
+  shardID: (value: any, tx: RPCTransactionHarmony) => (
+    <span>
+      {value}
+      <FormNextLink size="small" color="accent-2" />
+      {tx.toShardID}
+    </span>
+  ),
+};
 
-export const transactionDisplayValues = (transaction: RPCTransactionHarmony, key: string, value: any) => {
-  if (['blockHash','toShardID'].includes(key)) {
-    return
+export const transactionDisplayValues = (
+  transaction: RPCTransactionHarmony,
+  key: string,
+  value: any
+) => {
+  if (["blockHash", "toShardID"].includes(key)) {
+    return;
   }
 
-  const f: null | Function = transactionPropertyDisplayValues[key]
+  const f: null | Function = transactionPropertyDisplayValues[key];
 
-  let displayValue = value
+  let displayValue = value;
 
   if (f) {
-    displayValue = f(value, transaction)
+    displayValue = f(value, transaction);
   } else {
     if (Array.isArray(value)) {
-      displayValue = value.join(', ')
+      displayValue = value.join(", ");
     }
 
     if (value && value.length && value.length > 66) {
-      displayValue = value.slice(0, 63) + '...'
+      displayValue = value.slice(0, 63) + "...";
     }
 
-    if (displayValue === '0x') {
-      displayValue = null
+    if (displayValue === "0x") {
+      displayValue = null;
     }
   }
 
   if (displayValue === null || displayValue === undefined) {
-    displayValue = '—'
+    displayValue = "—";
   }
 
-  return <div>
-    {
-      !['shardID'].includes(key) &&
-      ![0, '0','—'].includes(displayValue) &&
-      <><Clone size="small" color="brand" />&nbsp;</>}
-    {displayValue}
-  </div>
-}
+  return (
+    <Box direction="row" align="baseline">
+      {!["shardID"].includes(key) && ![0, "0", "—"].includes(displayValue) && (
+        <>
+          <Clone size="small" color="brand" />
+          &nbsp;
+        </>
+      )}
+      {displayValue}
+    </Box>
+  );
+};

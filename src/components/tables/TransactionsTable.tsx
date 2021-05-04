@@ -142,19 +142,33 @@ function getColumns(props: any) {
 
 interface TransactionTableProps {
   data: any[];
+  columns?: any[];
   totalElements: number;
   limit: number;
   filter: Filter;
   setFilter: (filter: Filter) => void;
   showIfEmpty?: boolean;
   emptyText?: string;
+  hidePagination?: boolean;
+  isLoading?: boolean;
 }
 
 export function TransactionsTable(props: TransactionTableProps) {
   const history = useHistory();
-  const { data, totalElements, limit, filter, setFilter, showIfEmpty, emptyText = 'No data to display' } = props;
+  const {
+    data,
+    totalElements,
+    limit,
+    filter,
+    setFilter,
+    showIfEmpty,
+    emptyText = "No data to display",
+    columns,
+    hidePagination,
+    isLoading
+  } = props;
 
-  if (!data.length && !showIfEmpty) {
+  if ((!data.length && !showIfEmpty) || isLoading) {
     return (
       <Box style={{ height: "700px" }} justify="center" align="center">
         <Spinner />
@@ -162,38 +176,43 @@ export function TransactionsTable(props: TransactionTableProps) {
     );
   }
 
-  if(!data.length) {
-    return <Box style={{ height: '120px' }} justify="center" align="center">
-      <Text size="small">{emptyText}</Text>
-    </Box>
+  if (!data.length) {
+    return (
+      <Box style={{ height: "120px" }} justify="center" align="center">
+        <Text size="small">{emptyText}</Text>
+      </Box>
+    );
   }
 
   return (
     <>
       <Box
         direction="row"
-        justify="between"
+        justify={hidePagination ? "start" : "between"}
         pad={{ bottom: "small" }}
         margin={{ bottom: "small" }}
         border={{ size: "xsmall", side: "bottom", color: "border" }}
       >
         <Text>
-          <b>{Math.min(limit, data.length)}</b> transaction{data.length !== 1 ? 's' : ''} shown
+          <b>{Math.min(limit, data.length)}</b> transaction
+          {data.length !== 1 ? "s" : ""} shown
           {/*from <b>#{formatNumber(+endValue)}</b> to{" "}
           <b>#{formatNumber(+beginValue)}</b>*/}
         </Text>
-        <PaginationNavigator
-          onChange={setFilter}
-          filter={filter}
-          totalElements={totalElements}
-          elements={data}
-          property="block_number"
-        />
+        {!hidePagination && (
+          <PaginationNavigator
+            onChange={setFilter}
+            filter={filter}
+            totalElements={totalElements}
+            elements={data}
+            property="block_number"
+          />
+        )}
       </Box>
       <DataTable
         className={"g-table-header"}
         style={{ width: "100%" }}
-        columns={getColumns({ history })}
+        columns={columns ? columns : getColumns({ history })}
         data={data}
         step={10}
         border={{
@@ -207,16 +226,18 @@ export function TransactionsTable(props: TransactionTableProps) {
           },
         }}
       />
-      <Box direction="row" justify="between" margin={{ top: "medium" }}>
-        <PaginationRecordsPerPage filter={filter} onChange={setFilter} />
-        <PaginationNavigator
-          elements={data}
-          onChange={setFilter}
-          filter={filter}
-          totalElements={totalElements}
-          property="number"
-        />
-      </Box>
+      {!hidePagination && (
+        <Box direction="row" justify="between" margin={{ top: "medium" }}>
+          <PaginationRecordsPerPage filter={filter} onChange={setFilter} />
+          <PaginationNavigator
+            elements={data}
+            onChange={setFilter}
+            filter={filter}
+            totalElements={totalElements}
+            property="number"
+          />
+        </Box>
+      )}
     </>
   );
 }
