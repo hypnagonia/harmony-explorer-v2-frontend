@@ -70,7 +70,7 @@ export const SearchInput = () => {
       <TextInput
         value={value}
         onChange={onChange}
-        color="brand"
+        color="red"
         icon={<Search color="brand" />}
         style={{
           backgroundColor: themeMode === "light" ? "white" : "transparent",

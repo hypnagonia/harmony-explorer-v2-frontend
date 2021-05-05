@@ -8,13 +8,19 @@ let globalSetMode = () => {
 };
 
 export const useThemeMode = singletonHook(initTheme, () => {
-  const [mode, setMode] = useState(initTheme);
+  const currentTheme = window.localStorage.getItem('themeMode') as themeType || initTheme;
+
+  const [mode, setMode] = useState<themeType>(currentTheme);
   //@ts-ignore
   globalSetMode = setMode;
   return mode;
 });
 
-//@ts-ignore
-export const setThemeMode = (mode: themeType) => globalSetMode(mode);
+
+export const setThemeMode = (mode: themeType) =>  {
+  //@ts-ignore
+  globalSetMode(mode);
+  window.localStorage.setItem('themeMode', mode);
+};
 
 export type themeType = "light" | "dark";

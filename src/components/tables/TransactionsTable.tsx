@@ -113,7 +113,7 @@ function getColumns(props: any) {
       ),
       render: (data: RPCTransactionHarmony) => (
         <Box justify="center">
-          <ONEValue value={data.value} />
+          <ONEValue value={data.value} timestamp={+data.timestamp} />
         </Box>
       ),
     },
@@ -151,6 +151,7 @@ interface TransactionTableProps {
   emptyText?: string;
   hidePagination?: boolean;
   isLoading?: boolean;
+  hideCounter?: boolean;
 }
 
 export function TransactionsTable(props: TransactionTableProps) {
@@ -165,7 +166,8 @@ export function TransactionsTable(props: TransactionTableProps) {
     emptyText = "No data to display",
     columns,
     hidePagination,
-    isLoading
+    isLoading,
+    hideCounter,
   } = props;
 
   if ((!data.length && !showIfEmpty) || isLoading) {
@@ -193,12 +195,12 @@ export function TransactionsTable(props: TransactionTableProps) {
         margin={{ bottom: "small" }}
         border={{ size: "xsmall", side: "bottom", color: "border" }}
       >
-        <Text>
+        {!hideCounter && (<Text>
           <b>{Math.min(limit, data.length)}</b> transaction
           {data.length !== 1 ? "s" : ""} shown
           {/*from <b>#{formatNumber(+endValue)}</b> to{" "}
           <b>#{formatNumber(+beginValue)}</b>*/}
-        </Text>
+        </Text>)}
         {!hidePagination && (
           <PaginationNavigator
             onChange={setFilter}

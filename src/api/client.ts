@@ -33,3 +33,7 @@ export function getStakingTransactionByField(params: any[]) {
 export function getInternalTransactionsByField(params: any[]) {
   return transport('getInternalTransactionsByField', params) as Promise<InternalTransaction[]>;
 }
+
+export function getTransactionLogsByField(params: any[]) {
+  return transport('getLogsByField', params) as Promise<any>;
+}

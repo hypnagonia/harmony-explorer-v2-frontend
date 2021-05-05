@@ -28,6 +28,11 @@ export const theme = {
       mintGreen: palette.MintGreen,
     },
     palette,
+    select: {
+      clear: {
+        color: 'brand',
+      },
+    },
     font: {
       // family: 'Nunito',
       family: "Fira Sans",

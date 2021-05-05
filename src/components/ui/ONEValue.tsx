@@ -1,15 +1,26 @@
 import { useONEExchangeRate } from "../../hooks/useONEExchangeRate";
-import { Text, Box } from "grommet";
+import { getNearestPriceForTimestamp } from "src/components/ONE_USDT_Rate";
+import { Text, Box, Tip } from "grommet";
+import { TipContent } from "./Tooltip";
+import React from "react";
+import dayjs from "dayjs";
+
+interface ONEValueProps {
+  value: string | number;
+  timestamp?: number;
+}
 
 // @ts-ignore
-export const ONEValue = ({ value }) => {
+export const ONEValue = (props: ONEValueProps) => {
+  const { value, timestamp } = props;
   const { lastPrice } = useONEExchangeRate();
+  const price = timestamp ? getNearestPriceForTimestamp(timestamp) : lastPrice;
 
   const bi = BigInt(value) / BigInt(10 ** 14);
   const v = parseInt(bi.toString()) / 10000;
   let USDValue;
-  if (lastPrice && v > 0) {
-    USDValue = (v * +lastPrice).toLocaleString("en-US", {
+  if (price && v > 0) {
+    USDValue = (v * +price).toLocaleString("en-US", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
       currency: "USD",
@@ -25,7 +36,21 @@ export const ONEValue = ({ value }) => {
       >
         {v.toString()} ONE
       </Text>
-      {USDValue && <Text size="small">(${USDValue})</Text>}
+      {USDValue && (
+        <Tip
+          dropProps={{ align: { left: "right" }, margin: { left: 'small' } }}
+          content={
+            <TipContent
+              message={<span>{`Displaying value on ${dayjs(timestamp).format(
+                "YYYY-MM-DD"
+              )}. Current value`} <b>${(v * +lastPrice).toFixed(2)}</b></span>}
+            />
+          }
+          plain
+        >
+          <Text size="small">(${USDValue})</Text>
+        </Tip>
+      )}
     </Box>
   );
 };

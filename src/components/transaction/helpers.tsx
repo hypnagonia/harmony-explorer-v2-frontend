@@ -149,7 +149,7 @@ export const transactionPropertyDisplayValues: any = {
   shardID: (value: any, tx: RPCTransactionHarmony) => (
     <span>
       {value}
-      <FormNextLink size="small" color="accent-2" />
+      <FormNextLink size="small" color="brand" />
       {tx.toShardID}
     </span>
   ),

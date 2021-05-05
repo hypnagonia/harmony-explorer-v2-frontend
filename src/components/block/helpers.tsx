@@ -90,10 +90,10 @@ export const blockPropertyDisplayValues: any = {
     <BlockNumber number={value} />
     &nbsp;
     {value > 0 && <Link to={`/block/${+value - 1}`}>
-      <FormPreviousLink size="small" color="accent-2" />
+      <FormPreviousLink size="small" color="brand" />
     </Link>}
     <Link to={`/block/${+value + 1}`}>
-      <FormNextLink size="small" color="accent-2" />
+      <FormNextLink size="small" color="brand" />
     </Link>
   </>,
   'transactions': (value: any[]) => value.length > 0 ?
@@ -107,7 +107,7 @@ export const blockPropertyDisplayValues: any = {
   'miner': (value: any) => <Address address={value} />,
   'hash': (value: any) => <BlockHash hash={value} />,
   'parentHash': (value: any) => <BlockHash hash={value} />,
-  'timestamp': (value: any) => <Timestamp timestamp={value} />,
+  'timestamp': (value: any) => <Timestamp timestamp={value} withRelative />,
   'gasUsed': (value: any, block: Block) => <span>{value} ({+value / +block.gasLimit}%) </span>,
 }
 

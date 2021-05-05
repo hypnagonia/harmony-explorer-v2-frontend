@@ -8,6 +8,7 @@ import { AppHeader } from "src/components/appHeader";
 import { AppFooter } from "src/components/appFooter";
 
 import { SearchInput, BaseContainer } from "src/components/ui";
+import { ONE_USDT_Rate } from 'src/components/ONE_USDT_Rate';
 import { useThemeMode } from "src/hooks/themeSwitcherHook";
 import { theme, darkTheme } from "./theme";
 
@@ -30,6 +31,7 @@ function App() {
             </BaseContainer>
           </Box>
           <AppFooter style={{ flex: "0 0 auto" }} />
+          <ONE_USDT_Rate />
         </Box>
       </Grommet>
     </Router>
