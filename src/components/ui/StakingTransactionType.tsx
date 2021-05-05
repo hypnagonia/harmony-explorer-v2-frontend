@@ -14,7 +14,7 @@ export const StakingTransactionTypeValue = (props: IStakingTransactionType) => {
   );
 };
 
-const typeMap: Record<string, string> = {
+const typeMap: Record<StakingTransactionType, string> = {
   CreateValidator: "Create Validator",
   EditValidator: "Edit Validator",
   CollectRewards: "Collect Rewards",

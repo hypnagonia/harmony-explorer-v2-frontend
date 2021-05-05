@@ -9,10 +9,11 @@ import {
 } from "./helpers";
 import { TipContent } from "src/components/ui";
 import { Box, DataTable, Tip } from "grommet";
+import { TransactionSubType } from "src/components/transaction/helpers";
 
 import { CircleQuestion } from "grommet-icons";
 
-const columns = [
+const getColumns = ({ type = "" }) => [
   {
     property: "key",
     render: (e: any) => (
@@ -20,7 +21,12 @@ const columns = [
         <Tip
           dropProps={{ align: { left: "right" } }}
           content={
-            <TipContent message={transactionPropertyDescriptions[e.key]} />
+            <TipContent
+              message={
+                transactionPropertyDescriptions[e.key + type] ||
+                transactionPropertyDescriptions[e.key]
+              }
+            />
           }
           plain
         >
@@ -28,7 +34,10 @@ const columns = [
             <CircleQuestion size="small" />
           </span>
         </Tip>
-        &nbsp;{transactionPropertyDisplayNames[e.key] || e.key}
+        &nbsp;
+        {transactionPropertyDisplayNames[e.key + type] ||
+          transactionPropertyDisplayNames[e.key] ||
+          e.key}
       </div>
     ),
     size: "1/3",
@@ -42,7 +51,9 @@ const columns = [
 
 type TransactionDetailsProps = {
   transaction: RPCStakingTransactionHarmony;
+  type?: TransactionSubType;
 };
+
 type tableEntry = {
   key: string;
   value: any;
@@ -50,6 +61,7 @@ type tableEntry = {
 
 export const TransactionDetails: FunctionComponent<TransactionDetailsProps> = ({
   transaction,
+  type,
 }) => {
   const keys = Object.keys(transaction);
   const sortedKeys = keys.sort(
@@ -58,7 +70,7 @@ export const TransactionDetails: FunctionComponent<TransactionDetailsProps> = ({
 
   const txData = sortedKeys.reduce((arr, key) => {
     // @ts-ignore
-    const value = transactionDisplayValues(transaction, key, transaction[key]);
+    const value = transactionDisplayValues(transaction, key, transaction[key], type);
     if (value === undefined) {
       return arr;
     }
@@ -73,7 +85,7 @@ export const TransactionDetails: FunctionComponent<TransactionDetailsProps> = ({
         <DataTable
           className={"g-table-body-last-col-right g-table-no-header"}
           style={{ width: "100%" }}
-          columns={columns}
+          columns={getColumns({ type })}
           data={txData}
           step={10}
           border={{

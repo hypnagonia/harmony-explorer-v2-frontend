@@ -15,9 +15,12 @@ import { Box } from "grommet";
 
 export const todo = {};
 
+export type TransactionSubType = '__staking' | '__delegated' | '__undelegated' | '';
+
 export const transactionPropertyDisplayNames: Record<string, string> = {
   shardID: "Shard ID",
   hash: "Ethereum Hash",
+  hash__staking: "Hash",
   hash_harmony: "Hash",
   value: "Value",
   blockNumber: "Block Number",
@@ -104,8 +107,14 @@ export const transactionPropertyDescriptions: Record<string, string> = {
   r: "Value for the transaction's signature",
   s: "Value for the transaction's signature",
   validatorAddress: 'Validator address',
+  validatorAddress__delegated: 'Delegation validator address',
+  validatorAddress__undelegated: 'Delegation delegator address',
   delegatorAddress: 'Delegator address',
+  delegatorAddress__delegated: 'Delegator address',
+  delegatorAddress__undelegated: 'Undelegation delegator address',
   amount: 'Stake amount for validator',
+  amount__delegated: 'Amount for delegation to validator',
+  amount__undelegated: 'Amount for undelegation to delegator',
   name: 'Validator name',
   commissionRate: 'Validator commission rate',
   maxCommissionRate: 'Validator commission rate',
@@ -121,18 +130,6 @@ export const transactionPropertyDescriptions: Record<string, string> = {
   slotPubKeyToRemove: 'Validator bls pub key to remove',
 };
 
-const delegatePropertyDescriptionsExtend: Record<string, string> = {
-  amount: 'Amount for delegation to validator',
-  validatorAddress: 'Delegation validator address',
-  delegatorAddress: 'Delegation delegator address',
-};
-
-const undelegatePropertyDescriptionsExtend: Record<string, string> = {
-  amount: 'Amount for undelegation to delegator',
-  validatorAddress: 'Undelegation validator address',
-  delegatorAddress: 'Undelegation delegator address',
-};
-
 export const transactionPropertyDisplayValues: any = {
   // @ts-ignore
   blockNumber: (value: any) => <BlockNumber number={value} />,
@@ -140,6 +137,7 @@ export const transactionPropertyDisplayValues: any = {
   value: (value: any) => <ONEValue value={value} />,
   to: (value: any) => <Address address={value} />,
   hash: (value: any) => <TransactionHash hash={value} />,
+  hash__staking: (value: any) => <TransactionHash hash={value} link="staking-tx" />,
   hash_harmony: (value: any) => <TransactionHash hash={value} />,
   blockHash: (value: any) => <BlockHash hash={value} />,
   timestamp: (value: any) => <Timestamp timestamp={value} />,
@@ -177,13 +175,14 @@ export const transactionPropertyDisplayValues: any = {
 export const transactionDisplayValues = (
   transaction: RPCTransactionHarmony,
   key: string,
-  value: any
+  value: any,
+  type: string,
 ) => {
   if (["blockHash", "toShardID", "msg"].includes(key)) {
     return;
   }
 
-  const f: null | Function = transactionPropertyDisplayValues[key];
+  const f: null | Function = transactionPropertyDisplayValues[key + type] || transactionPropertyDisplayValues[key];
 
   let displayValue = value;
 

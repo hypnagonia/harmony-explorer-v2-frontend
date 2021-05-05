@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
 import { transport } from "src/api/explorer";
-import {Box, DataTable, Spinner, Text} from "grommet";
+import { Box, DataTable, Spinner, Text } from "grommet";
 import { Block } from "src/types";
 import { useHistory } from "react-router-dom";
-import { formatNumber, RelativeTimer, Address } from "src/components/ui";
-import { getBlocks } from 'src/api/client';
+import { formatNumber, RelativeTimer } from "src/components/ui";
+import { getBlocks } from "src/api/client";
 
 function getColumns(props: any) {
   const { history } = props;
@@ -57,24 +57,16 @@ function getColumns(props: any) {
       ),
     },
     {
-      property: "miner",
-      primaryKey: true,
-      header: (
-        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
-          Miner
-        </Text>
-      ),
-      render: (data: Block) => <Address address={data.miner} isShort />,
-    },
-    {
       property: "transactions",
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
-          Txs
+          Transactions
         </Text>
       ),
       render: (data: Block) => (
-        <Text size="small">{data.transactions.length + data.stakingTransactions.length}</Text>
+        <Text size="small">
+          {data.transactions.length + data.stakingTransactions.length}
+        </Text>
       ),
     },
   ];
@@ -108,7 +100,7 @@ export function LatestBlocksTable() {
 
     return () => {
       clearTimeout(tId);
-    }
+    };
   }, []);
 
   if (!blocks.length) {

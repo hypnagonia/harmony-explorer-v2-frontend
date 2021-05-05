@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-import {Box, DataTable, Spinner, Text} from "grommet";
+import { Box, DataTable, Spinner, Text } from "grommet";
 import { RPCTransactionHarmony } from "src/types";
 import { useHistory } from "react-router-dom";
 import { RelativeTimer, Address } from "src/components/ui";
 import { getTransactions } from "src/api/client";
+import { FormNextLink } from "grommet-icons";
 
 function getColumns(props: any) {
   const { history } = props;
@@ -16,7 +17,17 @@ function getColumns(props: any) {
           Shard
         </Text>
       ),
-      render: (data: RPCTransactionHarmony) => <Text size="small">{0}</Text>,
+      render: (data: RPCTransactionHarmony) => (
+        <Box direction="row" gap="3px" align="center">
+          <Text size="small">{0}</Text>
+          <FormNextLink
+            size="small"
+            color="brand"
+            style={{ marginBottom: "2px" }}
+          />
+          <Text size="small">{0}</Text>
+        </Box>
+      ),
     },
     {
       property: "hash",
@@ -68,22 +79,11 @@ function getColumns(props: any) {
         </Text>
       ),
       render: (data: RPCTransactionHarmony) => (
-        <Box direction="row" gap="xsmall">
-          <RelativeTimer date={new Date(data.timestamp)} updateInterval={1000} />
-        </Box>
-      ),
-    },
-    {
-      property: "gas",
-      header: (
-        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
-          Gas
-        </Text>
-      ),
-      render: (data: RPCTransactionHarmony) => (
-        <Text size="small">
-          {data.gas}
-        </Text>
+        <RelativeTimer
+          date={new Date(data.timestamp)}
+          updateInterval={1000}
+          style={{ textAlign: "right" }}
+        />
       ),
     },
   ];
@@ -105,7 +105,7 @@ export function LatestTransactionsTable() {
     let tId = 0 as any;
     const exec = async () => {
       try {
-        let trxs = await getTransactions( [0, filter]);
+        let trxs = await getTransactions([0, filter]);
         setTransactions(trxs as RPCTransactionHarmony[]);
       } catch (err) {
         console.log(err);
@@ -117,7 +117,7 @@ export function LatestTransactionsTable() {
 
     return () => {
       clearTimeout(tId);
-    }
+    };
   }, []);
 
   if (!transactions.length) {

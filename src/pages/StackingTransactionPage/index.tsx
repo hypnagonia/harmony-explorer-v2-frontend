@@ -6,6 +6,8 @@ import React, { useEffect, useState } from "react";
 import { Box, Text } from "grommet";
 import { getStakingTransactionByField } from "src/api/client";
 import { TransactionDetails } from "src/components/transaction/TransactionDetails";
+import { StakingTransactionType } from "src/types";
+import { TransactionSubType } from "src/components/transaction/helpers";
 
 export const StakingTransactionPage = () => {
   // @ts-ignore
@@ -35,7 +37,7 @@ export const StakingTransactionPage = () => {
         </Text>
       </Box>
 
-      <TransactionDetails transaction={tx} />
+      <TransactionDetails transaction={tx} type="__staking" />
       <Box
         margin={{ top: "medium" }}
         pad={{ bottom: "small" }}
@@ -43,7 +45,18 @@ export const StakingTransactionPage = () => {
       >
         <Text size="large">Staking Data</Text>
       </Box>
-      <TransactionDetails transaction={tx.msg} />
+      <TransactionDetails
+        transaction={tx.msg}
+        type={subTypeMap[tx.type] || ""}
+      />
     </BasePage>
   );
+};
+
+const subTypeMap: Record<StakingTransactionType, TransactionSubType> = {
+  Delegate: "__delegated",
+  Undelegate: "__undelegated",
+  CollectRewards: "",
+  CreateValidator: "",
+  EditValidator: "",
 };
