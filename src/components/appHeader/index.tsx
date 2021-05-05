@@ -1,23 +1,29 @@
 import React from "react";
-import { Box, Button, Heading } from "grommet";
+import { Box, Heading } from "grommet";
 import { FiatPrice, BaseContainer } from "src/components/ui";
-import { Configure } from "grommet-icons";
 import { useHistory } from "react-router-dom";
+import { ConfigureButton } from './ConfigureButton';
+import { useThemeMode } from "src/hooks/themeSwitcherHook";
 
 import { CSSProperties } from "styled-components";
 
-const HeaderLine = (props: any) => (
-  <Box
-    tag="header"
-    direction="row"
-    justify="center"
-    background="brand"
-    pad={{ left: "medium", right: "small", vertical: "small" }}
-    elevation="medium"
-    style={{ zIndex: "1" }}
-    {...props}
-  />
-);
+const HeaderLine = (props: any) => {
+  //@ts-ignore
+  const isDark = useThemeMode() === 'dark';
+
+  return (
+    <Box
+      tag="header"
+      direction="row"
+      justify="center"
+      background={isDark ? 'background' : 'brand'}
+      pad={{ left: "medium", right: "small", vertical: "small" }}
+      elevation={isDark ? 'none' : 'medium' }
+      style={{ zIndex: "1" }}
+      {...props}
+    />
+  )
+}
 
 export function AppHeader(props: { style: CSSProperties }) {
   const history = useHistory();
@@ -29,13 +35,13 @@ export function AppHeader(props: { style: CSSProperties }) {
           level="5"
           margin="none"
           style={{ cursor: "pointer" }}
-          onClick={() => (history.push('/'))}
+          onClick={() => history.push("/")}
         >
           Harmony Block Explorer
           <br />
           <FiatPrice />
         </Heading>
-        <Button icon={<Configure size="medium" />} onClick={() => {}} />
+        <ConfigureButton />
       </BaseContainer>
     </HeaderLine>
   );

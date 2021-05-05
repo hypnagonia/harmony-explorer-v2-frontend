@@ -19,7 +19,7 @@ export function AppFooter(props: { style: CSSProperties }) {
   const { CoolGray } = theme?.global?.palette;
 
   return (
-    <Box background="white" justify="center" align="center" pad="medium" margin={{ top: 'medium' }} {...props}>
+    <Box background="background" justify="center" align="center" pad="medium" margin={{ top: 'medium' }} {...props}>
       <Box gap="xsmall">
         <Box direction="row" width="320px" justify="center" align="center" gap="medium">
           <IconAhchor href="https://harmony.one/team" target="_blank" rel="noreferrer">

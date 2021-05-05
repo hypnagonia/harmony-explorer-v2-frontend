@@ -18,6 +18,8 @@ export const theme = {
     },
     colors: {
       brand: palette.Purple,
+      background: 'white',
+      backgroundBack: '#f3f3f3',
       border: palette.LightGrey,
       majorText: palette.MidnightBlue,
       minorText: palette.CoolGray,
@@ -68,6 +70,35 @@ export const theme = {
           }
         }
       `,
+    },
+  },
+};
+
+export const darkTheme = {
+  ...theme,
+  global: {
+    focus: {
+      border: {
+        color: "transparent",
+      },
+    },
+    colors: {
+      brand: palette.MintGreen,
+      background: palette.MidnightBlue,
+      backgroundBack: '#030921',
+      border: '#375873',
+      majorText: palette.MidnightBlue,
+      minorText: '#5f98c7',
+      iconMain: palette.ElectricBlue,
+      tableRow: '#122852',
+      mintGreen: palette.MintGreen,
+    },
+    palette,
+    font: {
+      // family: 'Nunito',
+      family: "Fira Sans",
+      size: "14px",
+      height: "20px",
     },
   },
 };

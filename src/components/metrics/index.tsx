@@ -1,28 +1,25 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Text, DataChart } from "grommet";
 import { BasePage } from "src/components/ui";
 import { formatNumber } from "src/components/ui/utils";
 import { LatencyIcon } from "src/components/ui/icons";
 import { Transaction, LineChart, Cubes } from "grommet-icons";
 import styled from "styled-components";
-import { theme } from "../../theme";
 import { useONEExchangeRate } from "../../hooks/useONEExchangeRate";
 
 import { getCount } from "src/api/client";
 
-
 export function Metrics() {
-  const { LightGrey } = theme?.global?.palette;
 
   return (
     <BasePage direction="row" justify="between" margin={{ bottom: "medium" }}>
       <Box
         justify="between"
         pad={{ right: "medium" }}
+        border={{ size: "xsmall", side: "right", color: "border" }}
         style={{
           height: "140px",
           flex: "1 1",
-          borderRight: `1px solid ${LightGrey}`,
         }}
       >
         <ONEPrice />
@@ -32,10 +29,10 @@ export function Metrics() {
       <Box
         justify="between"
         pad={{ horizontal: "medium" }}
+        border={{ size: "xsmall", side: "right", color: "border" }}
         style={{
           height: "140px",
           flex: "1 1",
-          borderRight: `1px solid ${LightGrey}`,
         }}
       >
         <ShardCount />
@@ -80,7 +77,7 @@ function ONEPrice() {
           <Text
             size="11px"
             weight="bold"
-            color={priceChangePercent > 0 ? "#2cb32c" : "#d23540"}
+            color={priceChangePercent > 0 ? "status-ok" : "#d23540"}
           >
             ({priceChangePercent > 0 ? "+" : ""}
             {formatNumber(priceChangePercent)}%)
@@ -92,7 +89,7 @@ function ONEPrice() {
 }
 
 function TransactionsCount() {
-  const [count, setCount] = useState<string>('');
+  const [count, setCount] = useState<string>("");
 
   useEffect(() => {
     let tId = 0;
@@ -109,7 +106,7 @@ function TransactionsCount() {
 
     return () => {
       clearTimeout(tId);
-    }
+    };
   }, []);
 
   return (
@@ -201,14 +198,13 @@ function BlockTransactionsHistory() {
           data={data}
           axis={{
             x: {
-                granularity: 'fine',
-                property: "date",
-              },
-            y:
-              {
-                granularity: 'medium',
-                property: "amount",
-              },
+              granularity: "fine",
+              property: "date",
+            },
+            y: {
+              granularity: "medium",
+              property: "amount",
+            },
           }}
           series={[
             {
