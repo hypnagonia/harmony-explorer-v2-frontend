@@ -33,8 +33,6 @@ export const ONEValue = (props: ONEValueProps) => {
     });
   }
 
-  console.log(USDValue, +price, !isTodayTransaction);
-
   return (
     <Box direction="row" gap="xsmall">
       <Text
@@ -67,7 +65,7 @@ export const ONEValue = (props: ONEValueProps) => {
           <Text size="small">(${USDValue})</Text>
         </Tip>
       )}
-      {USDValue && +USDValue > 0 && isTodayTransaction && (
+      {USDValue && +price > 0 && isTodayTransaction && (
         <Text size="small">(${USDValue})</Text>
       )}
     </Box>

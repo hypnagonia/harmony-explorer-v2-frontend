@@ -6,7 +6,7 @@ import { TransactionPage } from 'src/pages/TransactionPage'
 import { StakingTransactionPage } from 'src/pages/StackingTransactionPage'
 import { AllBlocksPage } from 'src/pages/AllBlocksPage'
 import { AllTransactionsPage } from 'src/pages/AllTransactionsPage'
-
+import { AddressPage } from 'src/pages/AddressPage'
 
 export function Routes() {
   return (
@@ -34,6 +34,10 @@ export function Routes() {
 
         <Route path="/staking-tx/:id">
           <StakingTransactionPage />
+        </Route>
+
+        <Route path="/address/:id">
+          <AddressPage />
         </Route>
       </Switch>
       </>

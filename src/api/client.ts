@@ -1,5 +1,5 @@
 import { transport } from './explorer';
-import {Block, InternalTransaction, RPCStakingTransactionHarmony, RPCTransactionHarmony} from "src/types";
+import {Block, InternalTransaction, RPCStakingTransactionHarmony, RPCTransactionHarmony, RelatedTransaction} from "src/types";
 
 export function getBlockByNumber(params: any[]) {
   return transport('getBlockByNumber', params) as Promise<Block>;
@@ -36,4 +36,8 @@ export function getInternalTransactionsByField(params: any[]) {
 
 export function getTransactionLogsByField(params: any[]) {
   return transport('getLogsByField', params) as Promise<any>;
+}
+
+export function getRelatedTransactions(params: any[]) {
+  return transport('getRelatedTransactions', params) as Promise<RelatedTransaction[]>;
 }

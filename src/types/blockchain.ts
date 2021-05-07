@@ -225,3 +225,13 @@ export type Address2Transaction = {
   address: Address
   transactionType: AddressTransactionType
 }
+
+
+export interface RelatedTransaction {
+  address: string;
+  blockNumber: string;
+  transactionHash: string;
+  transactionType: RelatedTransactionType;
+}
+
+export type RelatedTransactionType = 'transaction' | 'internal_transaction' | 'stacking_transaction';
