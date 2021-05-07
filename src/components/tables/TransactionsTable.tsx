@@ -86,7 +86,7 @@ function getColumns(props: any) {
         </Text>
       ),
       render: (data: RPCTransactionHarmony) => (
-        <Text size="small">
+        <Text size="12px">
           <Address address={data.from} />
         </Text>
       ),
@@ -99,7 +99,7 @@ function getColumns(props: any) {
         </Text>
       ),
       render: (data: RPCTransactionHarmony) => (
-        <Text size="small">
+        <Text size="12px">
           <Address address={data.to} />
         </Text>
       ),
@@ -113,7 +113,7 @@ function getColumns(props: any) {
       ),
       render: (data: RPCTransactionHarmony) => (
         <Box justify="center">
-          <ONEValue value={data.value} timestamp={+data.timestamp} />
+          <ONEValue value={data.value} timestamp={data.timestamp} />
         </Box>
       ),
     },

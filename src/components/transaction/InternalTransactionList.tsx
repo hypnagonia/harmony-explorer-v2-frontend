@@ -8,6 +8,7 @@ import {Address, ONEValue, TransactionType } from "src/components/ui";
 interface InternalTransactionListProps {
   list: InternalTransaction[];
   hash: string;
+  timestamp: string;
 }
 
 const initFilter: Filter = {
@@ -19,7 +20,7 @@ const initFilter: Filter = {
 };
 
 export function InternalTransactionList(props: InternalTransactionListProps) {
-  const { list, hash } = props;
+  const { list, hash, timestamp } = props;
   const [filter, setFilter] = useState<Filter>(initFilter);
 
   const { limit = 10 } = filter;
@@ -27,7 +28,7 @@ export function InternalTransactionList(props: InternalTransactionListProps) {
   return (
     <Box margin={{ top: 'medium' }}>
       <TransactionsTable
-        columns={getColumns()}
+        columns={getColumns({timestamp})}
         data={list.sort((a, b) => a.index > b.index ? 1 : -1)}
         totalElements={100}
         showIfEmpty
@@ -42,6 +43,8 @@ export function InternalTransactionList(props: InternalTransactionListProps) {
 }
 
 function getColumns(props?: any) {
+  const { timestamp } = props;
+
   return [
     {
       property: "type",
@@ -91,7 +94,7 @@ function getColumns(props?: any) {
       ),
       render: (data: InternalTransaction) => (
         <Box justify="center" align="end">
-          <ONEValue value={data.value} />
+          <ONEValue value={data.value} timestamp={timestamp} />
         </Box>
       ),
     },

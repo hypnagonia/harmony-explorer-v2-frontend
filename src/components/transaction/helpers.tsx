@@ -134,7 +134,7 @@ export const transactionPropertyDisplayValues: any = {
   // @ts-ignore
   blockNumber: (value: any) => <BlockNumber number={value} />,
   from: (value: any) => <Address address={value} />,
-  value: (value: any) => <ONEValue value={value} />,
+  value: (value: any, tx: any) => <ONEValue value={value} timestamp={tx.timestamp} />,
   to: (value: any) => <Address address={value} />,
   hash: (value: any) => <TransactionHash hash={value} />,
   hash__staking: (value: any) => <TransactionHash hash={value} link="staking-tx" />,
@@ -154,7 +154,7 @@ export const transactionPropertyDisplayValues: any = {
     </span>
   ),
   type: (value: any) => <StakingTransactionTypeValue type={value} />,
-  amount: (value: any) => <ONEValue value={value} />,
+  amount: (value: any, tx: any) => <ONEValue value={value} timestamp={tx.timestamp} />,
   name: (value: any) => <span>{value}</span>,
   delegatorAddress: (value: any) => <Address address={value} />,
   validatorAddress: (value: any) => <Address address={value} />,

@@ -4,17 +4,23 @@ import { Text, Box, Tip } from "grommet";
 import { TipContent } from "./Tooltip";
 import React from "react";
 import dayjs from "dayjs";
+import { formatNumber } from "./utils";
 
 interface ONEValueProps {
   value: string | number;
-  timestamp?: number;
+  timestamp?: string;
 }
 
 // @ts-ignore
 export const ONEValue = (props: ONEValueProps) => {
-  const { value, timestamp } = props;
+  const { value, timestamp = "" } = props;
   const { lastPrice } = useONEExchangeRate();
-  const price = timestamp ? getNearestPriceForTimestamp(timestamp) : lastPrice;
+  const isTodayTransaction =
+    dayjs(timestamp).format("YYYY-MM-DD") === dayjs().format("YYYY-MM-DD");
+  const price =
+    timestamp && !isTodayTransaction
+      ? getNearestPriceForTimestamp(timestamp)
+      : lastPrice;
 
   const bi = BigInt(value) / BigInt(10 ** 14);
   const v = parseInt(bi.toString()) / 10000;
@@ -36,20 +42,28 @@ export const ONEValue = (props: ONEValueProps) => {
       >
         {v.toString()} ONE
       </Text>
-      {USDValue && (
+      {USDValue && +USDValue > 0 && !isTodayTransaction && (
         <Tip
-          dropProps={{ align: { left: "right" }, margin: { left: 'small' } }}
+          dropProps={{ align: { left: "right" }, margin: { left: "small" } }}
           content={
             <TipContent
-              message={<span>{`Displaying value on ${dayjs(timestamp).format(
-                "YYYY-MM-DD"
-              )}. Current value`} <b>${(v * +lastPrice).toFixed(2)}</b></span>}
+              message={
+                <span>
+                  {`Displaying value on ${dayjs(timestamp).format(
+                    "YYYY-MM-DD"
+                  )}. Current value`}{" "}
+                  <b>${formatNumber(v * +lastPrice)}</b>
+                </span>
+              }
             />
           }
           plain
         >
           <Text size="small">(${USDValue})</Text>
         </Tip>
+      )}
+      {USDValue && +USDValue > 0 && isTodayTransaction && (
+        <Text size="small">(${USDValue})</Text>
       )}
     </Box>
   );

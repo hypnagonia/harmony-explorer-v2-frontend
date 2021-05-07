@@ -39,7 +39,6 @@ export const TransactionPage = () => {
   useEffect(() => {
     const getInternalTxs = async () => {
       try {
-        console.log(tx.hash); //TODO undefined
         //@ts-ignore
         let trxs = await getInternalTransactionsByField([
           0,
@@ -88,7 +87,7 @@ export const TransactionPage = () => {
           <TransactionDetails transaction={tx} />
         </Tab>
         <Tab title={<Text size="small">Internal Transactions</Text>}>
-          <InternalTransactionList list={trxs} hash={tx.hash} />
+          <InternalTransactionList list={trxs} hash={tx.hash} timestamp={tx.timestamp} />
         </Tab>
         <Tab title={<Text size="small">Logs</Text>}>
           <TransactionLogs logs={logs} hash={tx.hash} />
