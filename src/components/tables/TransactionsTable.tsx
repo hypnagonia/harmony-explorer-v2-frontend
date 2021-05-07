@@ -232,11 +232,11 @@ export function TransactionsTable(props: TransactionTableProps) {
         <Box direction="row" justify="between" margin={{ top: "medium" }}>
           <PaginationRecordsPerPage filter={filter} onChange={setFilter} />
           <PaginationNavigator
-            elements={data}
             onChange={setFilter}
             filter={filter}
             totalElements={totalElements}
-            property="number"
+            elements={data}
+            property="block_number"
           />
         </Box>
       )}

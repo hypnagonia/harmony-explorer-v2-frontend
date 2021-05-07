@@ -1,6 +1,5 @@
-import React, {CSSProperties, useEffect, useState} from "react";
+import React, { CSSProperties, useEffect, useState } from "react";
 import { Text } from "grommet";
-import { reintervate } from "src/components/ui/utils";
 import RelativeTime from "dayjs/plugin/relativeTime";
 import UpdateLocale from "dayjs/plugin/updateLocale";
 import dayjs from "dayjs";
@@ -8,8 +7,8 @@ import dayjs from "dayjs";
 dayjs.extend(UpdateLocale);
 const config = {
   thresholds: [
-    { l: "s", r: 3, d: 'second' },
-    { l: "ss", r: 59, d: 'second' },
+    { l: "s", r: 3, d: "second" },
+    { l: "ss", r: 59, d: "second" },
     { l: "m", r: 1 },
     { l: "mm", r: 59, d: "minute" },
     { l: "h", r: 1 },
@@ -44,8 +43,6 @@ dayjs.updateLocale("en", {
   },
 });
 
-
-
 interface IRelativeTimer {
   date: number | string | Date;
   updateInterval?: number;
@@ -59,8 +56,13 @@ export function RelativeTimer(props: IRelativeTimer) {
     const getTimeOffset = () => {
       setFormattedValue(dayjs().to(dayjs(date)));
     };
-    reintervate(getTimeOffset, updateInterval);
-  }, []);
+    getTimeOffset();
+    const tId = window.setInterval(getTimeOffset, updateInterval);
+
+    return () => {
+      clearInterval(tId);
+    };
+  }, [date]);
 
   const [formattedValue, setFormattedValue] = useState("");
 
@@ -69,7 +71,11 @@ export function RelativeTimer(props: IRelativeTimer) {
   }
 
   return (
-    <Text size="small" style={{ minWidth: '125px', ...style }} color="minorText">
+    <Text
+      size="small"
+      style={{ minWidth: "125px", ...style }}
+      color="minorText"
+    >
       {formattedValue}
     </Text>
   );

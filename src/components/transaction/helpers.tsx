@@ -140,7 +140,7 @@ export const transactionPropertyDisplayValues: any = {
   hash__staking: (value: any) => <TransactionHash hash={value} link="staking-tx" />,
   hash_harmony: (value: any) => <TransactionHash hash={value} />,
   blockHash: (value: any) => <BlockHash hash={value} />,
-  timestamp: (value: any) => <Timestamp timestamp={value} />,
+  timestamp: (value: any) => <Timestamp timestamp={value} withRelative />,
   gasUsed: (value: any, tx: RPCTransactionHarmony) => (
     <span>
       {value} ({+value / +tx.gas}%){" "}
