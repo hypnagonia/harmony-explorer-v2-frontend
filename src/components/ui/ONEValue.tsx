@@ -24,7 +24,7 @@ export const ONEValue = (props: ONEValueProps) => {
 
   const bi = BigInt(value) / BigInt(10 ** 14);
   const v = parseInt(bi.toString()) / 10000;
-  let USDValue;
+  let USDValue = "";
   if (price && v > 0) {
     USDValue = (v * +price).toLocaleString("en-US", {
       minimumFractionDigits: 2,
@@ -32,6 +32,8 @@ export const ONEValue = (props: ONEValueProps) => {
       currency: "USD",
     });
   }
+
+  console.log(USDValue, +price, !isTodayTransaction);
 
   return (
     <Box direction="row" gap="xsmall">
@@ -42,7 +44,7 @@ export const ONEValue = (props: ONEValueProps) => {
       >
         {v.toString()} ONE
       </Text>
-      {USDValue && +USDValue > 0 && !isTodayTransaction && (
+      {USDValue && +price > 0 && !isTodayTransaction && (
         <Tip
           dropProps={{ align: { left: "right" }, margin: { left: "small" } }}
           content={
@@ -52,7 +54,10 @@ export const ONEValue = (props: ONEValueProps) => {
                   {`Displaying value on ${dayjs(timestamp).format(
                     "YYYY-MM-DD"
                   )}. Current value`}{" "}
-                  <b>${formatNumber(v * +lastPrice)}</b>
+                  <b>
+                    $
+                    {formatNumber(v * +lastPrice, { maximumFractionDigits: 2 })}
+                  </b>
                 </span>
               }
             />
