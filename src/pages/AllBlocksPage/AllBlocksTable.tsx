@@ -183,24 +183,26 @@ export function AllBlocksTable() {
           property="number"
         />
       </Box>
-      <DataTable
-        className={"g-table-header"}
-        style={{ width: "100%" }}
-        columns={getColumns({ history })}
-        data={blocks}
-        step={10}
-        border={{
-          header: {
-            color: "brand",
-          },
-          body: {
-            color: "border",
-            side: "top",
-            size: "1px",
-          },
-        }}
-      />
-      <Box direction="row" justify="between" margin={{ top: "medium" }}>
+      <Box style={{ overflow: 'auto' }}>
+        <DataTable
+          className={"g-table-header"}
+          style={{ width: "100%",  minWidth: '1110px' }}
+          columns={getColumns({ history })}
+          data={blocks}
+          step={10}
+          border={{
+            header: {
+              color: "brand",
+            },
+            body: {
+              color: "border",
+              side: "top",
+              size: "1px",
+            },
+          }}
+        />
+      </Box>
+      <Box direction="row" justify="between" align="center" margin={{ top: "medium" }}>
         <PaginationRecordsPerPage filter={filter} onChange={setFilter} />
         <PaginationBlockNavigator
           blocks={blocks}

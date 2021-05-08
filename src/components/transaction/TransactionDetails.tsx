@@ -81,10 +81,10 @@ export const TransactionDetails: FunctionComponent<TransactionDetailsProps> = ({
 
   return (
     <>
-      <Box flex align="start" justify="start">
+      <Box flex align="start" justify="start" style={{ overflow: 'auto' }}>
         <DataTable
           className={"g-table-body-last-col-right g-table-no-header"}
-          style={{ width: "100%" }}
+          style={{ width: "100%", minWidth: '698px' }}
           columns={getColumns({ type })}
           data={txData}
           step={10}

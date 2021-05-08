@@ -47,29 +47,33 @@ const LogItem = (props: LogItemProps) => {
     <Box
       gap="small"
       border={{ size: "xsmall", side: "bottom", color: "border" }}
-      pad={{ bottom: "small", top: "medium" }}
+      pad={{ bottom: "small" }}
     >
       <Box>
         <Text color="minorText" size="small">
           Address
         </Text>
         <Text size="small" color="brand">
-          <Address address={address} />
+          <Address address={address} style={{ wordBreak: 'break-all' }} />
         </Text>
       </Box>
       <Box>
         <Text color="minorText" size="small">
           Topics
         </Text>
-        <Text size="small" color="brand">
-          {topics.join(", ")}
-        </Text>
+        <Box gap="xxsmall">
+          {topics.map(((topic, i) => (
+            <Text size="small" color="brand" style={{ wordBreak: 'break-all' }}>
+              {topic}{i !== topics.length - 1 ?', ' : ''}
+            </Text>
+          )))}
+        </Box>
       </Box>
       <Box>
         <Text color="minorText" size="small">
           Data
         </Text>
-        <Text size="small" color="brand">
+        <Text size="small" color="brand" style={{ wordBreak: 'break-all' }}>
           {data}
         </Text>
       </Box>

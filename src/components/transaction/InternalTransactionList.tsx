@@ -37,6 +37,7 @@ export function InternalTransactionList(props: InternalTransactionListProps) {
         limit={+limit}
         filter={filter}
         setFilter={setFilter}
+        minWidth="960px"
       />
     </Box>
   )

@@ -86,9 +86,7 @@ function getColumns(props: any) {
         </Text>
       ),
       render: (data: RPCTransactionHarmony) => (
-        <Text size="12px">
-          <Address address={data.from} />
-        </Text>
+          <Address address={data.from} style={{ fontSize: '12px' }} />
       ),
     },
     {
@@ -99,9 +97,7 @@ function getColumns(props: any) {
         </Text>
       ),
       render: (data: RPCTransactionHarmony) => (
-        <Text size="12px">
-          <Address address={data.to} />
-        </Text>
+          <Address address={data.to} style={{ fontSize: '12px' }} />
       ),
     },
     {
@@ -152,6 +148,7 @@ interface TransactionTableProps {
   hidePagination?: boolean;
   isLoading?: boolean;
   hideCounter?: boolean;
+  minWidth?: string;
 }
 
 export function TransactionsTable(props: TransactionTableProps) {
@@ -168,6 +165,7 @@ export function TransactionsTable(props: TransactionTableProps) {
     hidePagination,
     isLoading,
     hideCounter,
+    minWidth = '1310px'
   } = props;
 
   if ((!data.length && !showIfEmpty) || isLoading) {
@@ -211,25 +209,27 @@ export function TransactionsTable(props: TransactionTableProps) {
           />
         )}
       </Box>
-      <DataTable
-        className={"g-table-header"}
-        style={{ width: "100%" }}
-        columns={columns ? columns : getColumns({ history })}
-        data={data}
-        step={10}
-        border={{
-          header: {
-            color: "brand",
-          },
-          body: {
-            color: "border",
-            side: "top",
-            size: "1px",
-          },
-        }}
-      />
+      <Box style={{ overflow: 'auto' }}>
+        <DataTable
+          className={"g-table-header"}
+          style={{ width: "100%", minWidth }}
+          columns={columns ? columns : getColumns({ history })}
+          data={data}
+          step={10}
+          border={{
+            header: {
+              color: "brand",
+            },
+            body: {
+              color: "border",
+              side: "top",
+              size: "1px",
+            },
+          }}
+        />
+      </Box>
       {!hidePagination && (
-        <Box direction="row" justify="between" margin={{ top: "medium" }}>
+        <Box direction="row" justify="between" align="center" margin={{ top: "medium" }}>
           <PaginationRecordsPerPage filter={filter} onChange={setFilter} />
           <PaginationNavigator
             onChange={setFilter}

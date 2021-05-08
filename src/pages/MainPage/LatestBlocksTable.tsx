@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
-import { transport } from "src/api/explorer";
+import { useMediaQuery } from 'react-responsive';
+import { breakpoints } from "src/Responive/breakpoints";
 import { Box, DataTable, Spinner, Text } from "grommet";
 import { Block } from "src/types";
 import { useHistory } from "react-router-dom";
@@ -84,6 +85,8 @@ const filter = {
 export function LatestBlocksTable() {
   const history = useHistory();
   const [blocks, setBlocks] = useState<Block[]>([]);
+  const isLess1110 = useMediaQuery({ maxDeviceWidth: '1110px' });
+
   useEffect(() => {
     let tId = 0 as any;
     const exec = async () => {
@@ -112,22 +115,24 @@ export function LatestBlocksTable() {
   }
 
   return (
-    <DataTable
-      className={"g-table-header"}
-      style={{ width: "100%" }}
-      columns={getColumns({ history })}
-      data={blocks}
-      step={10}
-      border={{
-        header: {
-          color: "brand",
-        },
-        body: {
-          color: "border",
-          side: "top",
-          size: "1px",
-        },
-      }}
-    />
+    <Box style={{ overflow: 'auto' }}>
+      <DataTable
+        className={"g-table-header"}
+        style={{ width: "100%", minWidth: '620px' }}
+        columns={getColumns({ history })}
+        data={blocks}
+        step={10}
+        border={{
+          header: {
+            color: "brand",
+          },
+          body: {
+            color: "border",
+            side: "top",
+            size: "1px",
+          },
+        }}
+      />
+    </Box>
   );
 }

@@ -17,7 +17,7 @@ const HeaderLine = (props: any) => {
       direction="row"
       justify="center"
       background={isDark ? 'background' : 'brand'}
-      pad={{ left: "medium", right: "small", vertical: "small" }}
+      pad={{ vertical: "small" }}
       elevation={isDark ? 'none' : 'medium' }
       style={{ zIndex: "1" }}
       {...props}

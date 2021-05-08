@@ -129,22 +129,24 @@ export function LatestTransactionsTable() {
   }
 
   return (
-    <DataTable
-      className={"g-table-header"}
-      style={{ width: "100%" }}
-      columns={getColumns({ history })}
-      data={transactions}
-      step={10}
-      border={{
-        header: {
-          color: "brand",
-        },
-        body: {
-          color: "border",
-          side: "top",
-          size: "1px",
-        },
-      }}
-    />
+    <Box style={{ overflow: 'auto' }}>
+      <DataTable
+        className={"g-table-header"}
+        style={{ width: "100%", minWidth: '620px' }}
+        columns={getColumns({ history })}
+        data={transactions}
+        step={10}
+        border={{
+          header: {
+            color: "brand",
+          },
+          body: {
+            color: "border",
+            side: "top",
+            size: "1px",
+          },
+        }}
+      />
+    </Box>
   );
 }

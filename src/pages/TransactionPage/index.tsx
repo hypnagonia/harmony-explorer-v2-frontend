@@ -82,7 +82,7 @@ export const TransactionPage = () => {
 
   return (
     <BasePage>
-      <Tabs alignControls="start">
+      <Tabs alignControls="start" justify="start">
         <Tab title={<Text size="small">Transaction Details</Text>}>
           <TransactionDetails transaction={tx} />
         </Tab>

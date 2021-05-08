@@ -33,7 +33,7 @@ export function ConfigureButton() {
           />
         </Box>
       }
-      style={{ border: "none", boxShadow: "none" }}
+      style={{ border: "none", boxShadow: "none", paddingRight: '6px' }}
     />
   );
 }

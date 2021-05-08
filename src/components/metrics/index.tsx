@@ -5,44 +5,63 @@ import { formatNumber } from "src/components/ui/utils";
 import { LatencyIcon } from "src/components/ui/icons";
 import { Transaction, LineChart, Cubes } from "grommet-icons";
 import styled from "styled-components";
+import { useMediaQuery } from "react-responsive";
+import { breakpoints } from "src/Responive/breakpoints";
 import { useONEExchangeRate } from "../../hooks/useONEExchangeRate";
 
 import { getCount } from "src/api/client";
 
 export function Metrics() {
+  const isLessLaptop = useMediaQuery({ maxDeviceWidth: "852px" });
+  const isLessTablet = useMediaQuery({ maxDeviceWidth: breakpoints.tablet });
+  const isLessMobileM = useMediaQuery({ maxDeviceWidth: '468px' });
 
   return (
-    <BasePage direction="row" justify="between" margin={{ bottom: "medium" }}>
+    <BasePage
+      direction="row"
+      justify="between"
+      wrap={isLessLaptop}
+      margin={{ bottom: "medium" }}
+    >
       <Box
         justify="between"
-        pad={{ right: "medium" }}
-        border={{ size: "xsmall", side: "right", color: "border" }}
+        pad={{ right: isLessMobileM ? '0' : "medium" }}
+        border={{ size: isLessMobileM ? '0' : "xsmall", side: "right", color: "border" }}
         style={{
-          height: "140px",
-          flex: "1 1",
+          height: isLessMobileM ? "auto" : '140px',
+          flex: isLessLaptop ? "1 1 50%" : "1 1 100%",
         }}
+        gap={isLessMobileM ? 'small' : '0'}
       >
         <ONEPrice />
-        <Line horizontal />
+        {!isLessMobileM && (<Line horizontal />)}
         <TransactionsCount />
       </Box>
       <Box
         justify="between"
-        pad={{ horizontal: "medium" }}
-        border={{ size: "xsmall", side: "right", color: "border" }}
+        pad={{ left: "medium", right: isLessLaptop ? "0" : "medium" }}
+        border={{
+          size: isLessLaptop ? "0" : "xsmall",
+          side: "right",
+          color: "border",
+        }}
         style={{
-          height: "140px",
-          flex: "1 1",
+          height: isLessMobileM ? 'auto' : '140px',
+          flex: isLessLaptop ? "1 1 50%" : "1 1 100%",
         }}
       >
         <ShardCount />
-        <Line horizontal />
+        {!isLessMobileM && (<Line horizontal />)}
         <BlockLatency />
       </Box>
+      {isLessLaptop && <Line horizontal style={{ marginTop: isLessTablet ? '16px' : "24px" }} />}
       <Box
         justify="between"
-        pad={{ left: "medium" }}
-        style={{ height: "140px", flex: "1 1" }}
+        pad={{
+          left: isLessLaptop ? "0" : "medium",
+        }}
+        margin={{ top: isLessLaptop ? "medium" : "0" }}
+        style={{ height: "140px", flex: "1 1 100%" }}
       >
         <BlockTransactionsHistory />
       </Box>

@@ -62,32 +62,34 @@ export const BlockDetails: FunctionComponent<BlockDetailsProps> = ({ block }) =>
   }, [] as tableEntry[])
 
   return <>
-    <Box flex align="center" justify="start" margin={{ top: '-46px' }} style={{ overflow: 'hidden' }}>
-      <DataTable
-        className={'g-table-body-last-col-right'}
-        style={{ width: '100%' }}
-        columns={columns}
-        data={blockData}
-        step={10}
-        border={{
-          header: {
-            color: 'none'
-          },
-          body: {
-            color: 'border',
-            side: 'top',
-            size: '1px'
-          }
-        }}
-      />
-      <Anchor onClick={() => setShowDetails(!showDetails)} margin={{ top: "medium" }}>
-        {showDetails
-          ? <>Show less&nbsp;
-            <CaretUpFill size="small" /></>
-          : <>Show more&nbsp;
-          <CaretDownFill size="small" /></>
-        }
-      </Anchor>
+    <Box flex align="stretch" justify="start" margin={{ top: '-42px' }} style={{ overflow: 'auto' }}>
+        <DataTable
+          className={'g-table-body-last-col-right'}
+          style={{ width: '100%', minWidth: '698px' }}
+          columns={columns}
+          data={blockData}
+          step={10}
+          border={{
+            header: {
+              color: 'none'
+            },
+            body: {
+              color: 'border',
+              side: 'top',
+              size: '1px'
+            }
+          }}
+        />
+        <Box align="center" justify="center">
+          <Anchor onClick={() => setShowDetails(!showDetails)} margin={{ top: "medium" }}>
+            {showDetails
+              ? <>Show less&nbsp;
+                <CaretUpFill size="small" /></>
+              : <>Show more&nbsp;
+                <CaretDownFill size="small" /></>
+            }
+          </Anchor>
+        </Box>
     </Box>
   </>
 }
