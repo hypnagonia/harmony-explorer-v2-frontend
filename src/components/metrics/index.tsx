@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Box, Text, DataChart } from "grommet";
+import { Box, Text, DataChart, Spinner } from "grommet";
 import { BasePage } from "src/components/ui";
 import { formatNumber } from "src/components/ui/utils";
 import { LatencyIcon } from "src/components/ui/icons";
+import dayjs from "dayjs";
 import { Transaction, LineChart, Cubes } from "grommet-icons";
 import styled from "styled-components";
 import { useMediaQuery } from "react-responsive";
 import { breakpoints } from "src/Responive/breakpoints";
 import { useONEExchangeRate } from "../../hooks/useONEExchangeRate";
+import { getTransactionCountLast14Days } from "src/api/client";
 
 import { getCount } from "src/api/client";
 
 export function Metrics() {
   const isLessLaptop = useMediaQuery({ maxDeviceWidth: "852px" });
   const isLessTablet = useMediaQuery({ maxDeviceWidth: breakpoints.tablet });
-  const isLessMobileM = useMediaQuery({ maxDeviceWidth: '468px' });
+  const isLessMobileM = useMediaQuery({ maxDeviceWidth: "468px" });
 
   return (
     <BasePage
@@ -25,16 +27,20 @@ export function Metrics() {
     >
       <Box
         justify="between"
-        pad={{ right: isLessMobileM ? '0' : "medium" }}
-        border={{ size: isLessMobileM ? '0' : "xsmall", side: "right", color: "border" }}
+        pad={{ right: isLessMobileM ? "0" : "medium" }}
+        border={{
+          size: isLessMobileM ? "0" : "xsmall",
+          side: "right",
+          color: "border",
+        }}
         style={{
-          height: isLessMobileM ? "auto" : '140px',
+          height: isLessMobileM ? "auto" : "140px",
           flex: isLessLaptop ? "1 1 50%" : "1 1 100%",
         }}
-        gap={isLessMobileM ? 'small' : '0'}
+        gap={isLessMobileM ? "small" : "0"}
       >
         <ONEPrice />
-        {!isLessMobileM && (<Line horizontal />)}
+        {!isLessMobileM && <Line horizontal />}
         <TransactionsCount />
       </Box>
       <Box
@@ -46,15 +52,20 @@ export function Metrics() {
           color: "border",
         }}
         style={{
-          height: isLessMobileM ? 'auto' : '140px',
+          height: isLessMobileM ? "auto" : "140px",
           flex: isLessLaptop ? "1 1 50%" : "1 1 100%",
         }}
       >
         <ShardCount />
-        {!isLessMobileM && (<Line horizontal />)}
+        {!isLessMobileM && <Line horizontal />}
         <BlockLatency />
       </Box>
-      {isLessLaptop && <Line horizontal style={{ marginTop: isLessTablet ? '16px' : "24px" }} />}
+      {isLessLaptop && (
+        <Line
+          horizontal
+          style={{ marginTop: isLessTablet ? "16px" : "24px" }}
+        />
+      )}
       <Box
         justify="between"
         pad={{
@@ -197,15 +208,30 @@ function BlockLatency() {
   );
 }
 
+interface TxHitoryItem {
+  timestamp: string;
+  count: string;
+}
+
 function BlockTransactionsHistory() {
-  const data = [
-    { date: "08-20", amount: 0 },
-    { date: "08-21", amount: 18 },
-    { date: "08-22", amount: 21 },
-    { date: "08-23", amount: 14 },
-    { date: "08-24", amount: 52 },
-    { date: "08-25", amount: 43 },
-  ];
+  const [result, setResult] = useState<TxHitoryItem[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    const getElements = async () => {
+      setIsLoading(true);
+      const res = await getTransactionCountLast14Days();
+      setResult(res);
+      setIsLoading(false);
+    };
+
+    getElements();
+  }, []);
+
+  const data = result.map((i) => ({
+    date: dayjs(i.timestamp).format("DD-MM"),
+    count: +i.count,
+  }));
 
   return (
     <Box>
@@ -213,50 +239,56 @@ function BlockTransactionsHistory() {
         {"TRANSACTION HISTORY"}
       </Text>
       <Box style={{ flex: "1 1 100%" }}>
-        <DataChart
-          data={data}
-          axis={{
-            x: {
-              granularity: "fine",
-              property: "date",
-            },
-            y: {
-              granularity: "medium",
-              property: "amount",
-            },
-          }}
-          series={[
-            {
-              property: "date",
-              label: "Date",
-              render: (value) => (
-                <Text size="xsmall" color="minorText">
-                  {value}
-                </Text>
-              ),
-            },
-            {
-              property: "amount",
-              label: "Transactions",
-              render: (value) => (
-                <Text size="xsmall" color="minorText">
-                  {formatNumber(value)}
-                </Text>
-              ),
-            },
-          ]}
-          // detail
-          size="fill"
-          chart={[
-            {
-              property: "amount",
-              type: "line",
-              color: "brand",
-              opacity: "medium",
-              thickness: "2px",
-            },
-          ]}
-        />
+        {isLoading && (
+          <Box justify="center" align="center" height="110px">
+            <Spinner />
+          </Box>
+        )}
+        {!isLoading && (
+          <DataChart
+            data={data}
+            axis={{
+              x: {
+                granularity: "medium",
+                property: "date",
+              },
+              y: {
+                granularity: "medium",
+                property: "count",
+              },
+            }}
+            series={[
+              {
+                property: "date",
+                label: "Date",
+                render: (value) => (
+                  <Text size="xsmall" color="minorText">
+                    {value}
+                  </Text>
+                ),
+              },
+              {
+                property: "count",
+                label: "Transactions",
+                render: (value) => (
+                  <Text size="xsmall" color="minorText">
+                    {formatNumber(value)}
+                  </Text>
+                ),
+              },
+            ]}
+            size="fill"
+            chart={[
+              {
+                property: "count",
+                type: "line",
+                color: "brand",
+                opacity: "medium",
+                thickness: "3px",
+              },
+            ]}
+          />
+        )}
       </Box>
     </Box>
   );

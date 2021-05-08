@@ -8,8 +8,15 @@ import {
   themeType,
 } from "src/hooks/themeSwitcherHook";
 
+import {
+  useCurrency,
+  setCurrency,
+  currencyType,
+} from "src/hooks/ONE-ETH-SwitcherHook";
+
 export function ConfigureButton() {
   const theme = useThemeMode();
+  const currency = useCurrency();
 
   return (
     <DropButton
@@ -22,7 +29,9 @@ export function ConfigureButton() {
           border={{ size: "xsmall", color: "border" }}
           style={{ borderRadius: "0px" }}
         >
-          <Text size="small" weight="bold" margin={{ bottom: 'xsmall' }}>Theme</Text>
+          <Text size="small" weight="bold" margin={{ bottom: "xsmall" }}>
+            Theme
+          </Text>
           <ToggleButton
             value={theme}
             options={[
@@ -31,9 +40,24 @@ export function ConfigureButton() {
             ]}
             onChange={setThemeMode}
           />
+          <Text
+            size="small"
+            weight="bold"
+            margin={{ bottom: "xsmall", top: "small" }}
+          >
+            Currency
+          </Text>
+          <ToggleButton
+            value={currency}
+            options={[
+              { text: "ONE", value: "ONE" },
+              { text: "ETH", value: "ETH" },
+            ]}
+            onChange={setCurrency}
+          />
         </Box>
       }
-      style={{ border: "none", boxShadow: "none", paddingRight: '6px' }}
+      style={{ border: "none", boxShadow: "none", paddingRight: "6px" }}
     />
   );
 }
@@ -42,9 +66,9 @@ interface ToggleProps {
   value: string;
   options: Array<{
     text: string;
-    value: themeType;
+    value: themeType | currencyType;
   }>;
-  onChange: (value: themeType) => void;
+  onChange: (value: any) => void;
 }
 
 //@ts-ignore
@@ -73,6 +97,7 @@ const ToggleButton = (props: ToggleProps) => {
 
 const SwitchButton = styled.div<{ selected: boolean }>`
   padding: 8px 20px;
+  min-width: 50px;
   background-color: ${(props) =>
     props.selected ? props.theme.global.colors.brand : "transparent"};
   color: ${(props) =>
@@ -82,5 +107,6 @@ const SwitchButton = styled.div<{ selected: boolean }>`
   font-weight: ${(props) => (props.selected ? "bold" : "normal")};
   user-select: none;
   outline: none;
-  cursor: ${(props) => (props.selected ? "auto" : "pointer" )}
+  text-align: center;
+  cursor: ${(props) => (props.selected ? "auto" : "pointer")};
 `;

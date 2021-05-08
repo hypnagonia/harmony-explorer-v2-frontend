@@ -41,3 +41,7 @@ export function getTransactionLogsByField(params: any[]) {
 export function getRelatedTransactions(params: any[]) {
   return transport('getRelatedTransactions', params) as Promise<RelatedTransaction[]>;
 }
+
+export function getTransactionCountLast14Days() {
+  return transport('getTransactionCountLast14Days', []) as Promise<any[]>;
+}
