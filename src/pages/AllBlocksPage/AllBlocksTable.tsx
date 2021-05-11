@@ -171,7 +171,7 @@ export function AllBlocksTable() {
         border={{ size: "xsmall", side: "bottom", color: "border" }}
 
       >
-        <Text>
+        <Text style={{ flex: '1 1 auto' }}>
           <b>{filter.limit}</b> blocks shown, from <b>#{formatNumber(+endValue)}</b> to{" "}
           <b>#{formatNumber(+beginValue)}</b>
         </Text>

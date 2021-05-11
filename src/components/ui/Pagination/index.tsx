@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Box, Text, Select } from "grommet";
 import { Filter } from "src/types";
 import { FormPrevious, FormNext } from "grommet-icons";
@@ -15,6 +15,14 @@ export function PaginationNavigator(props: PaginationNavigator) {
   const { elements, totalElements, filter, onChange, property } = props;
   const { filters, limit = 10 } = filter;
   const { value } = filters[0];
+
+  useEffect(() => {
+      const scrollBody = document.getElementById("scrollBody");
+
+      if (scrollBody) {
+        scrollBody.scrollTo({ top: 0 });
+      }
+  }, [filter]);
 
   const blockNumbers = elements.map((b) => +b.blockNumber);
   const minBlockNumber = blockNumbers.reduce(
@@ -46,7 +54,7 @@ export function PaginationNavigator(props: PaginationNavigator) {
   };
 
   return (
-    <Box>
+    <Box style={{ flex: '0 0 auto' }}>
       <Pagination
         currentPage={+((totalElements - +value) / limit).toFixed(0) + 1}
         totalPages={+(Number(totalElements) / limit).toFixed(0)}

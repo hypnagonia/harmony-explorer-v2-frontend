@@ -42,7 +42,8 @@ export function AppFooter(props: { style: CSSProperties }) {
         {/*  <Anchor color="minorText" size="small" weight="normal" href="/">Privacy Policy</Anchor>*/}
         {/*</Box>*/}
         <Box direction="row" justify="center" align="center" gap="xsmall">
-          <Text color="minorText" size="xsmall">© Harmony {new Date().getFullYear()}</Text>
+          <Text color="minorText" size="xsmall" margin={{ top: '3px' }}>©</Text>
+          <Text color="minorText" size="xsmall">Harmony {new Date().getFullYear()}</Text>
           <Text color="minorText" size="small" margin={{ bottom: '6px' }}>.</Text>
           <Text color="minorText" size="xsmall">hello@harmony.one</Text>
         </Box>

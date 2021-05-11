@@ -45,12 +45,12 @@ export function ConfigureButton() {
             weight="bold"
             margin={{ bottom: "xsmall", top: "small" }}
           >
-            Currency
+            Address style
           </Text>
           <ToggleButton
             value={currency}
             options={[
-              { text: "ONE", value: "ONE" },
+              { text: "Harmony", value: "ONE" },
               { text: "ETH", value: "ETH" },
             ]}
             onChange={setCurrency}
@@ -97,7 +97,7 @@ const ToggleButton = (props: ToggleProps) => {
 
 const SwitchButton = styled.div<{ selected: boolean }>`
   padding: 8px 20px;
-  min-width: 50px;
+  min-width: 60px;
   background-color: ${(props) =>
     props.selected ? props.theme.global.colors.brand : "transparent"};
   color: ${(props) =>

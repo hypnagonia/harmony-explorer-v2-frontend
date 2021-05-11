@@ -9,8 +9,17 @@ import {
   RelativeTimer,
 } from "src/components/ui";
 import { AddressDetails } from "./AddressDetails";
-import { getRelatedTransactions, getTransactionByField, getInternalTransactionsByField } from "src/api/client";
-import { Filter, RPCTransactionHarmony, RelatedTransaction } from "src/types";
+import {
+  getRelatedTransactions,
+  getTransactionByField,
+  getInternalTransactionsByField,
+} from "src/api/client";
+import {
+  Filter,
+  RPCTransactionHarmony,
+  RelatedTransaction,
+  RelatedTransactionType,
+} from "src/types";
 import { useParams } from "react-router-dom";
 import { TransactionsTable } from "../../components/tables/TransactionsTable";
 import { FormNextLink } from "grommet-icons";
@@ -19,9 +28,9 @@ import dayjs from "dayjs";
 const initFilter: Filter = {
   offset: 0,
   limit: 10,
-  orderBy: "block_number",
+  orderBy: "number",
   orderDirection: "desc",
-  filters: [{ type: "gte", property: "block_number", value: 0 }],
+  filters: [{ type: "gte", property: "number", value: 0 }],
 };
 
 export function AddressPage() {
@@ -33,29 +42,14 @@ export function AddressPage() {
 
   useEffect(() => {
     const getElements = async () => {
+      setIsLoading(true);
       try {
-        setIsLoading(true);
-        let relatedTransactions = await getRelatedTransactions([0, id, filter]);
-        const transactionsHashes: string[] = [];
-        const internalTransactionsHashes: string[] = [];
-        console.log(relatedTransactions);
-        let reachedTransactions = await Promise.allSettled(relatedTransactions.map((tx: RelatedTransaction) => {
-          if (tx.transactionType === "transaction") {
-            return getTransactionByField([0, "hash", tx.transactionHash])
-          }
-          if (tx.transactionType === "internal_transaction") {
-            return getInternalTransactionsByField([0, "transaction_hash", tx.transactionHash])
-          }
-        }));
-        //@ts-ignore
-        reachedTransactions = reachedTransactions.map(res => ({...res.value, type: 'transaction' }));
-        //@ts-ignore
-        // internalTransactions = internalTransactions.map(res => ({...res.value, type: 'internal_transaction' }));
-        setIsLoading(false);
-        console.log(reachedTransactions);
+        let relatedTransactions = await getRelatedTransactions([0, id]);
+        setRelatedTrxs(relatedTransactions);
       } catch (err) {
         console.log(err);
       }
+      setIsLoading(false);
     };
     getElements();
   }, [filter]);
@@ -72,21 +66,21 @@ export function AddressPage() {
           Related transactions
         </Text>
         <TransactionsTable
-          columns={getColumns({})}
+          columns={getColumns()}
           data={relatedTrxs}
           totalElements={100}
           limit={+limit}
           filter={filter}
           isLoading={isLoading}
           setFilter={setFilter}
+          minWidth="1000px"
         />
       </BasePage>
     </BaseContainer>
   );
 }
 
-function getColumns(props: any) {
-  const { history } = props;
+function getColumns() {
   return [
     {
       property: "type",
@@ -95,16 +89,10 @@ function getColumns(props: any) {
           Type
         </Text>
       ),
-      render: (data: RPCTransactionHarmony) => (
-        <Box direction="row" gap="3px" align="center">
-          <Text size="small">{0}</Text>
-          <FormNextLink
-            size="small"
-            color="brand"
-            style={{ marginBottom: "2px" }}
-          />
-          <Text size="small">{0}</Text>
-        </Box>
+      render: (data: RelatedTransaction) => (
+        <Text size="small">
+          {relatedTxMap[data.transactionType] || data.transactionType}
+        </Text>
       ),
     },
     {
@@ -114,18 +102,7 @@ function getColumns(props: any) {
           Hash
         </Text>
       ),
-      render: (data: any) => (
-        <Text
-          size="small"
-          style={{ cursor: "pointer" }}
-          onClick={() => {
-            history.push(`/tx/${data.transactionHash}`);
-          }}
-          color="brand"
-        >
-          <Address address={data.transactionHash} isShort />
-        </Text>
-      ),
+      render: (data: any) => <Address address={data.transactionHash} type="tx" isShort />,
     },
     {
       property: "shard",
@@ -134,7 +111,7 @@ function getColumns(props: any) {
           Shard
         </Text>
       ),
-      render: (data: RPCTransactionHarmony) => (
+      render: (data: RelatedTransaction) => (
         <Box direction="row" gap="3px" align="center">
           <Text size="small">{0}</Text>
           <FormNextLink
@@ -153,7 +130,7 @@ function getColumns(props: any) {
           From
         </Text>
       ),
-      render: (data: RPCTransactionHarmony) => (
+      render: (data: RelatedTransaction) => (
         <Text size="12px">
           <Address address={data.from} />
         </Text>
@@ -166,25 +143,25 @@ function getColumns(props: any) {
           To
         </Text>
       ),
-      render: (data: RPCTransactionHarmony) => (
+      render: (data: RelatedTransaction) => (
         <Text size="12px">
           <Address address={data.to} />
         </Text>
       ),
     },
-    // {
-    //   property: "value",
-    //   header: (
-    //     <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
-    //       ONEValue
-    //     </Text>
-    //   ),
-    //   render: (data: RPCTransactionHarmony) => (
-    //     <Box justify="center">
-    //       <ONEValue value={data.value} timestamp={data.timestamp} />
-    //     </Box>
-    //   ),
-    // },
+    {
+      property: "value",
+      header: (
+        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+          ONEValue
+        </Text>
+      ),
+      render: (data: RelatedTransaction) => (
+        <Box justify="center">
+          <ONEValue value={data.value} timestamp={data.timestamp} />
+        </Box>
+      ),
+    },
     {
       property: "timestamp",
       header: (
@@ -192,7 +169,7 @@ function getColumns(props: any) {
           Timestamp
         </Text>
       ),
-      render: (data: RPCTransactionHarmony) => (
+      render: (data: RelatedTransaction) => (
         <Box direction="row" gap="xsmall" justify="end">
           <Text size="small">
             {dayjs(data.timestamp).format("YYYY-MM-DD, HH:mm:ss")},
@@ -207,3 +184,9 @@ function getColumns(props: any) {
     },
   ];
 }
+
+const relatedTxMap: Record<RelatedTransactionType, string> = {
+  transaction: "Transaction",
+  internal_transaction: "Internal Transaction",
+  stacking_transaction: "Staking Transaction",
+};

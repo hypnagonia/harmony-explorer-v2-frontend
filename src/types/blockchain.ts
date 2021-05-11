@@ -228,10 +228,14 @@ export type Address2Transaction = {
 
 
 export interface RelatedTransaction {
+  transactionType: RelatedTransactionType;
   address: string;
   blockNumber: string;
   transactionHash: string;
-  transactionType: RelatedTransactionType;
+  from: string;
+  to: string;
+  value: string;
+  timestamp: string;
 }
 
 export type RelatedTransactionType = 'transaction' | 'internal_transaction' | 'stacking_transaction';
