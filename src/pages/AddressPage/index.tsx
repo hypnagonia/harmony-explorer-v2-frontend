@@ -8,12 +8,8 @@ import {
   ONEValue,
   RelativeTimer,
 } from "src/components/ui";
-import { AddressDetails } from "./AddressDetails";
-import {
-  getRelatedTransactions,
-  getTransactionByField,
-  getInternalTransactionsByField,
-} from "src/api/client";
+import { AddressDetailsDisplay } from "./AddressDetails";
+import { getRelatedTransactions, getContractsByField } from "src/api/client";
 import {
   Filter,
   RPCTransactionHarmony,
@@ -28,13 +24,14 @@ import dayjs from "dayjs";
 const initFilter: Filter = {
   offset: 0,
   limit: 10,
-  orderBy: "number",
+  orderBy: "block_number",
   orderDirection: "desc",
-  filters: [{ type: "gte", property: "number", value: 0 }],
+  filters: [{ type: "gte", property: "block_number", value: 0 }],
 };
 
 export function AddressPage() {
-  const [relatedTrxs, setRelatedTrxs] = useState<any[]>([]);
+  const [contracts, setContracts] = useState<any>(null);
+  const [relatedTrxs, setRelatedTrxs] = useState<RelatedTransaction[]>([]);
   const [filter, setFilter] = useState<Filter>(initFilter);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   // @ts-ignore
@@ -44,7 +41,7 @@ export function AddressPage() {
     const getElements = async () => {
       setIsLoading(true);
       try {
-        let relatedTransactions = await getRelatedTransactions([0, id]);
+        let relatedTransactions = await getRelatedTransactions([0, id, filter]);
         setRelatedTrxs(relatedTransactions);
       } catch (err) {
         console.log(err);
@@ -53,6 +50,19 @@ export function AddressPage() {
     };
     getElements();
   }, [filter]);
+
+  useEffect(() => {
+    const getContracts = async () => {
+      try {
+        let contracts = await getContractsByField([0, "address", id]);
+        setContracts(contracts);
+      } catch (err) {
+        setContracts(null);
+      }
+    };
+    getContracts();
+  }, []);
+
   const { limit = 10 } = filter;
 
   return (
@@ -60,9 +70,12 @@ export function AddressPage() {
       <Text size="xlarge" weight="bold" margin={{ bottom: "medium" }}>
         Address
       </Text>
-      <BasePage margin={{ vertical: "0" }} gap="medium">
-        <AddressDetails address={{ balance: 123 }} type={"address"} />
-        <Text size="xlarge" margin={{ top: "medium" }}>
+      <BasePage margin={{ vertical: "0" }}>
+        <AddressDetailsDisplay data={contracts} type={"address"} />
+        <Text
+          size="xlarge"
+          margin={{ top: !!contracts ? "medium" : "0", bottom: "small" }}
+        >
           Related transactions
         </Text>
         <TransactionsTable
@@ -73,7 +86,7 @@ export function AddressPage() {
           filter={filter}
           isLoading={isLoading}
           setFilter={setFilter}
-          minWidth="1000px"
+          minWidth="1366px"
         />
       </BasePage>
     </BaseContainer>
@@ -102,7 +115,9 @@ function getColumns() {
           Hash
         </Text>
       ),
-      render: (data: any) => <Address address={data.transactionHash} type="tx" isShort />,
+      render: (data: any) => (
+        <Address address={data.transactionHash} type="tx" isShort />
+      ),
     },
     {
       property: "shard",
@@ -172,7 +187,9 @@ function getColumns() {
       render: (data: RelatedTransaction) => (
         <Box direction="row" gap="xsmall" justify="end">
           <Text size="small">
-            {dayjs(data.timestamp).format("YYYY-MM-DD, HH:mm:ss")},
+            {!!data.timestamp
+              ? dayjs(data.timestamp).format("YYYY-MM-DD, HH:mm:ss") + ","
+              : "--"}
           </Text>
           <RelativeTimer
             date={data.timestamp}

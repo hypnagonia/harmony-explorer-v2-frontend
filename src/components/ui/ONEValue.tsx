@@ -15,6 +15,11 @@ interface ONEValueProps {
 export const ONEValue = (props: ONEValueProps) => {
   const { value, timestamp = "" } = props;
   const { lastPrice } = useONEExchangeRate();
+
+  if(!value) {
+    return null;
+  }
+
   const isTodayTransaction =
     dayjs(timestamp).format("YYYY-MM-DD") === dayjs().format("YYYY-MM-DD");
   const price =

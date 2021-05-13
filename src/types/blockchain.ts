@@ -239,3 +239,11 @@ export interface RelatedTransaction {
 }
 
 export type RelatedTransactionType = 'transaction' | 'internal_transaction' | 'stacking_transaction';
+
+export interface AddressDetails {
+  creator_address: string;
+  solidity_version: string;
+  ipfs_hash?: string;
+  meta?: string;
+  bytecode: string;
+}

@@ -66,6 +66,10 @@ export function RelativeTimer(props: IRelativeTimer) {
 
   const [formattedValue, setFormattedValue] = useState("");
 
+  if(!date) {
+    return null;
+  }
+
   if (render) {
     return <div>{render(formattedValue)}</div>;
   }
