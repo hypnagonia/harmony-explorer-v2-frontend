@@ -81,11 +81,7 @@ export function Metrics() {
 }
 
 function ONEPrice() {
-  const { lastPrice, priceChangePercent } = useONEExchangeRate();
-
-  if (!lastPrice && !priceChangePercent) {
-    return <div />;
-  }
+  const { lastPrice = 0, priceChangePercent = 0 } = useONEExchangeRate();
 
   return (
     <Box direction="row" align="stretch">

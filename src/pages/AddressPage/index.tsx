@@ -65,6 +65,8 @@ export function AddressPage() {
 
   const { limit = 10 } = filter;
 
+  console.log(contracts);
+
   return (
     <BaseContainer pad={{ horizontal: "0" }}>
       <Text size="xlarge" weight="bold" margin={{ bottom: "medium" }}>

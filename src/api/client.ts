@@ -49,3 +49,7 @@ export function getTransactionCountLast14Days() {
 export function getContractsByField(params: any[]) {
   return transport('getContractsByField', params) as Promise<any[]>;
 }
+
+export function getAllERC20() {
+  return transport('getAllERC20', []) as Promise<any[]>;
+}

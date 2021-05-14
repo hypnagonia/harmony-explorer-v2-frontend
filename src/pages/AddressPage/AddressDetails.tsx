@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Text } from "grommet";
-import { ExpandString } from 'src/components/ui';
+import {Address, ExpandString} from 'src/components/ui';
 import { AddressDetails } from 'src/types';
 
 type TAddressType = "address" | "contract" | "erc20" | "erc721";
@@ -32,6 +32,10 @@ export function AddressDetailsDisplay(props: AddressDetailsProps) {
 function DetailItem(props: { data: any; name: string }) {
   const { data, name } = props;
 
+  if(!addressPropertyDisplayNames[name] || !addressPropertyDisplayValues[name] || data[name] === null) {
+    return null;
+  }
+
   return (
     <Box
       direction="row"
@@ -50,17 +54,19 @@ function DetailItem(props: { data: any; name: string }) {
 }
 
 const addressPropertyDisplayNames: Record<string, () => React.ReactNode> = {
-  creator_address: () => "Creator",
-  solidity_version: () => "Solidity version",
-  ipfs_hash: () => "IPFS hash",
+  address: () => 'Address',
+  creatorAddress: () => "Creator",
+  solidityVersion: () => "Solidity version",
+  IPFSHash: () => "IPFS hash",
   meta: () => "Meta",
   bytecode: () => "Bytecode",
 };
 
 const addressPropertyDisplayValues: Record<string, (value: any, data: any) => React.ReactNode> = {
-  creator_address: (value) => value,
-  solidity_version: (value) => value,
-  ipfs_hash: (value) => value,
+  address: (value) => <Address address={value} />,
+  creatorAddress: (value) => value,
+  solidityVersion: (value) => value,
+  IPFSHash: (value) => value,
   meta: (value) => value,
   bytecode: (value) => <ExpandString value={value || ''} />,
 };
