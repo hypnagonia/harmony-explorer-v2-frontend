@@ -4,7 +4,7 @@ import { singletonHook } from "react-singleton-hook";
 const initValue: ERC20_Pool = {};
 
 let globalSetMode = () => {
-  throw new Error("you must useERC20Pool before setting its state");
+  return {};
 };
 
 export const useERC20Pool = singletonHook(initValue, () => {

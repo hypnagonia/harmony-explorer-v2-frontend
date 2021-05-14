@@ -43,10 +43,10 @@ function DetailItem(props: { data: any; name: string }) {
       pad={{ bottom: "small" }}
       border={{ size: "xsmall", side: "bottom", color: "border" }}
     >
-      <Text style={{ width: '25%' }} color="minorText" margin={{ right: "xsmall" }}>
+      <Text style={{ width: '25%' }} color="minorText" size="small" margin={{ right: "xsmall" }}>
         {addressPropertyDisplayNames[name]()}
       </Text>
-      <Text style={{ width: '75%', wordBreak: 'break-all' }}>
+      <Text style={{ width: '75%', wordBreak: 'break-all' }} size="small">
         {addressPropertyDisplayValues[name](data[name], data)}
       </Text>
     </Box>

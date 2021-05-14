@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useState } from "react";
+import React, { CSSProperties } from "react";
 import { Text } from "grommet";
 import { useHistory } from "react-router-dom";
 import { useERC20Pool } from "src/hooks/ERC20_Pool";
