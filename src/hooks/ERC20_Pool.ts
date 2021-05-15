@@ -27,6 +27,7 @@ export const setERC20Pool = (pool: ERC20_Pool) => {
 export interface Erc20 {
   name: string;
   address: string;
+  decimals: number;
 }
 
 export type ERC20_Pool = Record<string, Erc20>;

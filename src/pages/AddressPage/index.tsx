@@ -4,15 +4,13 @@ import {
   BasePage,
   BaseContainer,
   Address,
-  formatNumber,
   ONEValue,
   RelativeTimer,
 } from "src/components/ui";
 import { AddressDetailsDisplay } from "./AddressDetails";
-import { getRelatedTransactions, getContractsByField } from "src/api/client";
+import { getRelatedTransactions, getContractsByField, getUserERC20Balances } from "src/api/client";
 import {
   Filter,
-  RPCTransactionHarmony,
   RelatedTransaction,
   RelatedTransactionType,
 } from "src/types";
@@ -20,6 +18,7 @@ import { useParams } from "react-router-dom";
 import { TransactionsTable } from "../../components/tables/TransactionsTable";
 import { FormNextLink } from "grommet-icons";
 import dayjs from "dayjs";
+import {useERC20Pool} from "../../hooks/ERC20_Pool";
 
 const initFilter: Filter = {
   offset: 0,
@@ -31,11 +30,16 @@ const initFilter: Filter = {
 
 export function AddressPage() {
   const [contracts, setContracts] = useState<any>(null);
+  const [tokens, setTokens] = useState<any>(null);
   const [relatedTrxs, setRelatedTrxs] = useState<RelatedTransaction[]>([]);
   const [filter, setFilter] = useState<Filter>(initFilter);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const erc20Map = useERC20Pool();
+  //TODO remove hardcode
   // @ts-ignore
   const { id } = useParams();
+
+  const erc20Token = erc20Map[id] || {};
 
   useEffect(() => {
     const getElements = async () => {
@@ -49,23 +53,33 @@ export function AddressPage() {
       setIsLoading(false);
     };
     getElements();
-  }, [filter]);
+  }, [filter, id]);
 
   useEffect(() => {
     const getContracts = async () => {
       try {
         let contracts = await getContractsByField([0, "address", id]);
-        setContracts(contracts);
+        setContracts({...contracts, value: '24234235'  });
       } catch (err) {
-        setContracts(null);
+        setContracts({ value: '24234235' });
       }
     };
     getContracts();
-  }, []);
+  }, [id]);
+
+  useEffect(() => {
+    const getTokens = async () => {
+      try {
+        let tokens = await getUserERC20Balances([id]);
+        setTokens(tokens);
+      } catch (err) {
+        setTokens(null);
+      }
+    };
+    getTokens();
+  }, [id]);
 
   const { limit = 10 } = filter;
-
-  console.log(contracts);
 
   return (
     <BaseContainer pad={{ horizontal: "0" }}>
@@ -73,7 +87,7 @@ export function AddressPage() {
         Address
       </Text>
       <BasePage margin={{ vertical: "0" }}>
-        <AddressDetailsDisplay data={contracts} type={"address"} />
+        <AddressDetailsDisplay data={{...contracts, ...erc20Token, token: tokens }} type={"address"} />
         <Text
           size="xlarge"
           margin={{ top: !!contracts ? "medium" : "0", bottom: "small" }}

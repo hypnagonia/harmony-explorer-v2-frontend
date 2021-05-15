@@ -17,4 +17,5 @@ export * from './PaginationBlock'
 export * from './TransactionType'
 export * from './StakingTransactionType';
 export * from './ExpandString';
+export * from './TokenValue';
 export * from './utils'

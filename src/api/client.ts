@@ -53,3 +53,9 @@ export function getContractsByField(params: any[]) {
 export function getAllERC20() {
   return transport('getAllERC20', []) as Promise<any[]>;
 }
+
+export function getUserERC20Balances(params: any[]) {
+  return transport('getUserERC20Balances', params) as Promise<any[]>;
+}
+
+

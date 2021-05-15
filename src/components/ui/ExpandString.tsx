@@ -16,9 +16,9 @@ export const ExpandString = (props: ExpandStringProps) => {
   }
 
   return (
-    <Box direction="column" style={{ maxHeight: '500px', overflowY: 'auto' }}>
-      <Text size="small" style={{ wordBreak: "break-all" }}>
-        {isFull ? value : `${value.substr(0, 67)}...`}
+    <Box direction="column">
+      <Text size="small" style={{ wordBreak: "break-all", maxHeight: '40vh', overflowY: 'auto' }}>
+        {isFull ? value : `${value.substr(0, 62)}...`}
       </Text>
       <Text
         size="small"
