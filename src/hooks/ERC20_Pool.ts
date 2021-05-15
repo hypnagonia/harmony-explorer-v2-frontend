@@ -28,6 +28,7 @@ export interface Erc20 {
   name: string;
   address: string;
   decimals: number;
+  symbol: string;
 }
 
 export type ERC20_Pool = Record<string, Erc20>;

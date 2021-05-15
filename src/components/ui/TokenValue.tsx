@@ -14,7 +14,7 @@ export const TokenValue = (props: ONEValueProps) => {
   const { value, tokenAddress = "" } = props;
   const erc20Map = useERC20Pool();
   //TODO remove hardcode
-  const tokenInfo = erc20Map[tokenAddress] || { decimals: 14 };
+  const tokenInfo = erc20Map[tokenAddress] || { decimals: 14, symbol: '' };
 
   if (!value) {
     return null;
@@ -23,5 +23,5 @@ export const TokenValue = (props: ONEValueProps) => {
   const bi = BigInt(value) / BigInt(10 ** tokenInfo.decimals);
   const v = parseInt(bi.toString()) / 10000;
 
-  return <Text size="small">${v.toString()}</Text>;
+  return <Text size="small"><b>{v.toString()}</b> {tokenInfo.symbol}</Text>;
 };

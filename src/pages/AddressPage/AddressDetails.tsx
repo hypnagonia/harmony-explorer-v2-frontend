@@ -27,7 +27,7 @@ export function AddressDetailsDisplay(props: AddressDetailsProps) {
 
   return (
     <Box>
-      {items.map((i) => (
+      {items.sort(sortByOrder).map((i) => (
         //@ts-ignore
         <DetailItem key={i} name={i} data={data} />
       ))}
@@ -88,9 +88,13 @@ const addressPropertyDisplayValues: Record<
   string,
   (value: any, data: any) => React.ReactNode
 > = {
+  address: (value) => (
+    <Text size="small" color="brand">
+      {value}
+    </Text>
+  ),
   value: (value) => <TokenValue value={value} />,
-  address: (value) => <Address address={value} />,
-  creatorAddress: (value) => value,
+  creatorAddress: (value) => <Address address={value} />,
   solidityVersion: (value) => value,
   IPFSHash: (value) => value,
   meta: (value) => value,
@@ -99,6 +103,28 @@ const addressPropertyDisplayValues: Record<
   name: (value) => value,
   symbol: (value) => value,
   decimals: (value) => value,
-  totalSupply: (value:string) => formatNumber(+value),
+  totalSupply: (value) => <TokenValue value={value} />,
   holders: (value: string) => formatNumber(+value),
+};
+
+function sortByOrder(a: string, b: string) {
+  return addressPropertyOrder[a] - addressPropertyOrder[b];
+}
+
+const addressPropertyOrder: Record<string, number> = {
+  address: 10,
+  value: 11,
+  token: 12,
+  creatorAddress: 13,
+
+  name: 20,
+  symbol: 21,
+  decimals: 22,
+  totalSupply: 23,
+  holders: 24,
+
+  solidityVersion: 31,
+  IPFSHash: 32,
+  meta: 33,
+  bytecode: 34,
 };

@@ -8,10 +8,11 @@ interface IAddress {
   isShort?: boolean;
   type?: "tx" | "address";
   style?: CSSProperties;
+  color?: string;
 }
 
 export const Address = (props: IAddress) => {
-  const { address, isShort, style, type = "address" } = props;
+  const { address, isShort, style, type = "address", color = 'brand' } = props;
   const history = useHistory();
   const ERC20Map = useERC20Pool();
 
@@ -28,7 +29,7 @@ export const Address = (props: IAddress) => {
   return (
     <Text
       size="small"
-      color="brand"
+      color={color}
       style={{ cursor: "pointer", textDecoration: !!parsedName ? 'underline' : 'none', ...style }}
       onClick={() => history.push(`/${type}/${address}`)}
     >

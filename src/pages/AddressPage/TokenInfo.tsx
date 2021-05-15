@@ -1,36 +1,58 @@
-import React from 'react';
-import {Box, Text} from "grommet";
-import { Address, TokenValue } from 'src/components/ui';
+import React from "react";
+import { Box, Text } from "grommet";
+import { Address, TokenValue } from "src/components/ui";
+import { Erc20, useERC20Pool } from "src/hooks/ERC20_Pool";
 
 interface Token {
   balance: string;
   tokenAddress: string;
 }
 
-export function TokensInfo(props: { value: Token[]}) {
+export function TokensInfo(props: { value: Token[] }) {
   const { value } = props;
+  const erc20Map = useERC20Pool();
 
-  if(!value.length) {
+  if (!value.length) {
     return <span>--</span>;
   }
 
   return (
     <Box>
-      <Text size="small">ERC-20 Tokens</Text>
-      <Box style={{ maxHeight: '40vh', overflowY: 'auto' }}>
-        {value.map(i => <TokenInfo key={i.tokenAddress} value={i} />)}
+      <Text size="small">HRC-20 Tokens:</Text>
+      <Box style={{ maxHeight: "40vh", overflowY: "auto" }}>
+        {value
+          .filter((i) => filterWithBalance(i.balance, erc20Map[i.tokenAddress]))
+          .map((i) => (
+            <TokenInfo key={i.tokenAddress} value={i} />
+          ))}
       </Box>
     </Box>
-  )
+  );
 }
 
 function TokenInfo(props: { value: Token }) {
   const { value } = props;
 
   return (
-    <Box direction="row" justify="between" style={{ maxWidth: '305px', flex: '0 0 auto' }} margin={{ bottom: '3px' }}>
-      <Address address={value.tokenAddress} />
+    <Box
+      direction="row"
+      style={{ minWidth: "320px", maxWidth: "380px", flex: "0 0 auto" }}
+      margin={{ bottom: "3px" }}
+      gap="medium"
+    >
+      <Address address={value.tokenAddress} style={{ width: "50%" }} />
       <TokenValue value={value.balance} tokenAddress={value.tokenAddress} />
     </Box>
-  )
+  );
+}
+
+function filterWithBalance(balance: string, token: Erc20) {
+  if (!balance || !token) {
+    return !!+balance;
+  }
+
+  const bi = BigInt(balance) / BigInt(10 ** token.decimals);
+  const v = parseInt(bi.toString()) / 10000;
+
+  return v > 0;
 }
