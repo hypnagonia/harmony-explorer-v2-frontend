@@ -7,6 +7,7 @@ import { StakingTransactionPage } from 'src/pages/StackingTransactionPage'
 import { AllBlocksPage } from 'src/pages/AllBlocksPage'
 import { AllTransactionsPage } from 'src/pages/AllTransactionsPage'
 import { AddressPage } from 'src/pages/AddressPage'
+import { ERC20List } from 'src/pages/ERC20List'
 
 export function Routes() {
   return (
@@ -38,6 +39,10 @@ export function Routes() {
 
         <Route path="/address/:id">
           <AddressPage />
+        </Route>
+
+        <Route path="/hrc20">
+          <ERC20List />
         </Route>
       </Switch>
       </>

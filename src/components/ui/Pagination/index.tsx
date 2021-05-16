@@ -2,20 +2,23 @@ import React, {useEffect} from "react";
 import { Box, Text, Select } from "grommet";
 import { Filter } from "src/types";
 import { FormPrevious, FormNext } from "grommet-icons";
+import { formatNumber } from "src/components/ui/utils";
+
+export type TPaginationAction = 'nextPage' | 'prevPage';
 
 interface PaginationNavigator {
   filter: Filter;
   elements: any[];
   totalElements: number;
-  onChange: (filter: Filter) => void;
+  onChange: (filter: Filter, action: TPaginationAction) => void;
   property: string;
   noScrollTop?: boolean;
+  showPages?: boolean;
 }
 
 export function PaginationNavigator(props: PaginationNavigator) {
-  const { elements, totalElements, filter, onChange, property, noScrollTop } = props;
-  const { filters, limit = 10 } = filter;
-  const { value } = filters[0];
+  const { elements, totalElements, filter, onChange, property, noScrollTop, showPages } = props;
+  const { offset, limit = 10 } = filter;
 
   useEffect(() => {
       const scrollBody = document.getElementById("scrollBody");
@@ -40,7 +43,7 @@ export function PaginationNavigator(props: PaginationNavigator) {
       innerFilter.value = maxBlockNumber + limit + 1;
     }
 
-    onChange(newFilter);
+    onChange(newFilter, 'prevPage');
   };
 
   const onNextClick = () => {
@@ -51,16 +54,18 @@ export function PaginationNavigator(props: PaginationNavigator) {
       innerFilter.value = minBlockNumber;
     }
 
-    onChange(newFilter);
+    onChange(newFilter, 'nextPage');
   };
 
   return (
     <Box style={{ flex: '0 0 auto' }}>
       <Pagination
-        currentPage={+((totalElements - +value) / limit).toFixed(0) + 1}
-        totalPages={+(Number(totalElements) / limit).toFixed(0)}
+        //@ts-ignore
+        currentPage={+(+offset / limit).toFixed(0) + 1}
+        totalPages={+Math.ceil(Number(totalElements) / limit).toFixed(0)}
         onPrevPageClick={onPrevClick}
         onNextPageClick={onNextClick}
+        showPages
       />
     </Box>
   );
@@ -68,19 +73,20 @@ export function PaginationNavigator(props: PaginationNavigator) {
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
+  showPages?: boolean;
   onPrevPageClick: () => void;
   onNextPageClick: () => void;
 }
 
 function Pagination(props: PaginationProps) {
-  const { currentPage, totalPages, onPrevPageClick, onNextPageClick } = props;
+  const { currentPage, totalPages, onPrevPageClick, onNextPageClick, showPages } = props;
   return (
     <Box direction="row" gap="small">
-      <FormPrevious onClick={onPrevPageClick} style={{ cursor: "pointer" }} />
-      {/* <Text style={{ fontWeight: "bold" }}>{formatNumber(+currentPage)}</Text>
-      <Text style={{ fontWeight: 300 }}>/</Text>
-      <Text style={{ fontWeight: 300 }}>{formatNumber(+totalPages)}</Text>*/}
-      <FormNext onClick={onNextPageClick} style={{ cursor: "pointer" }} />
+      <FormPrevious onClick={onPrevPageClick} style={{cursor: "pointer"}}/>
+      {showPages && <Text style={{fontWeight: "bold"}}>{formatNumber(+currentPage)}</Text>}
+      {showPages && <Text style={{fontWeight: 300}}>/</Text>}
+      {showPages && <Text style={{fontWeight: 300}}>{formatNumber(+totalPages)}</Text>}
+      <FormNext onClick={onNextPageClick} style={{cursor: "pointer"}}/>
     </Box>
   );
 }
