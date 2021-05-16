@@ -9,17 +9,18 @@ interface PaginationNavigator {
   totalElements: number;
   onChange: (filter: Filter) => void;
   property: string;
+  noScrollTop?: boolean;
 }
 
 export function PaginationNavigator(props: PaginationNavigator) {
-  const { elements, totalElements, filter, onChange, property } = props;
+  const { elements, totalElements, filter, onChange, property, noScrollTop } = props;
   const { filters, limit = 10 } = filter;
   const { value } = filters[0];
 
   useEffect(() => {
       const scrollBody = document.getElementById("scrollBody");
 
-      if (scrollBody) {
+      if (scrollBody && !noScrollTop) {
         scrollBody.scrollTo({ top: 0 });
       }
   }, [filter]);

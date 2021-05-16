@@ -29,6 +29,12 @@ export const SearchInput = () => {
       if (v.length !== 66 && v.length !== 42) {
         return;
       }
+      if(v.length === 42 && (/^0x[a-f0-9]+$/.test(v))) {
+        // address
+        history.push(`/address/${v}`);
+        return;
+      }
+
       if (v.length === 66 && v[0] === "0" && v[1] === "x") {
         // is block hash or tx hash
         try {

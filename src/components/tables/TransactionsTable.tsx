@@ -149,6 +149,7 @@ interface TransactionTableProps {
   isLoading?: boolean;
   hideCounter?: boolean;
   minWidth?: string;
+  noScrollTop?: boolean;
 }
 
 export function TransactionsTable(props: TransactionTableProps) {
@@ -165,6 +166,7 @@ export function TransactionsTable(props: TransactionTableProps) {
     hidePagination,
     isLoading,
     hideCounter,
+    noScrollTop,
     minWidth = '1310px'
   } = props;
 
@@ -203,6 +205,7 @@ export function TransactionsTable(props: TransactionTableProps) {
             filter={filter}
             totalElements={totalElements}
             elements={data}
+            noScrollTop={noScrollTop}
             property="block_number"
           />
         )}
@@ -234,6 +237,7 @@ export function TransactionsTable(props: TransactionTableProps) {
             filter={filter}
             totalElements={totalElements}
             elements={data}
+            noScrollTop={noScrollTop}
             property="block_number"
           />
         </Box>

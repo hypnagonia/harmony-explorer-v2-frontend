@@ -8,16 +8,22 @@ import {
 } from "src/components/ui";
 import { AddressDetails } from "src/types";
 import { TokensInfo } from "./TokenInfo";
-
-type TAddressType = "address" | "contract" | "erc20" | "erc721";
+import { Erc20, useERC20Pool } from "src/hooks/ERC20_Pool";
 
 interface AddressDetailsProps {
-  data: AddressDetails;
-  type: TAddressType;
+  address: string;
+  contracts: AddressDetails;
+  tokens: any[];
 }
 
 export function AddressDetailsDisplay(props: AddressDetailsProps) {
-  const { type, data } = props;
+  const { address, contracts, tokens } = props;
+  const erc20Map = useERC20Pool();
+
+  const erc20Token = erc20Map[address] || null;
+  const type = getType(contracts, erc20Token);
+
+  const data = { ...contracts, ...erc20Token, address, token: tokens };
 
   if (!data) {
     return null;
@@ -29,14 +35,14 @@ export function AddressDetailsDisplay(props: AddressDetailsProps) {
     <Box>
       {items.sort(sortByOrder).map((i) => (
         //@ts-ignore
-        <DetailItem key={i} name={i} data={data} />
+        <DetailItem key={i} name={i} data={data} type={type} />
       ))}
     </Box>
   );
 }
 
-function DetailItem(props: { data: any; name: string }) {
-  const { data, name } = props;
+function DetailItem(props: { data: any; name: string; type: TAddressType }) {
+  const { data, name, type } = props;
 
   if (
     !addressPropertyDisplayNames[name] ||
@@ -59,17 +65,29 @@ function DetailItem(props: { data: any; name: string }) {
         size="small"
         margin={{ right: "xsmall" }}
       >
-        {addressPropertyDisplayNames[name]()}
+        {addressPropertyDisplayNames[name]({ type })}
       </Text>
       <Text style={{ width: "75%", wordBreak: "break-all" }} size="small">
-        {addressPropertyDisplayValues[name](data[name], data)}
+        {addressPropertyDisplayValues[name](data[name], data, { type })}
       </Text>
     </Box>
   );
 }
 
-const addressPropertyDisplayNames: Record<string, () => React.ReactNode> = {
-  address: () => "Address",
+const addressPropertyDisplayNames: Record<
+  string,
+  (options: { type: TAddressType }) => React.ReactNode
+> = {
+  address: (props) => {
+    if (props.type === "erc20") {
+      return "HRC20 name";
+    }
+    if (props.type === "contract") {
+      return "Contract";
+    }
+
+    return "Address";
+  },
   value: () => "Value",
   creatorAddress: () => "Creator",
   solidityVersion: () => "Solidity version",
@@ -86,13 +104,9 @@ const addressPropertyDisplayNames: Record<string, () => React.ReactNode> = {
 
 const addressPropertyDisplayValues: Record<
   string,
-  (value: any, data: any) => React.ReactNode
+  (value: any, data: any, options: { type: TAddressType }) => React.ReactNode
 > = {
-  address: (value) => (
-    <Text size="small" color="brand">
-      {value}
-    </Text>
-  ),
+  address: (value) => <Text size="small">{value}</Text>,
   value: (value) => <TokenValue value={value} />,
   creatorAddress: (value) => <Address address={value} />,
   solidityVersion: (value) => value,
@@ -128,3 +142,17 @@ const addressPropertyOrder: Record<string, number> = {
   meta: 33,
   bytecode: 34,
 };
+
+type TAddressType = "address" | "contract" | "erc20" | "erc721";
+
+function getType(contracts: AddressDetails, erc20Token: Erc20): TAddressType {
+  if (!!contracts && !!erc20Token) {
+    return "erc20";
+  }
+
+  if (!!contracts) {
+    return "contract";
+  }
+
+  return "address";
+}

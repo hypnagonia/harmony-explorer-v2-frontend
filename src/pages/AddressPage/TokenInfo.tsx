@@ -13,7 +13,7 @@ export function TokensInfo(props: { value: Token[] }) {
   const erc20Map = useERC20Pool();
 
   if (!value.length) {
-    return <span>--</span>;
+    return <span>—</span>;
   }
 
   return (
@@ -51,8 +51,9 @@ function filterWithBalance(balance: string, token: Erc20) {
     return !!+balance;
   }
 
-  const bi = BigInt(balance) / BigInt(10 ** token.decimals);
-  const v = parseInt(bi.toString()) / 10000;
+  return !!+balance;
 
-  return v > 0;
+  // const bi = BigInt(balance) / BigInt(10 ** (token.decimals - 4));
+  // console.log(token.name, token.decimals, balance, parseInt(bi.toString()));
+  // const v = parseInt(bi.toString()) / 10e8;
 }

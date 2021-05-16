@@ -18,7 +18,6 @@ import { useParams } from "react-router-dom";
 import { TransactionsTable } from "../../components/tables/TransactionsTable";
 import { FormNextLink } from "grommet-icons";
 import dayjs from "dayjs";
-import {useERC20Pool} from "../../hooks/ERC20_Pool";
 
 const initFilter: Filter = {
   offset: 0,
@@ -34,12 +33,10 @@ export function AddressPage() {
   const [relatedTrxs, setRelatedTrxs] = useState<RelatedTransaction[]>([]);
   const [filter, setFilter] = useState<Filter>(initFilter);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const erc20Map = useERC20Pool();
   //TODO remove hardcode
   // @ts-ignore
   const { id } = useParams();
 
-  const erc20Token = erc20Map[id] || {};
 
   useEffect(() => {
     const getElements = async () => {
@@ -59,9 +56,9 @@ export function AddressPage() {
     const getContracts = async () => {
       try {
         let contracts = await getContractsByField([0, "address", id]);
-        setContracts({...contracts, value: '24234235'  });
+        setContracts(contracts);
       } catch (err) {
-        setContracts({ value: '24234235' });
+        setContracts(null);
       }
     };
     getContracts();
@@ -87,7 +84,7 @@ export function AddressPage() {
         Address
       </Text>
       <BasePage margin={{ vertical: "0" }}>
-        <AddressDetailsDisplay data={{...contracts, ...erc20Token, token: tokens }} type={"address"} />
+        <AddressDetailsDisplay address={id} contracts={contracts} tokens={tokens} />
         <Text
           size="xlarge"
           margin={{ top: !!contracts ? "medium" : "0", bottom: "small" }}
@@ -102,6 +99,7 @@ export function AddressPage() {
           filter={filter}
           isLoading={isLoading}
           setFilter={setFilter}
+          noScrollTop
           minWidth="1366px"
         />
       </BasePage>
@@ -205,7 +203,7 @@ function getColumns() {
           <Text size="small">
             {!!data.timestamp
               ? dayjs(data.timestamp).format("YYYY-MM-DD, HH:mm:ss") + ","
-              : "--"}
+              : "—"}
           </Text>
           <RelativeTimer
             date={data.timestamp}
