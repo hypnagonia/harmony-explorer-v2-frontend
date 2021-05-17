@@ -26,6 +26,7 @@ export const theme = {
       iconMain: palette.ElectricBlue,
       tableRow: palette.ElectricBlueLight,
       mintGreen: palette.MintGreen,
+
     },
     palette,
     select: {

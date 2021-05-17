@@ -118,6 +118,8 @@ function getColumns(props: any) {
   return [
     {
       property: "name",
+      size: 'small',
+      resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
           Name
@@ -127,6 +129,8 @@ function getColumns(props: any) {
     },
     {
       property: "symbol",
+      size: 'xsmall',
+      resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
           Symbol
@@ -142,28 +146,32 @@ function getColumns(props: any) {
           Address
         </Text>
       ),
-      render: (data: Erc20) => <Address address={data.address} isShort />,
+      render: (data: Erc20) => <Address address={data.address} displayHash />,
     },
     {
       property: "totalSupply",
+      size: 'small',
+      resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
           Total supply
         </Text>
       ),
       render: (data: Erc20) => {
-        return <TokenValue value={data.totalSupply} />;
+        return <TokenValue value={data.totalSupply} formatNumber />;
       },
     },
     {
       property: "holders",
+      size: 'small',
+      resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
           Holders
         </Text>
       ),
       render: (data: Erc20) => (
-        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+        <Text size="small" style={{ fontWeight: 300 }}>
           {formatNumber(+data.holders)}
         </Text>
       ),

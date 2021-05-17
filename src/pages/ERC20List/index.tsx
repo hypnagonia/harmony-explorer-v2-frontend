@@ -32,22 +32,29 @@ export const ERC20List = () => {
     setData(
       erc20Tokens
         .filter(filterWithFields(["name", "symbol"], search))
+        .sort(sortWithHolders)
         //@ts-ignore
         .slice(filter.offset, filter.offset + filter.limit)
     );
   }, [erc20, filter, search]);
 
+  useEffect(() => {
+    setFilter({ ...filter, offset: 0 });
+  }, [search]);
+
   const onChangeFilter = (newFilter: Filter, action?: TPaginationAction) => {
-    if (action === "prevPage") {
+    //@ts-ignore
+    if (action === "prevPage" && filter.offset > 0) {
       //@ts-ignore
       newFilter.offset = Math.max(0, filter.offset - filter.limit);
     }
+
     if (
       action === "nextPage" &&
       //@ts-ignore
-      filter.offset + filter.limit < !!search
+      (filter.offset + filter.limit < !!search
         ? searchedTokenLength
-        : erc20Tokens.length
+        : erc20Tokens.length)
     ) {
       newFilter.offset = Math.min(
         //@ts-ignore
@@ -112,4 +119,8 @@ function filterWithFields(fields: Array<keyof Erc20>, search: string) {
       erc20[field].toString().toLowerCase().includes(search.toLowerCase())
     );
   };
+}
+
+function sortWithHolders(a: Erc20, b: Erc20) {
+  return +b.holders - +a.holders;
 }

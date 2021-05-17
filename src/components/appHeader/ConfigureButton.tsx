@@ -22,6 +22,7 @@ export function ConfigureButton() {
     <DropButton
       label={<Configure size="medium" />}
       dropAlign={{ top: "bottom", right: "right" }}
+      style={{ border: "none", boxShadow: "none", paddingRight: "6px", paddingLeft: 0 }}
       dropContent={
         <Box
           pad="medium"
@@ -57,7 +58,6 @@ export function ConfigureButton() {
           />
         </Box>
       }
-      style={{ border: "none", boxShadow: "none", paddingRight: "6px" }}
     />
   );
 }

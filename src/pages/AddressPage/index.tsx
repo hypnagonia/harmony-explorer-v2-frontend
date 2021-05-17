@@ -200,11 +200,11 @@ function getColumns() {
       ),
       render: (data: RelatedTransaction) => (
         <Box direction="row" gap="xsmall" justify="end">
-          <Text size="small">
-            {!!data.timestamp
-              ? dayjs(data.timestamp).format("YYYY-MM-DD, HH:mm:ss") + ","
-              : "—"}
-          </Text>
+          {/*<Text size="small">*/}
+          {/*  {!!data.timestamp*/}
+          {/*    ? dayjs(data.timestamp).format("YYYY-MM-DD, HH:mm:ss") + ","*/}
+          {/*    : "—"}*/}
+          {/*</Text>*/}
           <RelativeTimer
             date={data.timestamp}
             updateInterval={1000}

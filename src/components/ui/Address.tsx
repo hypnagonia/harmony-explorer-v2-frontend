@@ -9,10 +9,11 @@ interface IAddress {
   type?: "tx" | "address";
   style?: CSSProperties;
   color?: string;
+  displayHash?: boolean;
 }
 
 export const Address = (props: IAddress) => {
-  const { address, isShort, style, type = "address", color = 'brand' } = props;
+  const { address, isShort, style, type = "address", color = 'brand', displayHash } = props;
   const history = useHistory();
   const ERC20Map = useERC20Pool();
 
@@ -22,7 +23,7 @@ export const Address = (props: IAddress) => {
 
   let parsedName = "";
 
-  if (ERC20Map[address]) {
+  if (ERC20Map[address] && !displayHash) {
     parsedName = ERC20Map[address].name;
   }
 

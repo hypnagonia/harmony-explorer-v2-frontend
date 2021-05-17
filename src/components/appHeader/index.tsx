@@ -3,6 +3,7 @@ import { Box, Heading } from "grommet";
 import { FiatPrice, BaseContainer } from "src/components/ui";
 import { useHistory } from "react-router-dom";
 import { ConfigureButton } from './ConfigureButton';
+import { InfoButton } from './InfoButton';
 import { useThemeMode } from "src/hooks/themeSwitcherHook";
 
 import { CSSProperties } from "styled-components";
@@ -41,7 +42,10 @@ export function AppHeader(props: { style: CSSProperties }) {
           <br />
           <FiatPrice />
         </Heading>
-        <ConfigureButton />
+        <Box direction="row">
+          <InfoButton />
+          <ConfigureButton />
+        </Box>
       </BaseContainer>
     </HeaderLine>
   );

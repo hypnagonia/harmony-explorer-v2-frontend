@@ -17,7 +17,7 @@ export const SearchInput = () => {
   useEffect(() => {
     const exec = async () => {
       // todo separate validation
-      const v = value.split(" ").join("");
+      const v = value.split(" ").join("").toLowerCase();
 
       setReadySubmit(false);
       if ("" + +v === v && +v > 0) {

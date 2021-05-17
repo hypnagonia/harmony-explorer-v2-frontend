@@ -1,7 +1,6 @@
 import React from "react";
 import { Box, Text } from "grommet";
 import { Address, TokenValue } from "src/components/ui";
-import { Erc20, useERC20Pool } from "src/hooks/ERC20_Pool";
 
 interface Token {
   balance: string;
@@ -10,9 +9,8 @@ interface Token {
 
 export function TokensInfo(props: { value: Token[] }) {
   const { value } = props;
-  const erc20Map = useERC20Pool();
 
-  if (!value.length) {
+  if (!value.filter((i) => filterWithBalance(i.balance)).length) {
     return <span>—</span>;
   }
 
@@ -21,7 +19,7 @@ export function TokensInfo(props: { value: Token[] }) {
       <Text size="small">HRC-20 Tokens:</Text>
       <Box style={{ maxHeight: "40vh", overflowY: "auto" }}>
         {value
-          .filter((i) => filterWithBalance(i.balance, erc20Map[i.tokenAddress]))
+          .filter((i) => filterWithBalance(i.balance))
           .map((i) => (
             <TokenInfo key={i.tokenAddress} value={i} />
           ))}
@@ -36,24 +34,20 @@ function TokenInfo(props: { value: Token }) {
   return (
     <Box
       direction="row"
-      style={{ minWidth: "320px", maxWidth: "380px", flex: "0 0 auto" }}
+      style={{ minWidth: "350px", maxWidth: "550px", flex: "0 0 auto" }}
       margin={{ bottom: "3px" }}
       gap="medium"
     >
-      <Address address={value.tokenAddress} style={{ width: "50%" }} />
-      <TokenValue value={value.balance} tokenAddress={value.tokenAddress} />
+      <Address address={value.tokenAddress} style={{ flex: "1 1 50%" }} />
+      <TokenValue
+        value={value.balance}
+        tokenAddress={value.tokenAddress}
+        style={{ flex: "1 1 50%", wordBreak: "break-word" }}
+      />
     </Box>
   );
 }
 
-function filterWithBalance(balance: string, token: Erc20) {
-  if (!balance || !token) {
-    return !!+balance;
-  }
-
+function filterWithBalance(balance: string) {
   return !!+balance;
-
-  // const bi = BigInt(balance) / BigInt(10 ** (token.decimals - 4));
-  // console.log(token.name, token.decimals, balance, parseInt(bi.toString()));
-  // const v = parseInt(bi.toString()) / 10e8;
 }

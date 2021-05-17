@@ -12,13 +12,14 @@ import {
   PaginationRecordsPerPage,
   ONEValue,
 } from "src/components/ui";
-import dayjs from "dayjs";
 
 function getColumns(props: any) {
   const { history } = props;
   return [
     {
       property: "shard",
+      size: 'xxsmall',
+      resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
           Shard
@@ -38,6 +39,8 @@ function getColumns(props: any) {
     },
     {
       property: "hash",
+      size: 'xsmall',
+      resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
           Hash
@@ -58,6 +61,8 @@ function getColumns(props: any) {
     },
     {
       property: "block_number",
+      size: '260px',
+      resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
           Block number
@@ -80,28 +85,34 @@ function getColumns(props: any) {
     },
     {
       property: "from",
+      size: 'large',
+      resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
           From
         </Text>
       ),
       render: (data: RPCTransactionHarmony) => (
-          <Address address={data.from} style={{ fontSize: '12px' }} />
+        <Address address={data.from} style={{ fontSize: "12px" }} />
       ),
     },
     {
       property: "to",
+      size: 'large',
+      resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
           To
         </Text>
       ),
       render: (data: RPCTransactionHarmony) => (
-          <Address address={data.to} style={{ fontSize: '12px' }} />
+        <Address address={data.to} style={{ fontSize: "12px" }} />
       ),
     },
     {
       property: "value",
+      size: '380px',
+      resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
           ONEValue
@@ -115,6 +126,8 @@ function getColumns(props: any) {
     },
     {
       property: "timestamp",
+      size: '280px',
+      resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
           Timestamp
@@ -122,9 +135,9 @@ function getColumns(props: any) {
       ),
       render: (data: RPCTransactionHarmony) => (
         <Box direction="row" gap="xsmall" justify="end">
-          <Text size="small">
-            {dayjs(data.timestamp).format("YYYY-MM-DD, HH:mm:ss")},
-          </Text>
+          {/*<Text size="small">*/}
+          {/*  {dayjs(data.timestamp).format("YYYY-MM-DD, HH:mm:ss")},*/}
+          {/*</Text>*/}
           <RelativeTimer
             date={data.timestamp}
             updateInterval={1000}
@@ -167,18 +180,12 @@ export function TransactionsTable(props: TransactionTableProps) {
     isLoading,
     hideCounter,
     noScrollTop,
-    minWidth = '1310px'
+    minWidth = "1310px",
   } = props;
 
-  if ((!data.length && !showIfEmpty) || isLoading) {
-    return (
-      <Box style={{ height: "700px" }} justify="center" align="center">
-        <Spinner />
-      </Box>
-    );
-  }
+  const _IsLoading = (!data.length && !showIfEmpty) || isLoading;
 
-  if (!data.length) {
+  if (!data.length && !_IsLoading) {
     return (
       <Box style={{ height: "120px" }} justify="center" align="center">
         <Text size="small">{emptyText}</Text>
@@ -195,10 +202,12 @@ export function TransactionsTable(props: TransactionTableProps) {
         margin={{ bottom: "small" }}
         border={{ size: "xsmall", side: "bottom", color: "border" }}
       >
-        {!hideCounter && (<Text style={{ flex: '1 1 100%' }}>
-          <b>{Math.min(limit, data.length)}</b> transaction
-          {data.length !== 1 ? "s" : ""} shown
-        </Text>)}
+        {!hideCounter && (
+          <Text style={{ flex: "1 1 100%" }}>
+            <b>{Math.min(limit, data.length)}</b> transaction
+            {data.length !== 1 ? "s" : ""} shown
+          </Text>
+        )}
         {!hidePagination && (
           <PaginationNavigator
             onChange={setFilter}
@@ -210,7 +219,14 @@ export function TransactionsTable(props: TransactionTableProps) {
           />
         )}
       </Box>
-      <Box style={{ overflow: 'auto' }}>
+      <Box
+        style={{
+          overflow: "auto",
+          opacity: _IsLoading ? "0.4" : "1",
+          transition: "0.1s all",
+          height: _IsLoading ? "529px" : "auto",
+        }}
+      >
         <DataTable
           className={"g-table-header"}
           style={{ width: "100%", minWidth }}
@@ -230,7 +246,12 @@ export function TransactionsTable(props: TransactionTableProps) {
         />
       </Box>
       {!hidePagination && (
-        <Box direction="row" justify="between" align="center" margin={{ top: "medium" }}>
+        <Box
+          direction="row"
+          justify="between"
+          align="center"
+          margin={{ top: "medium" }}
+        >
           <PaginationRecordsPerPage filter={filter} onChange={setFilter} />
           <PaginationNavigator
             onChange={setFilter}

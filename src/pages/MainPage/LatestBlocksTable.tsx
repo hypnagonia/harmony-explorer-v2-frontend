@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
 import { useMediaQuery } from 'react-responsive';
-import { breakpoints } from "src/Responive/breakpoints";
 import { Box, DataTable, Spinner, Text } from "grommet";
 import { Block } from "src/types";
 import { useHistory } from "react-router-dom";
@@ -42,22 +41,6 @@ function getColumns(props: any) {
       ),
     },
     {
-      property: "timestamp",
-      header: (
-        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
-          Timestamp
-        </Text>
-      ),
-      render: (data: Block) => (
-        <Box direction="row" gap="xsmall">
-          <Text size="small">
-            {dayjs(data.timestamp).format("YYYY-MM-DD, HH:mm:ss")},
-          </Text>
-          <RelativeTimer date={data.timestamp} updateInterval={1000} />
-        </Box>
-      ),
-    },
-    {
       property: "transactions",
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
@@ -68,6 +51,22 @@ function getColumns(props: any) {
         <Text size="small">
           {data.transactions.length + data.stakingTransactions.length}
         </Text>
+      ),
+    },
+    {
+      property: "timestamp",
+      header: (
+        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+          Timestamp
+        </Text>
+      ),
+      render: (data: Block) => (
+        <Box direction="row" justify="end" gap="xsmall">
+          {/*<Text size="small">*/}
+          {/*  {dayjs(data.timestamp).format("YYYY-MM-DD, HH:mm:ss")},*/}
+          {/*</Text>*/}
+          <RelativeTimer date={data.timestamp} updateInterval={1000} style={{ textAlign: "right" }} />
+        </Box>
       ),
     },
   ];

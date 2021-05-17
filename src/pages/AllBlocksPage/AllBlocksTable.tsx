@@ -54,9 +54,9 @@ function getColumns(props: any) {
       ),
       render: (data: Block) => (
         <Box direction="row" gap="xsmall">
-          <Text size="small">
-            {dayjs(data.timestamp).format("YYYY-MM-DD, HH:mm:ss")},
-          </Text>
+          {/*<Text size="small">*/}
+          {/*  {dayjs(data.timestamp).format("YYYY-MM-DD, HH:mm:ss")},*/}
+          {/*</Text>*/}
           <RelativeTimer date={data.timestamp} updateInterval={1000} />
         </Box>
       ),

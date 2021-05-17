@@ -2,16 +2,17 @@ import { TransactionDetails } from "src/components/transaction/TransactionDetail
 import { InternalTransactionList } from "src/components/transaction/InternalTransactionList";
 import { TransactionLogs } from "src/components/transaction/TransactionLogs";
 import { InternalTransaction, RPCStakingTransactionHarmony } from "src/types";
-import { BasePage } from "src/components/ui";
+import { BaseContainer, BasePage } from "src/components/ui";
 
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { Tabs, Tab, Text, Box, Spinner } from "grommet";
+import { Tabs, Tab, Text, Box, Spinner, Heading } from "grommet";
 import {
   getInternalTransactionsByField,
   getTransactionByField,
   getTransactionLogsByField,
 } from "src/api/client";
+import { AllBlocksTable } from "../AllBlocksPage/AllBlocksTable";
 
 export const TransactionPage = () => {
   // hash or number
@@ -64,7 +65,6 @@ export const TransactionPage = () => {
         ]);
         setLogs(logs as any);
         setIsLoading(false);
-
       } catch (err) {
         console.log(err);
       }
@@ -81,18 +81,27 @@ export const TransactionPage = () => {
   }
 
   return (
-    <BasePage>
-      <Tabs alignControls="start" justify="start">
-        <Tab title={<Text size="small">Transaction Details</Text>}>
-          <TransactionDetails transaction={tx} />
-        </Tab>
-        <Tab title={<Text size="small">Internal Transactions</Text>}>
-          <InternalTransactionList list={trxs} hash={tx.hash} timestamp={tx.timestamp} />
-        </Tab>
-        <Tab title={<Text size="small">Logs</Text>}>
-          <TransactionLogs logs={logs} hash={tx.hash} />
-        </Tab>
-      </Tabs>
-    </BasePage>
+    <BaseContainer pad={{ horizontal: "0" }}>
+      <Heading size="small" margin={{ bottom: "medium", top: "0" }}>
+        Transaction
+      </Heading>
+      <BasePage>
+        <Tabs alignControls="start" justify="start">
+          <Tab title={<Text size="small">Transaction Details</Text>}>
+            <TransactionDetails transaction={tx} />
+          </Tab>
+          <Tab title={<Text size="small">Internal Transactions</Text>}>
+            <InternalTransactionList
+              list={trxs}
+              hash={tx.hash}
+              timestamp={tx.timestamp}
+            />
+          </Tab>
+          <Tab title={<Text size="small">Logs</Text>}>
+            <TransactionLogs logs={logs} hash={tx.hash} />
+          </Tab>
+        </Tabs>
+      </BasePage>
+    </BaseContainer>
   );
 };

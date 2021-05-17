@@ -20,13 +20,13 @@ export function PaginationNavigator(props: PaginationNavigator) {
   const { elements, totalElements, filter, onChange, property, noScrollTop, showPages } = props;
   const { offset, limit = 10 } = filter;
 
-  useEffect(() => {
-      const scrollBody = document.getElementById("scrollBody");
-
-      if (scrollBody && !noScrollTop) {
-        scrollBody.scrollTo({ top: 0 });
-      }
-  }, [filter]);
+  // useEffect(() => {
+  //     const scrollBody = document.getElementById("scrollBody");
+  //
+  //     if (scrollBody && !noScrollTop) {
+  //       scrollBody.scrollTo({ top: 0 });
+  //     }
+  // }, [filter]);
 
   const blockNumbers = elements.map((b) => +b.blockNumber);
   const minBlockNumber = blockNumbers.reduce(
@@ -65,7 +65,7 @@ export function PaginationNavigator(props: PaginationNavigator) {
         totalPages={+Math.ceil(Number(totalElements) / limit).toFixed(0)}
         onPrevPageClick={onPrevClick}
         onNextPageClick={onNextClick}
-        showPages
+        showPages={showPages}
       />
     </Box>
   );
