@@ -8,6 +8,7 @@ import { AllBlocksPage } from 'src/pages/AllBlocksPage'
 import { AllTransactionsPage } from 'src/pages/AllTransactionsPage'
 import { AddressPage } from 'src/pages/AddressPage'
 import { ERC20List } from 'src/pages/ERC20List'
+import { ERC721List } from 'src/pages/ERC721List'
 
 export function Routes() {
   return (
@@ -43,6 +44,10 @@ export function Routes() {
 
         <Route path="/hrc20">
           <ERC20List />
+        </Route>
+
+        <Route path="/hrc721">
+          <ERC721List />
         </Route>
       </Switch>
       </>

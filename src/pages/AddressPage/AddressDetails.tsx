@@ -60,14 +60,14 @@ function DetailItem(props: { data: any; name: string; type: TAddressType }) {
       border={{ size: "xsmall", side: "bottom", color: "border" }}
     >
       <Text
-        style={{ width: "25%" }}
+        style={{ width: "20%" }}
         color="minorText"
         size="small"
         margin={{ right: "xsmall" }}
       >
-        {addressPropertyDisplayNames[name]({ type })}
+        {addressPropertyDisplayNames[name](data, { type })}
       </Text>
-      <Text style={{ width: "75%", wordBreak: "break-all" }} size="small">
+      <Text style={{ width: "80%", wordBreak: "break-all" }} size="small">
         {addressPropertyDisplayValues[name](data[name], data, { type })}
       </Text>
     </Box>
@@ -76,13 +76,13 @@ function DetailItem(props: { data: any; name: string; type: TAddressType }) {
 
 const addressPropertyDisplayNames: Record<
   string,
-  (options: { type: TAddressType }) => React.ReactNode
+  (data: any, options: { type: TAddressType }) => React.ReactNode
 > = {
-  address: (props) => {
-    if (props.type === "erc20") {
-      return "HRC20 name";
+  address: (data, options) => {
+    if (options.type === "erc20") {
+      return `HRC20 ${data.name}`;
     }
-    if (props.type === "contract") {
+    if (options.type === "contract") {
       return "Contract";
     }
 
@@ -106,7 +106,12 @@ const addressPropertyDisplayValues: Record<
   string,
   (value: any, data: any, options: { type: TAddressType }) => React.ReactNode
 > = {
-  address: (value) => <Text size="small">{value}</Text>,
+  address: (value, data, options: { type: TAddressType }) =>  {
+    if(options.type === 'erc20') {
+      return <Address address={value} displayHash />
+    }
+    return <Text size="small">{value}</Text>
+  },
   value: (value) => <TokenValue value={value} />,
   creatorAddress: (value) => <Address address={value} />,
   solidityVersion: (value) => value,

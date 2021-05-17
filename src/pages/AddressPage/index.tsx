@@ -100,7 +100,7 @@ export function AddressPage() {
           isLoading={isLoading}
           setFilter={setFilter}
           noScrollTop
-          minWidth="1366px"
+          minWidth="1266px"
         />
       </BasePage>
     </BaseContainer>

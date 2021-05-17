@@ -21,6 +21,7 @@ export function InfoButton() {
           background="background"
           border={{ size: "xsmall", color: "border" }}
           style={{ borderRadius: "0px" }}
+          gap="small"
         >
           <Anchor
             style={{ textDecoration: "underline" }}
@@ -31,6 +32,16 @@ export function InfoButton() {
             }}
           >
             HRC20 tokens
+          </Anchor>
+          <Anchor
+            style={{ textDecoration: "underline" }}
+            href={"/hrc721"}
+            onClick={(e) => {
+              e.preventDefault();
+              history.push("/hrc721");
+            }}
+          >
+            HRC721 tokens
           </Anchor>
         </Box>
       }

@@ -10,6 +10,7 @@ import { AppFooter } from "src/components/appFooter";
 import { SearchInput, BaseContainer } from "src/components/ui";
 import { ONE_USDT_Rate } from "src/components/ONE_USDT_Rate";
 import { ERC20_Pool } from "src/components/ERC20_Pool";
+import { ERC721_Pool } from "src/components/ERC721_Pool";
 import { useThemeMode } from "src/hooks/themeSwitcherHook";
 import { theme, darkTheme } from "./theme";
 
@@ -58,6 +59,7 @@ function AppWithHistory() {
         <AppFooter style={{ flex: "0 0 auto" }} />
         <ONE_USDT_Rate />
         <ERC20_Pool />
+        <ERC721_Pool />
       </Box>
     </Grommet>
   );
