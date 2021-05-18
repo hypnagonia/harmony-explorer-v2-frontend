@@ -68,8 +68,12 @@ function getColumns(props?: any) {
         </Text>
       ),
       render: (data: InternalTransaction) => {
-        // @ts-ignore
-        const signature = data.signatures && data.signatures.map(s => s.signature)[0].split('(')[0]
+        let signature
+        try {
+          // @ts-ignore
+          signature = data.signatures && data.signatures.map(s => s.signature)[0].split('(')[0]
+        } catch(err) {}
+
         return (
           <Text size="small">
             {signature || '—'}
