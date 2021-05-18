@@ -61,6 +61,23 @@ function getColumns(props?: any) {
       ),
     },
     {
+      property: "method",
+      header: (
+        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+          Suggested Method
+        </Text>
+      ),
+      render: (data: InternalTransaction) => {
+        // @ts-ignore
+        const signature = data.signatures && data.signatures.map(s => s.signature)[0].split('(')[0]
+        return (
+          <Text size="small">
+            {signature || '—'}
+          </Text>
+        )
+      }
+    },
+    {
       property: "from",
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
