@@ -78,14 +78,7 @@ const addressPropertyDisplayNames: Record<
   string,
   (data: any, options: { type: TAddressType }) => React.ReactNode
 > = {
-  address: (data, options) => {
-    if (options.type === "erc20") {
-      return `HRC20 ${data.name}`;
-    }
-    if (options.type === "contract") {
-      return "Contract";
-    }
-
+  address: () => {
     return "Address";
   },
   value: () => "Value",
@@ -106,11 +99,11 @@ const addressPropertyDisplayValues: Record<
   string,
   (value: any, data: any, options: { type: TAddressType }) => React.ReactNode
 > = {
-  address: (value, data, options: { type: TAddressType }) =>  {
-    if(options.type === 'erc20') {
-      return <Address address={value} displayHash />
+  address: (value, data, options: { type: TAddressType }) => {
+    if (options.type === "erc20") {
+      return <Address address={value} displayHash />;
     }
-    return <Text size="small">{value}</Text>
+    return <Text size="small">{value}</Text>;
   },
   value: (value) => <TokenValue value={value} />,
   creatorAddress: (value) => <Address address={value} />,
@@ -150,7 +143,10 @@ const addressPropertyOrder: Record<string, number> = {
 
 type TAddressType = "address" | "contract" | "erc20" | "erc721";
 
-function getType(contracts: AddressDetails, erc20Token: Erc20): TAddressType {
+export function getType(
+  contracts: AddressDetails,
+  erc20Token: Erc20
+): TAddressType {
   if (!!contracts && !!erc20Token) {
     return "erc20";
   }

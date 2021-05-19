@@ -11,7 +11,7 @@ import {
   getInternalTransactionsByField,
   getTransactionByField,
   getTransactionLogsByField,
-  getByteCodeSignatureByHash
+  getByteCodeSignatureByHash,
 } from "src/api/client";
 import { AllBlocksTable } from "../AllBlocksPage/AllBlocksTable";
 
@@ -49,21 +49,21 @@ export const TransactionPage = () => {
         ]);
 
         const methodSignatures = await Promise.all(
-          txs.map(
-            tx => getByteCodeSignatureByHash([tx.input.slice(0,10)])
-          )
+          txs.map((tx) => getByteCodeSignatureByHash([tx.input.slice(0, 10)]))
         );
 
-        const txsWithSignatures = txs.map((l, i) => ({...l, signatures: methodSignatures[i]}))
+        const txsWithSignatures = txs.map((l, i) => ({
+          ...l,
+          signatures: methodSignatures[i],
+        }));
 
-        console.log({txsWithSignatures})
+        console.log({ txsWithSignatures });
 
         setTrxs(txsWithSignatures as InternalTransaction[]);
       } catch (err) {
         console.log(err);
       }
     };
-
 
     getInternalTxs();
   }, [tx]);
@@ -79,12 +79,13 @@ export const TransactionPage = () => {
         ]);
 
         const logsSignatures = await Promise.all(
-          logs.map(
-            l => getByteCodeSignatureByHash([l.topics[0]])
-          )
+          logs.map((l) => getByteCodeSignatureByHash([l.topics[0]]))
         );
 
-        const logsWithSignatures = logs.map((l, i) => ({...l, signatures: logsSignatures[i]}))
+        const logsWithSignatures = logs.map((l, i) => ({
+          ...l,
+          signatures: logsSignatures[i],
+        }));
 
         setLogs(logsWithSignatures as any);
         setIsLoading(false);
@@ -102,8 +103,8 @@ export const TransactionPage = () => {
         <Spinner />
       </Box>
     );
-  }
-
+  } 
+  
   return (
     <BaseContainer pad={{ horizontal: "0" }}>
       <Heading size="small" margin={{ bottom: "medium", top: "0" }}>
@@ -114,16 +115,24 @@ export const TransactionPage = () => {
           <Tab title={<Text size="small">Transaction Details</Text>}>
             <TransactionDetails transaction={tx} />
           </Tab>
-          <Tab title={<Text size="small">Internal Transactions</Text>}>
-            <InternalTransactionList
-              list={trxs}
-              hash={tx.hash}
-              timestamp={tx.timestamp}
-            />
-          </Tab>
-          <Tab title={<Text size="small">Logs</Text>}>
-            <TransactionLogs logs={logs} hash={tx.hash} />
-          </Tab>
+          {trxs.length ? (
+            <Tab
+              title={
+                <Text size="small">Internal Transactions ({trxs.length})</Text>
+              }
+            >
+              <InternalTransactionList
+                list={trxs}
+                hash={tx.hash}
+                timestamp={tx.timestamp}
+              />
+            </Tab>
+          ) : null}
+          {logs.length ? (
+            <Tab title={<Text size="small">Logs ({logs.length})</Text>}>
+              <TransactionLogs logs={logs} hash={tx.hash} />
+            </Tab>
+          ) : null}
         </Tabs>
       </BasePage>
     </BaseContainer>

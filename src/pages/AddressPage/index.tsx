@@ -7,7 +7,7 @@ import {
   ONEValue,
   RelativeTimer,
 } from "src/components/ui";
-import { AddressDetailsDisplay } from "./AddressDetails";
+import { AddressDetailsDisplay, getType } from "./AddressDetails";
 import {
   getRelatedTransactions,
   getContractsByField,
@@ -19,6 +19,7 @@ import { TransactionsTable } from "../../components/tables/TransactionsTable";
 import { FormNextLink } from "grommet-icons";
 import dayjs from "dayjs";
 import styled, { css } from "styled-components";
+import { Erc20, useERC20Pool } from "src/hooks/ERC20_Pool";
 
 const initFilter: Filter = {
   offset: 0,
@@ -53,6 +54,7 @@ export function AddressPage() {
   const [relatedTrxs, setRelatedTrxs] = useState<RelatedTransaction[]>([]);
   const [filter, setFilter] = useState<Filter>(initFilter);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const erc20Map = useERC20Pool();
   //TODO remove hardcode
   // @ts-ignore
   const { id } = useParams();
@@ -95,12 +97,27 @@ export function AddressPage() {
     getTokens();
   }, [id]);
 
+  const renderTitle = () => { 
+    const erc20Token = erc20Map[id] || null;
+    const type = getType(contracts, erc20Token); 
+    const data = { ...contracts, ...erc20Token, address: id, token: tokens };
+
+    if (type === "erc20") {
+      return `HRC20 ${data.name}`;
+    }
+    if (type === "contract") {
+      return "Contract";
+    }
+
+    return "Address";
+  };
+
   const { limit = 10 } = filter;
 
   return (
     <BaseContainer pad={{ horizontal: "0" }}>
       <Text size="xlarge" weight="bold" margin={{ bottom: "medium" }}>
-        Address
+        {renderTitle()}
       </Text>
       <BasePage margin={{ vertical: "0" }}>
         <AddressDetailsDisplay
@@ -153,7 +170,11 @@ function getColumns(id: string): ColumnConfig<any>[] {
     {
       property: "hash",
       header: (
-        <Text color="minorText" size="small" style={{ fontWeight: 300, width: '95px' }}>
+        <Text
+          color="minorText"
+          size="small"
+          style={{ fontWeight: 300, width: "95px" }}
+        >
           Hash
         </Text>
       ),
@@ -211,7 +232,11 @@ function getColumns(id: string): ColumnConfig<any>[] {
     {
       property: "to",
       header: (
-        <Text color="minorText" size="small" style={{ fontWeight: 300, width: '320px' }}>
+        <Text
+          color="minorText"
+          size="small"
+          style={{ fontWeight: 300, width: "320px" }}
+        >
           To
         </Text>
       ),
@@ -224,7 +249,7 @@ function getColumns(id: string): ColumnConfig<any>[] {
     {
       property: "value",
       header: (
-        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+        <Text color="minorText" size="small" style={{ fontWeight: 300, width: '220px' }}>
           ONEValue
         </Text>
       ),
@@ -237,7 +262,7 @@ function getColumns(id: string): ColumnConfig<any>[] {
     {
       property: "timestamp",
       header: (
-        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+        <Text color="minorText" size="small" style={{ fontWeight: 300, width: '120px' }}>
           Timestamp
         </Text>
       ),

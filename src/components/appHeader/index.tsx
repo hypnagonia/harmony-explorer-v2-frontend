@@ -41,10 +41,12 @@ export function AppHeader(props: { style: CSSProperties }) {
           style={{
             cursor: "pointer",
             color: "#fff",
+            fontSize: '12px'
           }}
           onClick={() => history.push("/")}
         >
-          Harmony Block Explorer
+          <img src={require("../../assets/Logo.svg").default} />
+          Block Explorer
           <br />
           <FiatPrice />
         </Heading>
