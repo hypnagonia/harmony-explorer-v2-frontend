@@ -6,7 +6,7 @@ import { ConfigureButton } from "./ConfigureButton";
 import { InfoButton } from "./InfoButton";
 import { useThemeMode } from "src/hooks/themeSwitcherHook";
 
-import { CSSProperties } from "styled-components";
+import styled, { CSSProperties } from "styled-components";
 
 const HeaderLine = (props: any) => {
   //@ts-ignore
@@ -26,6 +26,10 @@ const HeaderLine = (props: any) => {
   );
 };
 
+const ProjectName = styled.div`
+  margin-left: 3px;
+`;
+
 export function AppHeader(props: { style: CSSProperties }) {
   const history = useHistory();
 
@@ -41,13 +45,13 @@ export function AppHeader(props: { style: CSSProperties }) {
           style={{
             cursor: "pointer",
             color: "#fff",
-            fontSize: '12px'
           }}
           onClick={() => history.push("/")}
         >
-          <img src={require("../../assets/Logo.svg").default} />
-          Block Explorer
-          <br />
+          <Box direction={"row"} align={"center"}>
+            <img src={require("../../assets/Logo.svg").default} />
+            <ProjectName>Harmony Block Explorer</ProjectName>
+          </Box>
           <FiatPrice />
         </Heading>
         <Box direction="row">
