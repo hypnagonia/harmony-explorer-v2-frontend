@@ -1,10 +1,10 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { Box, Text, Select } from "grommet";
 import { Filter } from "src/types";
 import { FormPrevious, FormNext } from "grommet-icons";
 import { formatNumber } from "src/components/ui/utils";
 
-export type TPaginationAction = 'nextPage' | 'prevPage';
+export type TPaginationAction = "nextPage" | "prevPage";
 
 interface PaginationNavigator {
   filter: Filter;
@@ -17,7 +17,16 @@ interface PaginationNavigator {
 }
 
 export function PaginationNavigator(props: PaginationNavigator) {
-  const { elements, totalElements, filter, onChange, property, noScrollTop, showPages } = props;
+  const {
+    elements,
+    totalElements,
+    filter,
+    onChange,
+    property,
+    noScrollTop,
+    showPages,
+  } = props;
+
   const { offset, limit = 10 } = filter;
 
   // useEffect(() => {
@@ -43,7 +52,7 @@ export function PaginationNavigator(props: PaginationNavigator) {
       innerFilter.value = maxBlockNumber + limit + 1;
     }
 
-    onChange(newFilter, 'prevPage');
+    onChange(newFilter, "prevPage");
   };
 
   const onNextClick = () => {
@@ -54,11 +63,11 @@ export function PaginationNavigator(props: PaginationNavigator) {
       innerFilter.value = minBlockNumber;
     }
 
-    onChange(newFilter, 'nextPage');
+    onChange(newFilter, "nextPage");
   };
 
   return (
-    <Box style={{ flex: '0 0 auto' }}>
+    <Box style={{ flex: "0 0 auto" }}>
       <Pagination
         //@ts-ignore
         currentPage={+(+offset / limit).toFixed(0) + 1}
@@ -66,6 +75,7 @@ export function PaginationNavigator(props: PaginationNavigator) {
         onPrevPageClick={onPrevClick}
         onNextPageClick={onNextClick}
         showPages={showPages}
+        disableNextBtn={elements.length < limit}
       />
     </Box>
   );
@@ -76,17 +86,40 @@ interface PaginationProps {
   showPages?: boolean;
   onPrevPageClick: () => void;
   onNextPageClick: () => void;
+  disableNextBtn: boolean;
 }
 
 function Pagination(props: PaginationProps) {
-  const { currentPage, totalPages, onPrevPageClick, onNextPageClick, showPages } = props;
+  const {
+    currentPage,
+    totalPages,
+    onPrevPageClick,
+    onNextPageClick,
+    showPages,
+    disableNextBtn,
+  } = props;
+
   return (
     <Box direction="row" gap="small">
-      <FormPrevious onClick={onPrevPageClick} style={{cursor: "pointer"}}/>
-      {showPages && <Text style={{fontWeight: "bold"}}>{formatNumber(+currentPage)}</Text>}
-      {showPages && <Text style={{fontWeight: 300}}>/</Text>}
-      {showPages && <Text style={{fontWeight: 300}}>{formatNumber(+totalPages)}</Text>}
-      <FormNext onClick={onNextPageClick} style={{cursor: "pointer"}}/>
+      <FormPrevious
+        onClick={onPrevPageClick}
+        style={{ cursor: "pointer", userSelect: "none" }}
+      />
+      {showPages && (
+        <Text style={{ fontWeight: "bold" }}>{formatNumber(+currentPage)}</Text>
+      )}
+      {showPages && <Text style={{ fontWeight: 300 }}>/</Text>}
+      {showPages && (
+        <Text style={{ fontWeight: 300 }}>{formatNumber(+totalPages)}</Text>
+      )}
+      <FormNext
+        onClick={disableNextBtn ? undefined : onNextPageClick}
+        style={{
+          cursor: "pointer",
+          userSelect: "none",
+          opacity: disableNextBtn ? 0.5 : 1,
+        }}
+      />
     </Box>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, Box } from "grommet";
+import { Text, Box, ColumnConfig } from "grommet";
 import {
   BasePage,
   BaseContainer,
@@ -8,16 +8,17 @@ import {
   RelativeTimer,
 } from "src/components/ui";
 import { AddressDetailsDisplay } from "./AddressDetails";
-import { getRelatedTransactions, getContractsByField, getUserERC20Balances } from "src/api/client";
 import {
-  Filter,
-  RelatedTransaction,
-  RelatedTransactionType,
-} from "src/types";
+  getRelatedTransactions,
+  getContractsByField,
+  getUserERC20Balances,
+} from "src/api/client";
+import { Filter, RelatedTransaction, RelatedTransactionType } from "src/types";
 import { useParams } from "react-router-dom";
 import { TransactionsTable } from "../../components/tables/TransactionsTable";
 import { FormNextLink } from "grommet-icons";
 import dayjs from "dayjs";
+import styled, { css } from "styled-components";
 
 const initFilter: Filter = {
   offset: 0,
@@ -26,6 +27,25 @@ const initFilter: Filter = {
   orderDirection: "desc",
   filters: [{ type: "gte", property: "block_number", value: 0 }],
 };
+
+const Marker = styled.div<{ out: boolean }>`
+  border-radius: 2px;
+  padding: 5px;
+
+  text-align: center;
+  font-weight: bold;
+
+  ${(props) =>
+    props.out
+      ? css`
+          background: rgb(239 145 62);
+          color: #fff;
+        `
+      : css`
+          background: rgba(105, 250, 189, 0.8);
+          color: #1b295e;
+        `};
+`;
 
 export function AddressPage() {
   const [contracts, setContracts] = useState<any>(null);
@@ -37,17 +57,16 @@ export function AddressPage() {
   // @ts-ignore
   const { id } = useParams();
 
-
   useEffect(() => {
     const getElements = async () => {
       setIsLoading(true);
       try {
         let relatedTransactions = await getRelatedTransactions([0, id, filter]);
+        setIsLoading(false);
         setRelatedTrxs(relatedTransactions);
       } catch (err) {
         console.log(err);
       }
-      setIsLoading(false);
     };
     getElements();
   }, [filter, id]);
@@ -84,7 +103,11 @@ export function AddressPage() {
         Address
       </Text>
       <BasePage margin={{ vertical: "0" }}>
-        <AddressDetailsDisplay address={id} contracts={contracts} tokens={tokens} />
+        <AddressDetailsDisplay
+          address={id}
+          contracts={contracts}
+          tokens={tokens}
+        />
         <Text
           size="xlarge"
           margin={{ top: !!contracts ? "medium" : "0", bottom: "small" }}
@@ -92,7 +115,7 @@ export function AddressPage() {
           Related transactions
         </Text>
         <TransactionsTable
-          columns={getColumns()}
+          columns={getColumns(id)}
           data={relatedTrxs}
           totalElements={100}
           limit={+limit}
@@ -107,17 +130,22 @@ export function AddressPage() {
   );
 }
 
-function getColumns() {
+function getColumns(id: string): ColumnConfig<any>[] {
   return [
     {
       property: "type",
+      size: "",
       header: (
-        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+        <Text
+          color="minorText"
+          size="small"
+          style={{ fontWeight: 300, width: "140px" }}
+        >
           Type
         </Text>
       ),
       render: (data: RelatedTransaction) => (
-        <Text size="small">
+        <Text size="small" style={{ width: "140px" }}>
           {relatedTxMap[data.transactionType] || data.transactionType}
         </Text>
       ),
@@ -125,7 +153,7 @@ function getColumns() {
     {
       property: "hash",
       header: (
-        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+        <Text color="minorText" size="small" style={{ fontWeight: 300, width: '95px' }}>
           Hash
         </Text>
       ),
@@ -155,7 +183,11 @@ function getColumns() {
     {
       property: "from",
       header: (
-        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+        <Text
+          color="minorText"
+          size="small"
+          style={{ fontWeight: 300, width: "320px" }}
+        >
           From
         </Text>
       ),
@@ -166,9 +198,20 @@ function getColumns() {
       ),
     },
     {
+      property: "marker",
+      header: <></>,
+      render: (data: RelatedTransaction) => (
+        <Text size="12px">
+          <Marker out={data.from === id}>
+            {data.from === id ? "OUT" : "IN"}
+          </Marker>
+        </Text>
+      ),
+    },
+    {
       property: "to",
       header: (
-        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+        <Text color="minorText" size="small" style={{ fontWeight: 300, width: '320px' }}>
           To
         </Text>
       ),

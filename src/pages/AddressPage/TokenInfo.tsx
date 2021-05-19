@@ -34,7 +34,7 @@ function TokenInfo(props: { value: Token }) {
   return (
     <Box
       direction="row"
-      style={{ minWidth: "350px", maxWidth: "550px", flex: "0 0 auto" }}
+      style={{ minWidth: "690px", maxWidth: "550px", flex: "0 0 auto" }}
       margin={{ bottom: "3px" }}
       gap="medium"
     >

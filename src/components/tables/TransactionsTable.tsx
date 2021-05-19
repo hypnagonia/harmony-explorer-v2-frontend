@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Box, DataTable, Text, Spinner } from "grommet";
+import { Box, DataTable, Text, Spinner, ColumnConfig } from "grommet";
 import { Filter, RPCTransactionHarmony } from "src/types";
 import { useHistory } from "react-router-dom";
 import { FormNextLink } from "grommet-icons";
@@ -18,7 +18,7 @@ function getColumns(props: any) {
   return [
     {
       property: "shard",
-      size: 'xxsmall',
+      size: "xxsmall",
       resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
@@ -39,7 +39,7 @@ function getColumns(props: any) {
     },
     {
       property: "hash",
-      size: 'xsmall',
+      size: "xsmall",
       resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
@@ -61,7 +61,7 @@ function getColumns(props: any) {
     },
     {
       property: "block_number",
-      size: '260px',
+      size: "260px",
       resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
@@ -85,7 +85,7 @@ function getColumns(props: any) {
     },
     {
       property: "from",
-      size: 'large',
+      size: "large",
       resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
@@ -98,7 +98,7 @@ function getColumns(props: any) {
     },
     {
       property: "to",
-      size: 'large',
+      size: "large",
       resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
@@ -111,7 +111,7 @@ function getColumns(props: any) {
     },
     {
       property: "value",
-      size: '380px',
+      size: "380px",
       resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
@@ -126,7 +126,7 @@ function getColumns(props: any) {
     },
     {
       property: "timestamp",
-      size: '280px',
+      size: "280px",
       resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
@@ -151,7 +151,7 @@ function getColumns(props: any) {
 
 interface TransactionTableProps {
   data: any[];
-  columns?: any[];
+  columns?: ColumnConfig<any>[];
   totalElements: number;
   limit: number;
   filter: Filter;
@@ -183,15 +183,7 @@ export function TransactionsTable(props: TransactionTableProps) {
     minWidth = "1310px",
   } = props;
 
-  const _IsLoading = (!data.length && !showIfEmpty) || isLoading;
-
-  if (!data.length && !_IsLoading) {
-    return (
-      <Box style={{ height: "120px" }} justify="center" align="center">
-        <Text size="small">{emptyText}</Text>
-      </Box>
-    );
-  }
+  const _IsLoading = isLoading;
 
   return (
     <>
@@ -224,26 +216,36 @@ export function TransactionsTable(props: TransactionTableProps) {
           overflow: "auto",
           opacity: _IsLoading ? "0.4" : "1",
           transition: "0.1s all",
-          height: _IsLoading ? "529px" : "auto",
+          height: "590px",
         }}
       >
-        <DataTable
-          className={"g-table-header"}
-          style={{ width: "100%", minWidth }}
-          columns={columns ? columns : getColumns({ history })}
-          data={data}
-          step={10}
-          border={{
-            header: {
-              color: "brand",
-            },
-            body: {
-              color: "border",
-              side: "top",
-              size: "1px",
-            },
-          }}
-        />
+        {_IsLoading ? (
+          <Box align={"center"} justify={"center"} flex>
+            <Spinner size={"large"} />
+          </Box>
+        ) : !data.length && !_IsLoading ? (
+          <Box style={{ height: "120px" }} justify="center" align="center">
+            <Text size="small">{emptyText}</Text>
+          </Box>
+        ) : (
+          <DataTable
+            className={"g-table-header"}
+            style={{ width: "100%", minWidth }}
+            columns={columns ? columns : getColumns({ history })}
+            data={data}
+            step={10}
+            border={{
+              header: {
+                color: "brand",
+              },
+              body: {
+                color: "border",
+                side: "top",
+                size: "1px",
+              },
+            }}
+          />
+        )}
       </Box>
       {!hidePagination && (
         <Box

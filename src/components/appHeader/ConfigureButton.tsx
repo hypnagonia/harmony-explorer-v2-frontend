@@ -1,5 +1,5 @@
 import React from "react";
-import { Configure } from "grommet-icons";
+import { SettingsOption } from "grommet-icons";
 import { Box, Text, DropButton } from "grommet";
 import styled from "styled-components";
 import {
@@ -20,9 +20,14 @@ export function ConfigureButton() {
 
   return (
     <DropButton
-      label={<Configure size="medium" />}
+      label={<SettingsOption size="medium" color={'#fff'} />}
       dropAlign={{ top: "bottom", right: "right" }}
-      style={{ border: "none", boxShadow: "none", paddingRight: "6px", paddingLeft: 0 }}
+      style={{
+        border: "none",
+        boxShadow: "none",
+        paddingRight: "6px",
+        paddingLeft: 0,
+      }}
       dropContent={
         <Box
           pad="medium"

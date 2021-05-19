@@ -4,6 +4,7 @@ import { Box, TextInput } from "grommet";
 import { useHistory } from "react-router-dom";
 import { getBlockByHash, getTransactionByField } from "src/api/client";
 import { useThemeMode } from "../../hooks/themeSwitcherHook";
+import { getAddress } from "src/utils";
 
 let timeoutID: any | null = null;
 
@@ -29,9 +30,17 @@ export const SearchInput = () => {
       if (v.length !== 66 && v.length !== 42) {
         return;
       }
-      if(v.length === 42 && (/^0x[a-f0-9]+$/.test(v))) {
+      if (v.length === 42 && /^0x[a-f0-9]+$/.test(v)) {
         // address
         history.push(`/address/${v}`);
+        return;
+      }
+
+      if (v.length === 42 && v.slice(0, 4) === "one1") {
+        // address
+        const ethAddress = getAddress(v).basicHex;
+
+        history.push(`/address/${ethAddress}`);
         return;
       }
 

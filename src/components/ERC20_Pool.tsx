@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { getAllERC20 } from "src/api/client";
-import { setERC20Pool, Erc20 } from 'src/hooks/ERC20_Pool';
+import { setERC20Pool, Erc20 } from "src/hooks/ERC20_Pool";
 
 export function ERC20_Pool() {
   useEffect(() => {
@@ -17,10 +17,10 @@ export function ERC20_Pool() {
 
     let tId = 0;
 
-    window.onload = function () {
+    setTimeout(() => {
       getRates();
       tId = window.setInterval(getRates, 10 * 60 * 1e3);
-    };
+    });
 
     return () => {
       clearTimeout(tId);
