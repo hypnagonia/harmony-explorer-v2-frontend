@@ -100,10 +100,10 @@ const addressPropertyDisplayValues: Record<
   (value: any, data: any, options: { type: TAddressType }) => React.ReactNode
 > = {
   address: (value, data, options: { type: TAddressType }) => {
-    if (options.type === "erc20") {
-      return <Address address={value} displayHash />;
-    }
-    return <Text size="small">{value}</Text>;
+    // if (options.type === "erc20") {
+    //   return <Address address={value} displayHash />;
+    // }
+    return <Address address={value} />;
   },
   value: (value) => <TokenValue value={value} />,
   creatorAddress: (value) => <Address address={value} />,

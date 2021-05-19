@@ -26,6 +26,8 @@ export const TransactionPage = () => {
   const [logs, setLogs] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  console.log(tx.hash);
+
   useEffect(() => {
     const getTx = async () => {
       let trx;
@@ -40,28 +42,35 @@ export const TransactionPage = () => {
 
   useEffect(() => {
     const getInternalTxs = async () => {
-      try {
-        //@ts-ignore
-        const txs = await getInternalTransactionsByField([
-          0,
-          "transaction_hash",
-          tx.hash,
-        ]);
+      if (tx.hash) {
+        try {
+          //@ts-ignore
+          const txs = await getInternalTransactionsByField([
+            0,
+            "transaction_hash",
+            tx.hash,
+          ]);
 
-        const methodSignatures = await Promise.all(
-          txs.map((tx) => getByteCodeSignatureByHash([tx.input.slice(0, 10)]))
-        );
+          const methodSignatures = await Promise.all(
+            txs.map((tx) => {
+              console.log(tx);
+              return tx.input
+                ? getByteCodeSignatureByHash([tx.input.slice(0, 10)])
+                : Promise.resolve([]);
+            })
+          );
 
-        const txsWithSignatures = txs.map((l, i) => ({
-          ...l,
-          signatures: methodSignatures[i],
-        }));
+          const txsWithSignatures = txs.map((l, i) => ({
+            ...l,
+            signatures: methodSignatures[i],
+          }));
 
-        console.log({ txsWithSignatures });
-
-        setTrxs(txsWithSignatures as InternalTransaction[]);
-      } catch (err) {
-        console.log(err);
+          setTrxs(txsWithSignatures as InternalTransaction[]);
+        } catch (err) {
+          console.log(err);
+        }
+      } else {
+        setTrxs([]);
       }
     };
 
@@ -70,27 +79,31 @@ export const TransactionPage = () => {
 
   useEffect(() => {
     const getLogs = async () => {
-      try {
-        //@ts-ignore
-        const logs: any[] = await getTransactionLogsByField([
-          0,
-          "transaction_hash",
-          tx.hash,
-        ]);
+      if (tx.hash) {
+        try {
+          //@ts-ignore
+          const logs: any[] = await getTransactionLogsByField([
+            0,
+            "transaction_hash",
+            tx.hash,
+          ]);
 
-        const logsSignatures = await Promise.all(
-          logs.map((l) => getByteCodeSignatureByHash([l.topics[0]]))
-        );
+          const logsSignatures = await Promise.all(
+            logs.map((l) => getByteCodeSignatureByHash([l.topics[0]]))
+          );
 
-        const logsWithSignatures = logs.map((l, i) => ({
-          ...l,
-          signatures: logsSignatures[i],
-        }));
+          const logsWithSignatures = logs.map((l, i) => ({
+            ...l,
+            signatures: logsSignatures[i],
+          }));
 
-        setLogs(logsWithSignatures as any);
-        setIsLoading(false);
-      } catch (err) {
-        console.log(err);
+          setLogs(logsWithSignatures as any);
+          setIsLoading(false);
+        } catch (err) {
+          console.log(err);
+        }
+      } else {
+        setLogs([]);
       }
     };
 
@@ -103,8 +116,8 @@ export const TransactionPage = () => {
         <Spinner />
       </Box>
     );
-  } 
-  
+  }
+
   return (
     <BaseContainer pad={{ horizontal: "0" }}>
       <Heading size="small" margin={{ bottom: "medium", top: "0" }}>
