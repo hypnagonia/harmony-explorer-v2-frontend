@@ -105,10 +105,11 @@ export function AddressPage() {
         }, {} as { [token: string]: number });
 
         setTokens([
-          ...tokens,
+          ...tokens.map((token) => ({ ...token, isERC20: true })),
           ...erc721Tokens.map((token) => ({
             ...token,
             balance: erc721BalanceMap[token.tokenAddress].toString(),
+            isERC721: true,
           })),
         ]);
       } catch (err) {
