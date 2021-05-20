@@ -127,12 +127,17 @@ export function AddressPage() {
 
   const renderTitle = () => {
     const erc20Token = erc20Map[id] || null;
-    const type = getType(contracts, erc20Token);
+    const type = erc721Map[id] ? "erc721" : getType(contracts, erc20Token);
     const data = { ...contracts, ...erc20Token, address: id, token: tokens };
 
     if (type === "erc20") {
       return `HRC20 ${data.name}`;
     }
+
+    if (type === 'erc721') {
+      return `ERC721 ${data.name}`;
+    }  
+
     if (type === "contract") {
       return "Contract";
     }
