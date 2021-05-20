@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { getAllERC721 } from "src/api/client";
-import { setERC721Pool, ERC721 } from 'src/hooks/ERC721_Pool';
+import { setERC721Pool, ERC721 } from "src/hooks/ERC721_Pool";
 
 export function ERC721_Pool() {
   useEffect(() => {
@@ -17,11 +17,11 @@ export function ERC721_Pool() {
 
     let tId = 0;
 
-    window.onload = function () {
+    setTimeout(() => {
       getRates();
-      console.log('GET 721');
+      console.log("GET 721");
       tId = window.setInterval(getRates, 10 * 60 * 1e3);
-    };
+    });
 
     return () => {
       clearTimeout(tId);

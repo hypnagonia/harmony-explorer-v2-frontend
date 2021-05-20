@@ -85,14 +85,14 @@ export function AddressPage() {
         const mergedContracts = erc721Map[contracts.address]
           ? { ...contracts, ...erc721Map[contracts.address] }
           : contracts;
-           
+
         setContracts(mergedContracts);
       } catch (err) {
         setContracts(null);
       }
     };
     getContracts();
-  }, [id]);
+  }, [id, erc721Map]);
 
   useEffect(() => {
     const getTokens = async () => {
