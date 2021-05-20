@@ -57,6 +57,7 @@ export function AddressPage() {
   const [filter, setFilter] = useState<Filter>(initFilter);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const erc20Map = useERC20Pool();
+  const erc721Map = useERC721Pool();
 
   //TODO remove hardcode
   // @ts-ignore
@@ -79,8 +80,13 @@ export function AddressPage() {
   useEffect(() => {
     const getContracts = async () => {
       try {
-        let contracts = await getContractsByField([0, "address", id]);
-        setContracts(contracts);
+        let contracts: any = await getContractsByField([0, "address", id]);
+
+        const mergedContracts = erc721Map[contracts.address]
+          ? { ...contracts, ...erc721Map[contracts.address] }
+          : contracts;
+           
+        setContracts(mergedContracts);
       } catch (err) {
         setContracts(null);
       }
