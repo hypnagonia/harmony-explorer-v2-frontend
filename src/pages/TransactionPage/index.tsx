@@ -26,8 +26,6 @@ export const TransactionPage = () => {
   const [logs, setLogs] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  console.log(tx.hash);
-
   useEffect(() => {
     const getTx = async () => {
       let trx;
@@ -50,11 +48,9 @@ export const TransactionPage = () => {
             "transaction_hash",
             tx.hash,
           ]);
-
           const methodSignatures = await Promise.all(
             txs.map((tx) => {
-              console.log(tx);
-              return tx.input
+              return tx.input && tx.input.length > 10
                 ? getByteCodeSignatureByHash([tx.input.slice(0, 10)])
                 : Promise.resolve([]);
             })
@@ -75,7 +71,7 @@ export const TransactionPage = () => {
     };
 
     getInternalTxs();
-  }, [tx]);
+  }, [tx.hash]);
 
   useEffect(() => {
     const getLogs = async () => {
