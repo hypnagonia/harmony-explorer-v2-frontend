@@ -30,7 +30,6 @@ export function TokensInfo(props: { value: Token[] }) {
 
 function TokenInfo(props: { value: Token }) {
   const { value } = props;
-
   return (
     <Box
       direction="row"

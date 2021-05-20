@@ -4,6 +4,7 @@ import Big from "big.js";
 import { formatNumber as _formatNumber } from "src/components/ui/utils";
 
 import { useERC20Pool } from "src/hooks/ERC20_Pool";
+import { useERC721Pool } from "src/hooks/ERC721_Pool";
 
 interface ONEValueProps {
   value: string | number;
@@ -20,8 +21,14 @@ Big.PE = 15;
 export const TokenValue = (props: ONEValueProps) => {
   const { value, tokenAddress = "", style, formatNumber } = props;
   const erc20Map = useERC20Pool();
+  const erc721Map = useERC721Pool();
   //TODO remove hardcode
-  const tokenInfo = erc20Map[tokenAddress] || { decimals: 14, symbol: "" };
+  const tokenInfo: any = erc20Map[tokenAddress] ||
+    erc721Map[tokenAddress] || { decimals: 14, symbol: "" };
+
+  if (!("decimals" in tokenInfo)) {
+    tokenInfo.decimals = 0;
+  }
 
   if (!value) {
     return null;

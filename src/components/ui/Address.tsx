@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import { useERC20Pool } from "src/hooks/ERC20_Pool";
 import { getAddress } from "src/utils";
 import { useCurrency } from "src/hooks/ONE-ETH-SwitcherHook";
+import { useERC721Pool } from "src/hooks/ERC721_Pool";
 
 interface IAddress {
   address: string;
@@ -25,6 +26,7 @@ export const Address = (props: IAddress) => {
   } = props;
   const history = useHistory();
   const ERC20Map = useERC20Pool();
+  const erc721Map = useERC721Pool();
   const currency = useCurrency();
 
   if (!address) {
@@ -36,6 +38,11 @@ export const Address = (props: IAddress) => {
   if (ERC20Map[address] && !displayHash) {
     parsedName = ERC20Map[address].name;
   }
+
+  if (erc721Map[address] && !displayHash) {
+    parsedName = erc721Map[address].name
+  }
+
   let outPutAddress = address;
   try {
     outPutAddress = currency === "ONE" ? getAddress(address).bech32 : address;

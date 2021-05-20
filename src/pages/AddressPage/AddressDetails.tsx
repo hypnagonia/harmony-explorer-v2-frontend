@@ -30,7 +30,6 @@ export function AddressDetailsDisplay(props: AddressDetailsProps) {
   }
 
   const items: string[] = Object.keys(data);
-
   return (
     <Box>
       {items.sort(sortByOrder).map((i) => (
@@ -100,10 +99,7 @@ const addressPropertyDisplayValues: Record<
   (value: any, data: any, options: { type: TAddressType }) => React.ReactNode
 > = {
   address: (value, data, options: { type: TAddressType }) => {
-    // if (options.type === "erc20") {
-    //   return <Address address={value} displayHash />;
-    // }
-    return <Address address={value} />;
+    return <Address address={value} displayHash />;
   },
   value: (value) => <TokenValue value={value} />,
   creatorAddress: (value) => <Address address={value} />,

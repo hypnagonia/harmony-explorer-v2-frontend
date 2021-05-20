@@ -12,6 +12,7 @@ import {
   getRelatedTransactions,
   getContractsByField,
   getUserERC20Balances,
+  getUserERC721Assets,
 } from "src/api/client";
 import { Filter, RelatedTransaction, RelatedTransactionType } from "src/types";
 import { useParams } from "react-router-dom";
@@ -20,6 +21,7 @@ import { FormNextLink } from "grommet-icons";
 import dayjs from "dayjs";
 import styled, { css } from "styled-components";
 import { Erc20, useERC20Pool } from "src/hooks/ERC20_Pool";
+import { useERC721Pool } from "src/hooks/ERC721_Pool";
 
 const initFilter: Filter = {
   offset: 0,
@@ -55,6 +57,7 @@ export function AddressPage() {
   const [filter, setFilter] = useState<Filter>(initFilter);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const erc20Map = useERC20Pool();
+
   //TODO remove hardcode
   // @ts-ignore
   const { id } = useParams();
@@ -88,8 +91,26 @@ export function AddressPage() {
   useEffect(() => {
     const getTokens = async () => {
       try {
+        let erc721Tokens = await getUserERC721Assets([id]);
         let tokens = await getUserERC20Balances([id]);
-        setTokens(tokens);
+
+        const erc721BalanceMap = erc721Tokens.reduce((prev, cur) => {
+          if (prev[cur.tokenAddress]) {
+            prev[cur.tokenAddress]++;
+          } else {
+            prev[cur.tokenAddress] = 1;
+          }
+
+          return prev;
+        }, {} as { [token: string]: number });
+
+        setTokens([
+          ...tokens,
+          ...erc721Tokens.map((token) => ({
+            ...token,
+            balance: erc721BalanceMap[token.tokenAddress].toString(),
+          })),
+        ]);
       } catch (err) {
         setTokens(null);
       }
@@ -97,9 +118,9 @@ export function AddressPage() {
     getTokens();
   }, [id]);
 
-  const renderTitle = () => { 
+  const renderTitle = () => {
     const erc20Token = erc20Map[id] || null;
-    const type = getType(contracts, erc20Token); 
+    const type = getType(contracts, erc20Token);
     const data = { ...contracts, ...erc20Token, address: id, token: tokens };
 
     if (type === "erc20") {
@@ -249,7 +270,11 @@ function getColumns(id: string): ColumnConfig<any>[] {
     {
       property: "value",
       header: (
-        <Text color="minorText" size="small" style={{ fontWeight: 300, width: '220px' }}>
+        <Text
+          color="minorText"
+          size="small"
+          style={{ fontWeight: 300, width: "220px" }}
+        >
           ONEValue
         </Text>
       ),
@@ -262,7 +287,11 @@ function getColumns(id: string): ColumnConfig<any>[] {
     {
       property: "timestamp",
       header: (
-        <Text color="minorText" size="small" style={{ fontWeight: 300, width: '120px' }}>
+        <Text
+          color="minorText"
+          size="small"
+          style={{ fontWeight: 300, width: "120px" }}
+        >
           Timestamp
         </Text>
       ),
