@@ -90,3 +90,9 @@ export function getUserERC721Assets(params: any[]) {
     IUserERC721Assets[]
   >;
 }
+
+export function getTokenERC721Assets(params: [string]) {
+  return transport("getTokenERC721Assets", params) as Promise<
+    IUserERC721Assets[]
+  >;
+}
