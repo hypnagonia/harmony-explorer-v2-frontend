@@ -21,7 +21,7 @@ const Loader = styled.div`
   position: absolute;
   width: 215px;
   height: 270px;
-  background: #fff;
+  background: ${(props) => props.theme.backgroundBack};
 `;
 
 const InventImg = styled.img`
@@ -33,7 +33,7 @@ const ErrorPreview = styled(Box)`
   width: 215px;
   height: 270px;
 
-  background: #f9f6f6;
+  background: ${(props) => props.theme.backgroundBack};
   border-radius: 8px;
 `;
 
@@ -41,7 +41,7 @@ const EmptyImage = styled(Box)`
   width: 215px;
   height: 270px;
 
-  background: #f9f6f6;
+  background: ${(props) => props.theme.backgroundBack};
   border-radius: 8px;
 `;
 
