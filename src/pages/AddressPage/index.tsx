@@ -158,7 +158,7 @@ export function AddressPage() {
             <Transactions />
           </Tab>
           {type === "erc721" && inventory.length ? (
-            <Tab title={<Text size="medium">Inventory</Text>}>
+            <Tab title={<Text size="medium">Inventory ({inventory.length})</Text>}>
               <Inventory inventory={inventory} />
             </Tab>
           ) : null}
