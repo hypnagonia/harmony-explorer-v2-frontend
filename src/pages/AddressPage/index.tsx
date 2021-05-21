@@ -148,17 +148,21 @@ export function AddressPage() {
           contracts={contracts}
           tokens={tokens}
         />
+      </BasePage>
+      <BasePage margin={{top: '15px'}}>
         <Tabs
           alignControls="start"
           justify="start"
           activeIndex={activeIndex}
           onActive={(newActive) => setActiveIndex(newActive)}
         >
-          <Tab title={<Text size="medium">Transactions</Text>}>
+          <Tab title={<Text size="small">Transactions</Text>}>
             <Transactions />
           </Tab>
           {type === "erc721" && inventory.length ? (
-            <Tab title={<Text size="medium">Inventory ({inventory.length})</Text>}>
+            <Tab
+              title={<Text size="small">Inventory ({inventory.length})</Text>}
+            >
               <Inventory inventory={inventory} />
             </Tab>
           ) : null}

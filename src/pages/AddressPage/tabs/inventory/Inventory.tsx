@@ -13,7 +13,7 @@ export function Inventory(props: IInventoryProps) {
   const [page, setPage] = useState<number>(0);
 
   const { inventory } = props;
-  const pageSize = 40;
+  const pageSize = 10;
   const maxPage = Math.ceil(inventory.length / pageSize);
   const renderedInventory = inventory.slice(
     page * pageSize,

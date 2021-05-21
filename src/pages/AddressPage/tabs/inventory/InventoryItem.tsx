@@ -82,14 +82,17 @@ export function InventoryItem(props: IInventoryItemProps) {
         </EmptyImage>
       )}
       <Box direction={"column"} flex align={"center"}>
-        <Text title={tokenID}>
+        <Text title={tokenID} size="small">
           #
           {tokenID.length > 8
             ? `${tokenID.slice(0, 5)}...${tokenID.slice(-5)}`
             : tokenID}
         </Text>
         <Text>
-          Owner <Address address={ownerAddress} isShort={true} />
+          <Text color="minorText" size="small"> 
+            Owner
+          </Text>{" "}
+          <Address address={ownerAddress} isShort={true} />
         </Text>
       </Box>
     </InventItem>
