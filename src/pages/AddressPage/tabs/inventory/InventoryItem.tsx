@@ -33,7 +33,6 @@ const ErrorPreview = styled(Box)`
   width: 215px;
   height: 270px;
 
-  background: ${(props) => props.theme.backgroundBack};
   border-radius: 8px;
 `;
 
@@ -41,7 +40,6 @@ const EmptyImage = styled(Box)`
   width: 215px;
   height: 270px;
 
-  background: ${(props) => props.theme.backgroundBack};
   border-radius: 8px;
 `;
 
@@ -64,8 +62,8 @@ export function InventoryItem(props: IInventoryItemProps) {
       ) : null}
       {isErrorLoading ? (
         <ErrorPreview direction={"column"} justify={"center"} align={"center"}>
-          <Alert size={"large"} style={{ marginBottom: "10px" }} />
-          <Text>Error loading image</Text>
+          <Image size={"large"} style={{ marginBottom: "10px" }} />
+          <Text style={{ opacity: 0.7 }}>No Image</Text>
         </ErrorPreview>
       ) : url ? (
         <InventImg
@@ -80,7 +78,7 @@ export function InventoryItem(props: IInventoryItemProps) {
       ) : (
         <EmptyImage direction={"column"} justify={"center"} align={"center"}>
           <Image size={"large"} style={{ marginBottom: "10px" }} />
-          <Text>No image</Text>
+          <Text style={{ opacity: 0.7 }}>No image</Text>
         </EmptyImage>
       )}
       <Box direction={"column"} flex align={"center"}>
