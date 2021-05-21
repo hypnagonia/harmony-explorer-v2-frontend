@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { IUserERC721Assets } from "src/api/client.interface";
 import { Box, Spinner, Text } from "grommet";
 import { Address } from "src/components/ui";
-import { Alert } from "grommet-icons";
+import { Alert, Image } from "grommet-icons";
 
 export interface IInventoryItemProps {
   item: IUserERC721Assets;
@@ -37,6 +37,14 @@ const ErrorPreview = styled(Box)`
   border-radius: 8px;
 `;
 
+const EmptyImage = styled(Box)`
+  width: 215px;
+  height: 270px;
+
+  background: #f9f6f6;
+  border-radius: 8px;
+`;
+
 export function InventoryItem(props: IInventoryItemProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [isErrorLoading, setIsErrorLoading] = useState(false);
@@ -59,7 +67,7 @@ export function InventoryItem(props: IInventoryItemProps) {
           <Alert size={"large"} style={{ marginBottom: "10px" }} />
           <Text>Error loading image</Text>
         </ErrorPreview>
-      ) : (
+      ) : url ? (
         <InventImg
           title={description}
           src={url}
@@ -69,6 +77,11 @@ export function InventoryItem(props: IInventoryItemProps) {
             setIsErrorLoading(true);
           }}
         />
+      ) : (
+        <EmptyImage direction={"column"} justify={"center"} align={"center"}>
+          <Image size={"large"} style={{ marginBottom: "10px" }} />
+          <Text>No image</Text>
+        </EmptyImage>
       )}
       <Box direction={"column"} flex align={"center"}>
         <Text title={tokenID}>
