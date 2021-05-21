@@ -20,6 +20,7 @@ export const theme = {
       brand: palette.Purple,
       background: 'white',
       backgroundBack: '#f3f3f3',
+      backgroundBackEmpty: '#f3f3f3',
       border: palette.LightGrey,
       headerText: '#ffffff',
       majorText: palette.MidnightBlue,
