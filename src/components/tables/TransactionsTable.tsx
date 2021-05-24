@@ -194,11 +194,13 @@ export function TransactionsTable(props: TransactionTableProps) {
         margin={{ bottom: "small" }}
         border={{ size: "xsmall", side: "bottom", color: "border" }}
       >
-        {!hideCounter && (
+        {!hideCounter ? (
           <Text style={{ flex: "1 1 100%" }}>
             <b>{Math.min(limit, data.length)}</b> transaction
             {data.length !== 1 ? "s" : ""} shown
           </Text>
+        ) : (
+          <Box />
         )}
         {!hidePagination && (
           <PaginationNavigator

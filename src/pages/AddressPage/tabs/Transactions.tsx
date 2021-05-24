@@ -74,25 +74,25 @@ function getColumns(id: string): ColumnConfig<any>[] {
         <Address address={data.transactionHash} type="tx" isShort />
       ),
     },
-    {
-      property: "shard",
-      header: (
-        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
-          Shard
-        </Text>
-      ),
-      render: (data: RelatedTransaction) => (
-        <Box direction="row" gap="3px" align="center">
-          <Text size="small">{0}</Text>
-          <FormNextLink
-            size="small"
-            color="brand"
-            style={{ marginBottom: "2px" }}
-          />
-          <Text size="small">{0}</Text>
-        </Box>
-      ),
-    },
+    // {
+    //   property: "shard",
+    //   header: (
+    //     <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+    //       Shard
+    //     </Text>
+    //   ),
+    //   render: (data: RelatedTransaction) => (
+    //     <Box direction="row" gap="3px" align="center">
+    //       <Text size="small">{0}</Text>
+    //       <FormNextLink
+    //         size="small"
+    //         color="brand"
+    //         style={{ marginBottom: "2px" }}
+    //       />
+    //       <Text size="small">{0}</Text>
+    //     </Box>
+    //   ),
+    // },
     {
       property: "from",
       header: (
@@ -161,7 +161,7 @@ function getColumns(id: string): ColumnConfig<any>[] {
         <Text
           color="minorText"
           size="small"
-          style={{ fontWeight: 300, width: "120px" }}
+          style={{ fontWeight: 300, width: "140px" }}
         >
           Timestamp
         </Text>
@@ -225,6 +225,7 @@ export function Transactions(props: { type: TRelatedTransaction }) {
         setFilter={setFilter}
         noScrollTop
         minWidth="1266px"
+        hideCounter
       />
     </Box>
   );
