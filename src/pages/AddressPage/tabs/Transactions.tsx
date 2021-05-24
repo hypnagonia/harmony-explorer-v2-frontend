@@ -187,13 +187,17 @@ const relatedTxMap: Record<RelatedTransactionType, string> = {
 
 export function Transactions(props: { type: TRelatedTransaction }) {
   const [relatedTrxs, setRelatedTrxs] = useState<RelatedTransaction[]>([]);
-  const [filter, setFilter] = useState<Filter>(initFilter);
+  const [filter, setFilter] = useState<Filter>({ ...initFilter });
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { limit = 10 } = filter;
 
   // @ts-ignore
   const { id } = useParams();
+
+  useEffect(() => {
+    setFilter({ ...initFilter });
+  }, [props.type]);
 
   useEffect(() => {
     const getElements = async () => {
