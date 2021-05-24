@@ -218,7 +218,7 @@ export function TransactionsTable(props: TransactionTableProps) {
           overflow: "auto",
           opacity: _IsLoading ? "0.4" : "1",
           transition: "0.1s all",
-          height: "590px",
+          height: "595px",
         }}
       >
         {_IsLoading ? (
