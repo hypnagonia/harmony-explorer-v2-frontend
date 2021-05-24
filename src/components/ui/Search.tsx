@@ -2,7 +2,11 @@ import React, { useCallback, useState, useEffect } from "react";
 import { Search } from "grommet-icons";
 import { Box, TextInput } from "grommet";
 import { useHistory } from "react-router-dom";
-import { getBlockByHash, getTransactionByField } from "src/api/client";
+import {
+  getBlockByHash,
+  getStakingTransactionByField,
+  getTransactionByField,
+} from "src/api/client";
 import { useThemeMode } from "../../hooks/themeSwitcherHook";
 import { getAddress } from "src/utils";
 
@@ -64,6 +68,13 @@ export const SearchInput = () => {
                 history.push(`/tx/${v}`);
               })
               .catch(),
+            getStakingTransactionByField([0, "hash", v]).then((res) => {
+              if (!res) {
+                return
+              }
+
+              history.push(`/staking-tx/${v}`)
+            }),
           ]);
           return;
         } catch (e) {}

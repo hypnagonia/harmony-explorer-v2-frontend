@@ -30,7 +30,6 @@ export function getTransactions(params: any[]) {
   >;
 }
 
-// TODO почему RPCStakingTransactionHarmony в обычной транзакции
 export function getTransactionByField(params: any[]) {
   return transport(
     "getTransactionByField",
@@ -38,7 +37,7 @@ export function getTransactionByField(params: any[]) {
   ) as Promise<RPCStakingTransactionHarmony>;
 }
 
-export function getStakingTransactionByField(params: any[]) {
+export function getStakingTransactionByField(params: [0, "hash", string]) {
   return transport(
     "getStakingTransactionsByField",
     params
