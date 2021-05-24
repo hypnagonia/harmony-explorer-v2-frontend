@@ -19,3 +19,10 @@ export interface IUserERC721Assets {
   tokenID: string;
   tokenURI: string;
 }
+
+export type TRelatedTransaction =
+  | "transaction"
+  | "staking_transaction"
+  | "internal_transaction"
+  | "erc20"
+  | "erc721";

@@ -2,11 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Box, ColumnConfig, Text } from "grommet";
 import { FormNextLink } from "grommet-icons";
 import { useParams } from "react-router-dom";
-import { getRelatedTransactions } from "src/api/client";
+import {
+  getRelatedTransactions,
+  getRelatedTransactionsByType,
+} from "src/api/client";
 import { TransactionsTable } from "src/components/tables/TransactionsTable";
 import { Address, ONEValue, RelativeTimer } from "src/components/ui";
 import { Filter, RelatedTransaction, RelatedTransactionType } from "src/types";
 import styled, { css } from "styled-components";
+import { TRelatedTransaction } from "src/api/client.interface";
 
 const initFilter: Filter = {
   offset: 0,
@@ -37,24 +41,24 @@ const Marker = styled.div<{ out: boolean }>`
 
 function getColumns(id: string): ColumnConfig<any>[] {
   return [
-    {
-      property: "type",
-      size: "",
-      header: (
-        <Text
-          color="minorText"
-          size="small"
-          style={{ fontWeight: 300, width: "140px" }}
-        >
-          Type
-        </Text>
-      ),
-      render: (data: RelatedTransaction) => (
-        <Text size="small" style={{ width: "140px" }}>
-          {relatedTxMap[data.transactionType] || data.transactionType}
-        </Text>
-      ),
-    },
+    // {
+    //   property: "type",
+    //   size: "",
+    //   header: (
+    //     <Text
+    //       color="minorText"
+    //       size="small"
+    //       style={{ fontWeight: 300, width: "140px" }}
+    //     >
+    //       Type
+    //     </Text>
+    //   ),
+    //   render: (data: RelatedTransaction) => (
+    //     <Text size="small" style={{ width: "140px" }}>
+    //       {relatedTxMap[data.transactionType] || data.transactionType}
+    //     </Text>
+    //   ),
+    // },
     {
       property: "hash",
       header: (
@@ -181,7 +185,7 @@ const relatedTxMap: Record<RelatedTransactionType, string> = {
   stacking_transaction: "Staking Transaction",
 };
 
-export function Transactions() {
+export function Transactions(props: { type: TRelatedTransaction }) {
   const [relatedTrxs, setRelatedTrxs] = useState<RelatedTransaction[]>([]);
   const [filter, setFilter] = useState<Filter>(initFilter);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -195,7 +199,11 @@ export function Transactions() {
     const getElements = async () => {
       setIsLoading(true);
       try {
-        let relatedTransactions = await getRelatedTransactions([0, id, filter]);
+        let relatedTransactions = await getRelatedTransactionsByType([
+          0,
+          id,
+          props.type,
+        ]);
         setIsLoading(false);
         setRelatedTrxs(relatedTransactions);
       } catch (err) {
@@ -203,7 +211,7 @@ export function Transactions() {
       }
     };
     getElements();
-  }, [filter, id]);
+  }, [filter, id, props.type]);
 
   return (
     <Box style={{ padding: "10px" }}>

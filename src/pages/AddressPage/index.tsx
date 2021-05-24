@@ -15,7 +15,10 @@ import styled, { css } from "styled-components";
 import { useERC20Pool } from "src/hooks/ERC20_Pool";
 import { useERC721Pool } from "src/hooks/ERC721_Pool";
 import { Transactions } from "./tabs/Transactions";
-import { IUserERC721Assets } from "src/api/client.interface";
+import {
+  IUserERC721Assets,
+  TRelatedTransaction,
+} from "src/api/client.interface";
 import { Inventory } from "./tabs/inventory/Inventory";
 
 const Marker = styled.div<{ out: boolean }>`
@@ -137,6 +140,14 @@ export function AddressPage() {
     return "Address";
   };
 
+  const tabs: TRelatedTransaction[] = [
+    "transaction",
+    "staking_transaction",
+    "internal_transaction",
+    "erc20",
+    "erc721",
+  ];
+
   return (
     <BaseContainer pad={{ horizontal: "0" }}>
       <Text size="xlarge" weight="bold" margin={{ bottom: "medium" }}>
@@ -149,7 +160,7 @@ export function AddressPage() {
           tokens={tokens}
         />
       </BasePage>
-      <BasePage margin={{top: '15px'}}>
+      <BasePage margin={{ top: "15px" }}>
         <Tabs
           alignControls="start"
           justify="start"
@@ -157,8 +168,25 @@ export function AddressPage() {
           onActive={(newActive) => setActiveIndex(newActive)}
         >
           <Tab title={<Text size="small">Transactions</Text>}>
-            <Transactions />
+            <Transactions type={"transaction"} />
           </Tab>
+
+          <Tab title={<Text size="small">Staking</Text>}>
+            <Transactions type={"staking_transaction"} />
+          </Tab>
+
+          <Tab title={<Text size="small">Internal</Text>}>
+            <Transactions type={"internal_transaction"} />
+          </Tab>
+
+          <Tab title={<Text size="small">HRC20 Transfers</Text>}>
+            <Transactions type={"erc20"} />
+          </Tab>
+
+          <Tab title={<Text size="small">HRC721 Transfers</Text>}>
+            <Transactions type={"erc721"} />
+          </Tab>
+
           {type === "erc721" && inventory.length ? (
             <Tab
               title={<Text size="small">Inventory ({inventory.length})</Text>}
