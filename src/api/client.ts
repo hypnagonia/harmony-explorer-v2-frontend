@@ -6,7 +6,7 @@ import {
   RPCTransactionHarmony,
   RelatedTransaction,
 } from "src/types";
-import { IUserERC721Assets } from "./client.interface";
+import { IUserERC721Assets, TRelatedTransaction } from "./client.interface";
 
 export function getBlockByNumber(params: any[]) {
   return transport("getBlockByNumber", params) as Promise<Block>;
@@ -94,5 +94,13 @@ export function getUserERC721Assets(params: any[]) {
 export function getTokenERC721Assets(params: [string]) {
   return transport("getTokenERC721Assets", params) as Promise<
     IUserERC721Assets[]
+  >;
+}
+
+export function getRelatedTransactionsByType(
+  params: [0, string, TRelatedTransaction]
+) {
+  return transport("getRelatedTransactionsByType", params) as Promise<
+    RelatedTransaction[]
   >;
 }
