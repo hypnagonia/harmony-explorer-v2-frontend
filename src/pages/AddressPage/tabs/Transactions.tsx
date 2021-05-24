@@ -203,6 +203,7 @@ export function Transactions(props: { type: TRelatedTransaction }) {
           0,
           id,
           props.type,
+          filter,
         ]);
         setIsLoading(false);
         setRelatedTrxs(relatedTransactions);

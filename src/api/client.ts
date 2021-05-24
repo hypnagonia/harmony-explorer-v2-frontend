@@ -98,7 +98,7 @@ export function getTokenERC721Assets(params: [string]) {
 }
 
 export function getRelatedTransactionsByType(
-  params: [0, string, TRelatedTransaction]
+  params: [0, string, TRelatedTransaction, any]
 ) {
   return transport("getRelatedTransactionsByType", params) as Promise<
     RelatedTransaction[]

@@ -19,7 +19,7 @@ export type FilterOrderBy = 'number' | 'block_number'
 
 export type FilterOrderDirection = 'asc' | 'desc'
 export type Filter = {
-  offset?: number
+  offset: number
   limit?: number
   orderDirection: FilterOrderDirection
   orderBy: FilterOrderBy

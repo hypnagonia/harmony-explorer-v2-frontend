@@ -14,6 +14,8 @@ interface PaginationNavigator {
   property: string;
   noScrollTop?: boolean;
   showPages?: boolean;
+  lastElement?: number;
+  isLoading?: boolean;
 }
 
 export function PaginationNavigator(props: PaginationNavigator) {
@@ -25,45 +27,26 @@ export function PaginationNavigator(props: PaginationNavigator) {
     property,
     noScrollTop,
     showPages,
+    isLoading,
   } = props;
 
-  const { offset, limit = 10 } = filter;
-
-  // useEffect(() => {
-  //     const scrollBody = document.getElementById("scrollBody");
-  //
-  //     if (scrollBody && !noScrollTop) {
-  //       scrollBody.scrollTo({ top: 0 });
-  //     }
-  // }, [filter]);
-
-  const blockNumbers = elements.map((b) => +b.blockNumber);
-  const minBlockNumber = blockNumbers.reduce(
-    (a, b) => (a === -1 || a > b ? b : a),
-    -1
-  );
-  const maxBlockNumber = blockNumbers.reduce((a, b) => Math.max(a, b), 0);
+  const { offset = 0, limit = 10 } = filter;
 
   const onPrevClick = () => {
     const newFilter = JSON.parse(JSON.stringify(filter)) as Filter;
-    const innerFilter = newFilter.filters.find((i) => i.property === property);
-    if (innerFilter) {
-      innerFilter.type = "lt";
-      innerFilter.value = maxBlockNumber + limit + 1;
-    }
+    newFilter.offset = newFilter.offset - 10;
 
-    onChange(newFilter, "prevPage");
+    if (!isLoading) {
+      onChange(newFilter, "prevPage");
+    }
   };
 
   const onNextClick = () => {
     const newFilter = JSON.parse(JSON.stringify(filter)) as Filter;
-    const innerFilter = newFilter.filters.find((i) => i.property === property);
-    if (innerFilter) {
-      innerFilter.type = "lt";
-      innerFilter.value = minBlockNumber;
+    newFilter.offset += 10;
+    if (!isLoading) {
+      onChange(newFilter, "nextPage");
     }
-
-    onChange(newFilter, "nextPage");
   };
 
   return (
@@ -76,6 +59,7 @@ export function PaginationNavigator(props: PaginationNavigator) {
         onNextPageClick={onNextClick}
         showPages={showPages}
         disableNextBtn={elements.length < limit}
+        disablePrevBtn={filter.offset === 0}
       />
     </Box>
   );
@@ -87,6 +71,7 @@ interface PaginationProps {
   onPrevPageClick: () => void;
   onNextPageClick: () => void;
   disableNextBtn: boolean;
+  disablePrevBtn: boolean;
 }
 
 function Pagination(props: PaginationProps) {
@@ -97,13 +82,18 @@ function Pagination(props: PaginationProps) {
     onNextPageClick,
     showPages,
     disableNextBtn,
+    disablePrevBtn,
   } = props;
 
   return (
     <Box direction="row" gap="small">
       <FormPrevious
-        onClick={onPrevPageClick}
-        style={{ cursor: "pointer", userSelect: "none" }}
+        onClick={disablePrevBtn ? undefined : onPrevPageClick}
+        style={{
+          cursor: "pointer",
+          userSelect: "none",
+          opacity: disablePrevBtn ? 0.5 : 1,
+        }}
       />
       {showPages && (
         <Text style={{ fontWeight: "bold" }}>{formatNumber(+currentPage)}</Text>

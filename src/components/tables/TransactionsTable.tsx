@@ -184,6 +184,7 @@ export function TransactionsTable(props: TransactionTableProps) {
   } = props;
 
   const _IsLoading = isLoading;
+  
 
   return (
     <>
@@ -205,6 +206,7 @@ export function TransactionsTable(props: TransactionTableProps) {
         {!hidePagination && (
           <PaginationNavigator
             onChange={setFilter}
+            isLoading={isLoading}
             filter={filter}
             totalElements={totalElements}
             elements={data}
@@ -259,6 +261,7 @@ export function TransactionsTable(props: TransactionTableProps) {
           <PaginationRecordsPerPage filter={filter} onChange={setFilter} />
           <PaginationNavigator
             onChange={setFilter}
+            isLoading={isLoading}
             filter={filter}
             totalElements={totalElements}
             elements={data}
