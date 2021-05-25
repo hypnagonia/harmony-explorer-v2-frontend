@@ -34,8 +34,6 @@ export const TokenValue = (props: ONEValueProps) => {
     return null;
   }
 
-  console.log(value)
-
   const bi = Big(value).div(10 ** tokenInfo.decimals);
   const v = formatNumber ? _formatNumber(bi.toNumber()) : bi.toString();
 
