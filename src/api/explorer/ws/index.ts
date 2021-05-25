@@ -1,6 +1,9 @@
 import { io } from "socket.io-client";
 
-const socket = io("https://ws.explorer-v2.hmny.io", {
+// todo to .env file and config object
+// const url = "https://ws.explorer-v2.hmny.io"
+const url = 'ws://localhost:3001'
+const socket = io(url, {
   transports: ["websocket"],
 });
 
