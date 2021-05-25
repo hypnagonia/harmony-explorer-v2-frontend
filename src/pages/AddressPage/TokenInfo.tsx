@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Text } from "grommet";
 import { Address, TokenValue } from "src/components/ui";
+import { Dropdown } from "src/components/dropdown/Dropdown";
 
 interface Token {
   balance: string;
@@ -26,6 +27,14 @@ export function TokensInfo(props: { value: Token[] }) {
 
   return (
     <Box>
+      {/* <Box style={{ width: "450px" }}>
+        <Dropdown<Token>
+          keyField={"tokenAddress"}
+          items={[...erc20Tokens, ...erc721Tokens]}
+          renderItem={(item) => <Box>{item.tokenAddress}</Box>}
+          renderValue={(item) => <Box>{item.tokenAddress}</Box>}
+        />
+      </Box> */}
       {erc20Tokens.length ? (
         <>
           <Text size="small">HRC20 Tokens:</Text>

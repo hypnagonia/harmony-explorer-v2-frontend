@@ -21,25 +21,6 @@ import {
 } from "src/api/client.interface";
 import { Inventory } from "./tabs/inventory/Inventory";
 
-const Marker = styled.div<{ out: boolean }>`
-  border-radius: 2px;
-  padding: 5px;
-
-  text-align: center;
-  font-weight: bold;
-
-  ${(props) =>
-    props.out
-      ? css`
-          background: rgb(239 145 62);
-          color: #fff;
-        `
-      : css`
-          background: rgba(105, 250, 189, 0.8);
-          color: #1b295e;
-        `};
-`;
-
 export function AddressPage() {
   const [contracts, setContracts] = useState<any>(null);
   const [tokens, setTokens] = useState<any>(null);

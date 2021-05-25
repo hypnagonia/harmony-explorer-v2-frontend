@@ -187,17 +187,19 @@ const relatedTxMap: Record<RelatedTransactionType, string> = {
 
 export function Transactions(props: { type: TRelatedTransaction }) {
   const [relatedTrxs, setRelatedTrxs] = useState<RelatedTransaction[]>([]);
-  const [filter, setFilter] = useState<Filter>({ ...initFilter });
+  const [filter, setFilter] = useState<{ [name: string]: Filter }>({
+    transaction: { ...initFilter },
+    staking_transaction: { ...initFilter },
+    internal_transaction: { ...initFilter },
+    erc20: { ...initFilter },
+    erc721: { ...initFilter },
+  });
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const { limit = 10 } = filter;
+  const { limit = 10 } = filter[props.type];
 
   // @ts-ignore
   const { id } = useParams();
-
-  useEffect(() => {
-    setFilter({ ...initFilter });
-  }, [props.type]);
 
   useEffect(() => {
     const getElements = async () => {
@@ -207,7 +209,7 @@ export function Transactions(props: { type: TRelatedTransaction }) {
           0,
           id,
           props.type,
-          filter,
+          filter[props.type],
         ]);
         setIsLoading(false);
         setRelatedTrxs(relatedTransactions);
@@ -216,7 +218,7 @@ export function Transactions(props: { type: TRelatedTransaction }) {
       }
     };
     getElements();
-  }, [filter, id, props.type]);
+  }, [filter[props.type], id, props.type]);
 
   return (
     <Box style={{ padding: "10px" }}>
@@ -225,9 +227,9 @@ export function Transactions(props: { type: TRelatedTransaction }) {
         data={relatedTrxs}
         totalElements={100}
         limit={+limit}
-        filter={filter}
+        filter={filter[props.type]}
         isLoading={isLoading}
-        setFilter={setFilter}
+        setFilter={(value) => setFilter({ ...filter, [props.type]: value })}
         noScrollTop
         minWidth="1266px"
         hideCounter
