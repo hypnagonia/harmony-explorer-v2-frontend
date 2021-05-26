@@ -70,7 +70,7 @@ export const DisplaySignature = (props: any = {}) => {
   const { parsed, event, abi } = props
 
   if (!parsed || !event || !abi) {
-    return <></>
+    return <>Empty</>
   }
 
   return (
