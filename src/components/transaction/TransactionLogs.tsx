@@ -2,6 +2,7 @@ import React from 'react'
 import { Box, Text } from 'grommet'
 
 import { Address } from 'src/components/ui'
+import { parseSuggestedEvent, DisplaySignature } from 'src/web3/parseByteCode'
 
 interface TransactionLogsProps {
   logs: any[];
@@ -44,6 +45,17 @@ interface LogItemProps {
 const LogItem = (props: LogItemProps) => {
   const { address, topics, data, signatures } = props.log
 
+  let parsedEvents: any = null
+
+  try {
+    // @ts-ignore
+    parsedEvents = signatures.map(s => s.signature)
+      .map(s => parseSuggestedEvent(s, data, topics))
+  } catch (err) {
+  }
+
+  const displaySignature = parsedEvents && parsedEvents[0] && DisplaySignature(parsedEvents[0]) || null
+
   return (
     <Box
       gap="small"
@@ -59,13 +71,13 @@ const LogItem = (props: LogItemProps) => {
         </Text>
       </Box>
 
-      {signatures &&
+      {signatures && signatures.length &&
       <Box>
         <Text color="minorText" size="small">
           Suggested Event
         </Text>
         <Text size="small" color="brand">
-          {signatures.map(s => s.signature).join(', ')}
+          {displaySignature || signatures[0].signature}
         </Text>
       </Box>
       }
