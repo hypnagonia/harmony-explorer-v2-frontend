@@ -3,15 +3,12 @@ import { Text, Tabs, Tab } from "grommet";
 import { BasePage, BaseContainer } from "src/components/ui";
 import { AddressDetailsDisplay, getType } from "./AddressDetails";
 import {
-  getRelatedTransactions,
   getContractsByField,
   getUserERC20Balances,
   getUserERC721Assets,
   getTokenERC721Assets,
 } from "src/api/client";
-import { Filter, RelatedTransaction } from "src/types";
 import { useParams } from "react-router-dom";
-import styled, { css } from "styled-components";
 import { useERC20Pool } from "src/hooks/ERC20_Pool";
 import { useERC721Pool } from "src/hooks/ERC721_Pool";
 import { Transactions } from "./tabs/Transactions";
@@ -134,7 +131,7 @@ export function AddressPage() {
       <Text size="xlarge" weight="bold" margin={{ bottom: "medium" }}>
         {renderTitle()}
       </Text>
-      <BasePage margin={{ vertical: "0" }}>
+      <BasePage margin={{ vertical: "0" }} style={{ overflow: "inherit" }}>
         <AddressDetailsDisplay
           address={id}
           contracts={contracts}
