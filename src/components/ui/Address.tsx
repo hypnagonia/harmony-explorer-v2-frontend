@@ -29,6 +29,8 @@ export const Address = (props: IAddress) => {
   const erc721Map = useERC721Pool();
   const currency = useCurrency();
 
+  const EMPTY_ADDRESS = "0x0000000000000000000000000000000000000000";
+
   if (!address) {
     return null;
   }
@@ -43,6 +45,8 @@ export const Address = (props: IAddress) => {
     parsedName = erc721Map[address].name;
   }
 
+  parsedName = address === EMPTY_ADDRESS ? "0x0" : parsedName;
+
   let outPutAddress = address;
   try {
     outPutAddress = currency === "ONE" ? getAddress(address).bech32 : address;
@@ -56,10 +60,19 @@ export const Address = (props: IAddress) => {
       color={color}
       style={{
         cursor: "pointer",
-        textDecoration: !!parsedName ? "underline" : "none",
+        textDecoration:
+          address === EMPTY_ADDRESS
+            ? "none"
+            : !!parsedName
+            ? "underline"
+            : "none",
         ...style,
       }}
-      onClick={() => history.push(`/${type}/${address}`)}
+      onClick={
+        address === EMPTY_ADDRESS
+          ? undefined
+          : () => history.push(`/${type}/${address}`)
+      }
     >
       {parsedName ||
         (isShort
