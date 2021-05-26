@@ -6,8 +6,8 @@ const socket = io("https://ws.explorer-v2.hmny.io", {
 
 socket.connect();
 
-export const transport = (method: string, params: any[]) => {
-  return new Promise((resolve, reject) => {
+export const transport = <T = any>(method: string, params: any[]) => {
+  return new Promise<T>((resolve, reject) => {
     socket.emit(method, params, (res: any) => {
       try {
         const payload = JSON.parse(res.payload);

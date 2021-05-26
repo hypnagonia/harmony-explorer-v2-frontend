@@ -6,7 +6,22 @@ import {
   RPCTransactionHarmony,
   RelatedTransaction,
 } from "src/types";
-import { IUserERC721Assets, TRelatedTransaction } from "./client.interface";
+import {
+  IPairPrice,
+  IUserERC721Assets,
+  TRelatedTransaction,
+} from "./client.interface";
+// import { ClientCache } from "./clientCache";
+
+// const clientCache = new ClientCache({
+//   timer: 5000, // 15 mins
+// });
+
+// TODO: hardcode
+let pairCache: { [pair: string]: IPairPrice } = {};
+setInterval(() => {
+  pairCache = {};
+}, 90000);
 
 export function getBlockByNumber(params: any[]) {
   return transport("getBlockByNumber", params) as Promise<Block>;
@@ -102,4 +117,18 @@ export function getRelatedTransactionsByType(
   return transport("getRelatedTransactionsByType", params) as Promise<
     RelatedTransaction[]
   >;
+}
+
+export function getBinancePairPrice(params: [string]) {
+  const cacheValue = pairCache[params[0]];
+  return cacheValue
+    ? Promise.resolve(cacheValue)
+    : transport<IPairPrice>("getBinancePairPrice", params).then((res) => {
+        pairCache[params[0]] = res;
+        return res;
+      });
+}
+
+export function getBinancePairHistoricalPrice(params: [string]) {
+  return transport("getBinancePairHistoricalPrice", params) as Promise<any[]>;
 }
