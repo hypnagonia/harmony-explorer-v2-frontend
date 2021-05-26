@@ -1,25 +1,26 @@
-import React, { FunctionComponent } from "react";
-import { RPCStakingTransactionHarmony } from "src/types";
+import React, { FunctionComponent } from 'react'
+import { Log, RPCStakingTransactionHarmony } from 'src/types'
 
 import {
   transactionPropertyDisplayNames,
   transactionDisplayValues,
   transactionPropertySort,
-  transactionPropertyDescriptions,
-} from "./helpers";
-import { TipContent } from "src/components/ui";
-import { Box, DataTable, Tip } from "grommet";
-import { TransactionSubType } from "src/components/transaction/helpers";
+  transactionPropertyDescriptions
+} from './helpers'
+import { Address, TipContent } from 'src/components/ui'
+import { Box, DataTable, Text, Tip } from 'grommet'
+import { TransactionSubType } from 'src/components/transaction/helpers'
+import { parseSuggestedEvent, DisplaySignature } from 'src/web3/parseByteCode'
 
-import { CircleQuestion } from "grommet-icons";
+import { CircleQuestion } from 'grommet-icons'
 
-const getColumns = ({ type = "" }) => [
+const getColumns = ({ type = '' }) => [
   {
-    property: "key",
+    property: 'key',
     render: (e: any) => (
       <div>
         <Tip
-          dropProps={{ align: { left: "right" } }}
+          dropProps={{ align: { left: 'right' } }}
           content={
             <TipContent
               message={
@@ -36,22 +37,23 @@ const getColumns = ({ type = "" }) => [
         </Tip>
         &nbsp;
         {transactionPropertyDisplayNames[e.key + type] ||
-          transactionPropertyDisplayNames[e.key] ||
-          e.key}
+        transactionPropertyDisplayNames[e.key] ||
+        e.key}
       </div>
     ),
-    size: "1/3",
+    size: '1/3'
   },
   {
-    property: "value",
-    size: "2/3",
-    render: (e: any) => e.value,
-  },
-];
+    property: 'value',
+    size: '2/3',
+    render: (e: any) => e.value
+  }
+]
 
 type TransactionDetailsProps = {
   transaction: RPCStakingTransactionHarmony;
   type?: TransactionSubType;
+  logs?: Log[]
 };
 
 type tableEntry = {
@@ -59,47 +61,74 @@ type tableEntry = {
   value: any;
 };
 
-export const TransactionDetails: FunctionComponent<TransactionDetailsProps> = ({
-  transaction,
-  type,
-}) => {
-  const keys = Object.keys(transaction);
-  const sortedKeys = keys.sort(
-    (a, b) => transactionPropertySort[b] - transactionPropertySort[a]
-  );
+// todo move out to a service to support any custom ABI
+const erc20TransferTopic = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
 
-  const txData = sortedKeys.reduce((arr, key) => {
-    // @ts-ignore
-    const value = transactionDisplayValues(transaction, key, transaction[key], type);
-    if (value === undefined) {
-      return arr;
-    }
-
-    arr.push({ key, value } as tableEntry);
-    return arr;
-  }, [] as tableEntry[]);
+const tokenTransfers = (logs: Log[]) => {
+  const erc20Logs = logs.filter(l => l.topics.includes(erc20TransferTopic))
+  const events = erc20Logs.map(
+    l => parseSuggestedEvent('Transfer(address,address,uint256)', l.data, l.topics))
 
   return (
     <>
-      <Box flex align="start" justify="start" style={{ overflow: 'auto' }}>
-        <DataTable
-          className={"g-table-body-last-col-right g-table-no-header"}
-          style={{ width: "100%", minWidth: '698px' }}
-          columns={getColumns({ type })}
-          data={txData}
-          step={10}
-          border={{
-            header: {
-              color: "none",
-            },
-            body: {
-              color: "border",
-              side: "top",
-              size: "1px",
-            },
-          }}
-        />
-      </Box>
+      {events.map((e: any) => <>
+        <Text size="small" color="minorText">From</Text>:&nbsp;
+        <Address address={e.parsed['$0'].toLowerCase()} />&nbsp;
+        <Text size="small" color="minorText">To</Text>:&nbsp;
+        <Address address={e.parsed['$1'].toLowerCase()} />&nbsp;
+        <Text size="small" color="minorText">Value</Text>:&nbsp;
+        {e.parsed['$2']}
+        <br/>
+      </>)}
     </>
-  );
-};
+  )
+}
+
+export const TransactionDetails: FunctionComponent<TransactionDetailsProps> =
+  ({
+     transaction,
+     type,
+     logs = []
+   }) => {
+
+    const newTransaction = { ...transaction, tokenTransfers: tokenTransfers(logs) }
+    const keys = Object.keys(newTransaction)
+    const sortedKeys = keys.sort(
+      (a, b) => transactionPropertySort[b] - transactionPropertySort[a]
+    )
+
+    const txData = sortedKeys.reduce((arr, key) => {
+      // @ts-ignore
+      const value = transactionDisplayValues(newTransaction, key, newTransaction[key], type)
+      if (value === undefined) {
+        return arr
+      }
+
+      arr.push({ key, value } as tableEntry)
+      return arr
+    }, [] as tableEntry[])
+
+    return (
+      <>
+        <Box flex align="start" justify="start" style={{ overflow: 'auto' }}>
+          <DataTable
+            className={'g-table-body-last-col-right g-table-no-header'}
+            style={{ width: '100%', minWidth: '698px' }}
+            columns={getColumns({ type })}
+            data={txData}
+            step={10}
+            border={{
+              header: {
+                color: 'none'
+              },
+              body: {
+                color: 'border',
+                side: 'top',
+                size: '1px'
+              }
+            }}
+          />
+        </Box>
+      </>
+    )
+  }

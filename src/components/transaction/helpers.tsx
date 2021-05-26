@@ -38,7 +38,7 @@ export const transactionPropertyDisplayNames: Record<string, string> = {
   v: "v",
   type: "Type",
   amount: "Amount",
-
+  tokenTransfers: 'Token Transfers',
   name: 'Name',
   commissionRate: 'Commission Rate',
   maxCommissionRate: 'Max Commission Rate',
@@ -63,6 +63,7 @@ export const transactionPropertySort: Record<string, number> = {
   hash: 900,
   hash_harmony: 950,
   value: 600,
+  tokenTransfers: 599,
   blockNumber: 800,
   blockHash: 799,
   from: 700,
@@ -128,6 +129,7 @@ export const transactionPropertyDescriptions: Record<string, string> = {
   slotPubKeys: 'Validator bls pub keys',
   slotPubKeyToAdd: 'Validator bls pub key to add',
   slotPubKeyToRemove: 'Validator bls pub key to remove',
+  tokenTransfers: 'Token Transfers'
 };
 
 export const transactionPropertyDisplayValues: any = {
@@ -170,6 +172,7 @@ export const transactionPropertyDisplayValues: any = {
   slotPubKeys: (value: any) => <span>{value}</span>,
   slotPubKeyToAdd: (value: any) => <span>{value}</span>,
   slotPubKeyToRemove: (value: any) => <span>{value}</span>,
+  tokenTransfers: (value: any) => <span>{value}</span>,
 };
 
 export const transactionDisplayValues = (
