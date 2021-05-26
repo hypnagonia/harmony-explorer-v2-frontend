@@ -179,6 +179,138 @@ function getColumns(id: string): ColumnConfig<any>[] {
   ];
 }
 
+const getStackingColumns = (id: string): ColumnConfig<any>[] => {
+  return [
+    {
+      property: "hash",
+      header: (
+        <Text
+          color="minorText"
+          size="small"
+          style={{ fontWeight: 300, width: "95px" }}
+        >
+          Hash
+        </Text>
+      ),
+      render: (data: any) => (
+        <Address address={data.transactionHash} type="staking-tx" isShort />
+      ),
+    },
+    {
+      property: "type",
+      header: (
+        <Text
+          color="minorText"
+          size="small"
+          style={{ fontWeight: 300, width: "140px" }}
+        >
+          Type
+        </Text>
+      ),
+      render: (data: RelatedTransaction) => (
+        <Text size="small" style={{ width: "140px" }}>
+          {data.type}
+        </Text>
+      ),
+    },
+    {
+      property: "validator",
+      header: (
+        <Text
+          color="minorText"
+          size="small"
+          style={{ fontWeight: 300, width: "320px" }}
+        >
+          Validator
+        </Text>
+      ),
+      render: (data: RelatedTransaction) => (
+        <Text size="12px">
+          {data.msg?.validatorAddress ? (
+            <Address address={data.msg?.validatorAddress || data.from} />
+          ) : (
+            "-"
+          )}
+        </Text>
+      ),
+    },
+    {
+      property: "marker",
+      header: <></>,
+      render: (data: RelatedTransaction) => (
+        <Text size="12px">
+          <Marker out={data.from === id}>
+            {data.from === id ? "OUT" : "IN"}
+          </Marker>
+        </Text>
+      ),
+    },
+    {
+      property: "delegator",
+      header: (
+        <Text
+          color="minorText"
+          size="small"
+          style={{ fontWeight: 300, width: "320px" }}
+        >
+          Delegator
+        </Text>
+      ),
+      render: (data: RelatedTransaction) => (
+        <Text size="12px">
+          {data.msg?.delegatorAddress ? (
+            <Address address={data.msg?.delegatorAddress} />
+          ) : (
+            "-"
+          )}
+        </Text>
+      ),
+    },
+    {
+      property: "value",
+      header: (
+        <Text
+          color="minorText"
+          size="small"
+          style={{ fontWeight: 300, width: "220px" }}
+        >
+          Value
+        </Text>
+      ),
+      render: (data: RelatedTransaction) => (
+        <Box justify="center">
+          {data.msg?.amount ? (
+            <ONEValue value={data.msg?.amount} timestamp={data.timestamp} />
+          ) : (
+            "-"
+          )}
+        </Box>
+      ),
+    },
+    {
+      property: "timestamp",
+      header: (
+        <Text
+          color="minorText"
+          size="small"
+          style={{ fontWeight: 300, width: "140px" }}
+        >
+          Timestamp
+        </Text>
+      ),
+      render: (data: RelatedTransaction) => (
+        <Box direction="row" gap="xsmall" justify="end">
+          <RelativeTimer
+            date={data.timestamp}
+            updateInterval={1000}
+            style={{ minWidth: "auto" }}
+          />
+        </Box>
+      ),
+    },
+  ];
+};
+
 const relatedTxMap: Record<RelatedTransactionType, string> = {
   transaction: "Transaction",
   internal_transaction: "Internal Transaction",
@@ -220,10 +352,24 @@ export function Transactions(props: { type: TRelatedTransaction }) {
     getElements();
   }, [filter[props.type], id, props.type]);
 
+  let columns = [];
+
+  switch (props.type) {
+    case "staking_transaction": {
+      columns = getStackingColumns(id);
+      break;
+    }
+
+    default: {
+      columns = getColumns(id);
+      break;
+    }
+  }
+
   return (
     <Box style={{ padding: "10px" }}>
       <TransactionsTable
-        columns={getColumns(id)}
+        columns={columns}
         data={relatedTrxs}
         totalElements={100}
         limit={+limit}

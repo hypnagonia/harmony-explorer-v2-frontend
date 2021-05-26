@@ -9,7 +9,7 @@ import { useERC721Pool } from "src/hooks/ERC721_Pool";
 interface IAddress {
   address: string;
   isShort?: boolean;
-  type?: "tx" | "address";
+  type?: "tx" | "address" | "staking-tx";
   style?: CSSProperties;
   color?: string;
   displayHash?: boolean;
@@ -40,7 +40,7 @@ export const Address = (props: IAddress) => {
   }
 
   if (erc721Map[address] && !displayHash) {
-    parsedName = erc721Map[address].name
+    parsedName = erc721Map[address].name;
   }
 
   let outPutAddress = address;
