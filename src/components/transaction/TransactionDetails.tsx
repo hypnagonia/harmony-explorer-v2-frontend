@@ -69,6 +69,10 @@ const tokenTransfers = (logs: Log[]) => {
   const events = erc20Logs.map(
     l => parseSuggestedEvent('Transfer(address,address,uint256)', l.data, l.topics))
 
+  if (!events.length) {
+    return <>—</>
+  }
+
   return (
     <>
       {events.map((e: any) => <>
