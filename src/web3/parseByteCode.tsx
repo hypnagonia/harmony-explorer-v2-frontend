@@ -10,7 +10,7 @@ export const parseSuggestedMethod = () => {
 }
 
 
-export const parseSuggestedEvent = (textSignature: string, data: string, topics: string[]) => {
+export const parseSuggestedEvent = (textSignature: string, data: string, topics: string[]): any => {
   if (!textSignature) {
     return
   }
@@ -24,7 +24,7 @@ export const parseSuggestedEvent = (textSignature: string, data: string, topics:
   if (abi.inputs.length) {
     try {
       const [topic0, ...restTopics] = topics
-      const parsed = web3.eth.abi.decodeLog(abi.inputs, data, restTopics)
+      const parsed = web3.eth.abi.decodeLog(abi.inputs, data,  restTopics)
       return {
         event,
         abi,
@@ -66,8 +66,12 @@ const parseTextSignature = (sig: string) => {
   }
 }
 
-export const DisplaySignature = (props: any) => {
+export const DisplaySignature = (props: any = {}) => {
   const { parsed, event, abi } = props
+
+  if (!parsed || !event || !abi) {
+    return <></>
+  }
 
   return (
     <>
@@ -78,11 +82,11 @@ export const DisplaySignature = (props: any) => {
           return <>
             <Text size="small" color="minorText">{input.type}</Text>:&nbsp;
             {input.type === 'address' ?
-              <Address address={parsed[input.name]} />
+              <Address address={parsed[input.name].toLowerCase()} />
               : parsed[input.name]
             }
 
-            {i < abi.inputs.length -1 ? ', ' : null}
+            {i < abi.inputs.length - 1 ? ', ' : null}
           </>
         })}
       </>

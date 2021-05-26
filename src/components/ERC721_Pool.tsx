@@ -19,7 +19,7 @@ export function ERC721_Pool() {
 
     setTimeout(() => {
       getRates();
-      console.log("GET 721");
+      // console.log("GET 721");
       tId = window.setInterval(getRates, 10 * 60 * 1e3);
     });
 
