@@ -1,4 +1,4 @@
-import { Text } from "grommet";
+import { Box, Text } from "grommet";
 import React, { useEffect, useState } from "react";
 import Big from "big.js";
 import { formatNumber as _formatNumber } from "src/components/ui/utils";
@@ -14,6 +14,7 @@ interface ONEValueProps {
   tokenAddress?: string;
   style?: React.CSSProperties;
   formatNumber?: boolean;
+  direction?: "row" | "column";
 }
 
 Big.DP = 18;
@@ -26,6 +27,7 @@ export const TokenValueBalanced = (props: ONEValueProps) => {
   const { value, tokenAddress = "", style, formatNumber } = props;
   const erc20Map = useERC20Pool();
   const erc721Map = useERC721Pool();
+  const { direction = "column" } = props;
 
   let pairSymbol = BinancePairs.find(
     (item) => item.hrc20Address === tokenAddress
@@ -70,11 +72,10 @@ export const TokenValueBalanced = (props: ONEValueProps) => {
     <Text size="small" style={style}>
       <b>
         {dollar && dollar.lastPrice ? (
-          <>
-            {`$ ${dollarPrice.toString()}`}
-            <br />
-            {`${v} ${tokenInfo.symbol}`}
-          </>
+          <Box direction={direction}>
+            <Text size={"small"}>{`${v} ${tokenInfo.symbol}`}</Text>
+            <Text size={"small"} style={{paddingLeft: '0.3em'}}> {` ($ ${dollarPrice.toFixed(2).toString()})`}</Text>
+          </Box>
         ) : (
           `${v} ${tokenInfo.symbol}`
         )}

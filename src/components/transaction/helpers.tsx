@@ -12,10 +12,15 @@ import {
   StakingTransactionTypeValue,
 } from "../ui";
 import { Box } from "grommet";
+import { CopyBtn } from "../ui/CopyBtn";
 
 export const todo = {};
 
-export type TransactionSubType = '__staking' | '__delegated' | '__undelegated' | '';
+export type TransactionSubType =
+  | "__staking"
+  | "__delegated"
+  | "__undelegated"
+  | "";
 
 export const transactionPropertyDisplayNames: Record<string, string> = {
   shardID: "Shard ID",
@@ -38,21 +43,21 @@ export const transactionPropertyDisplayNames: Record<string, string> = {
   v: "v",
   type: "Type",
   amount: "Amount",
-  tokenTransfers: 'Token Transfers',
-  name: 'Name',
-  commissionRate: 'Commission Rate',
-  maxCommissionRate: 'Max Commission Rate',
-  maxChangeRate: 'Max Change Rate',
-  minSelfDelegation: 'Min Self Delegation',
-  maxTotalDelegation: 'Max Total Delegation',
-  website: 'Website',
-  identity: 'Identity',
-  securityContract: 'Security Contract',
-  details: 'Details',
-  slotPubKeys: 'Details',
+  tokenTransfers: "Token Transfers",
+  name: "Name",
+  commissionRate: "Commission Rate",
+  maxCommissionRate: "Max Commission Rate",
+  maxChangeRate: "Max Change Rate",
+  minSelfDelegation: "Min Self Delegation",
+  maxTotalDelegation: "Max Total Delegation",
+  website: "Website",
+  identity: "Identity",
+  securityContract: "Security Contract",
+  details: "Details",
+  slotPubKeys: "Details",
 
-  slotPubKeyToAdd: 'Slot Pub Key To Add',
-  slotPubKeyToRemove: 'Slot Pub Key To Remove',
+  slotPubKeyToAdd: "Slot Pub Key To Add",
+  slotPubKeyToRemove: "Slot Pub Key To Remove",
 
   delegatorAddress: "Delegator Address",
   validatorAddress: "Validator Address",
@@ -107,39 +112,43 @@ export const transactionPropertyDescriptions: Record<string, string> = {
   v: "Value for the transaction's signature",
   r: "Value for the transaction's signature",
   s: "Value for the transaction's signature",
-  validatorAddress: 'Validator address',
-  validatorAddress__delegated: 'Delegation validator address',
-  validatorAddress__undelegated: 'Delegation delegator address',
-  delegatorAddress: 'Delegator address',
-  delegatorAddress__delegated: 'Delegator address',
-  delegatorAddress__undelegated: 'Undelegation delegator address',
-  amount: 'Stake amount for validator',
-  amount__delegated: 'Amount for delegation to validator',
-  amount__undelegated: 'Amount for undelegation to delegator',
-  name: 'Validator name',
-  commissionRate: 'Validator commission rate',
-  maxCommissionRate: 'Validator commission rate',
-  maxChangeRate: 'validator max commission rate change',
-  minSelfDelegation: 'Min how much validator self delegates',
-  maxTotalDelegation: 'Max total delegation to validator',
-  website: 'Validator website',
-  identity: 'Validator kyc identity',
-  securityContact: 'Validator security contact',
-  details: 'Additional validator info',
-  slotPubKeys: 'Validator bls pub keys',
-  slotPubKeyToAdd: 'Validator bls pub key to add',
-  slotPubKeyToRemove: 'Validator bls pub key to remove',
-  tokenTransfers: 'Token Transfers'
+  validatorAddress: "Validator address",
+  validatorAddress__delegated: "Delegation validator address",
+  validatorAddress__undelegated: "Delegation delegator address",
+  delegatorAddress: "Delegator address",
+  delegatorAddress__delegated: "Delegator address",
+  delegatorAddress__undelegated: "Undelegation delegator address",
+  amount: "Stake amount for validator",
+  amount__delegated: "Amount for delegation to validator",
+  amount__undelegated: "Amount for undelegation to delegator",
+  name: "Validator name",
+  commissionRate: "Validator commission rate",
+  maxCommissionRate: "Validator commission rate",
+  maxChangeRate: "validator max commission rate change",
+  minSelfDelegation: "Min how much validator self delegates",
+  maxTotalDelegation: "Max total delegation to validator",
+  website: "Validator website",
+  identity: "Validator kyc identity",
+  securityContact: "Validator security contact",
+  details: "Additional validator info",
+  slotPubKeys: "Validator bls pub keys",
+  slotPubKeyToAdd: "Validator bls pub key to add",
+  slotPubKeyToRemove: "Validator bls pub key to remove",
+  tokenTransfers: "Token Transfers",
 };
 
 export const transactionPropertyDisplayValues: any = {
   // @ts-ignore
   blockNumber: (value: any) => <BlockNumber number={value} />,
   from: (value: any) => <Address address={value} />,
-  value: (value: any, tx: any) => <ONEValue value={value} timestamp={tx.timestamp} />,
+  value: (value: any, tx: any) => (
+    <ONEValue value={value} timestamp={tx.timestamp} />
+  ),
   to: (value: any) => <Address address={value} />,
   hash: (value: any) => <TransactionHash hash={value} />,
-  hash__staking: (value: any) => <TransactionHash hash={value} link="staking-tx" />,
+  hash__staking: (value: any) => (
+    <TransactionHash hash={value} link="staking-tx" />
+  ),
   hash_harmony: (value: any) => <TransactionHash hash={value} />,
   blockHash: (value: any) => <BlockHash hash={value} />,
   timestamp: (value: any) => <Timestamp timestamp={value} withRelative />,
@@ -156,7 +165,9 @@ export const transactionPropertyDisplayValues: any = {
     </span>
   ),
   type: (value: any) => <StakingTransactionTypeValue type={value} />,
-  amount: (value: any, tx: any) => <ONEValue value={value} timestamp={tx.timestamp} />,
+  amount: (value: any, tx: any) => (
+    <ONEValue value={value} timestamp={tx.timestamp} />
+  ),
   name: (value: any) => <span>{value}</span>,
   delegatorAddress: (value: any) => <Address address={value} />,
   validatorAddress: (value: any) => <Address address={value} />,
@@ -179,13 +190,15 @@ export const transactionDisplayValues = (
   transaction: RPCTransactionHarmony,
   key: string,
   value: any,
-  type: string,
+  type: string
 ) => {
   if (["blockHash", "toShardID", "msg"].includes(key)) {
     return;
   }
 
-  const f: null | Function = transactionPropertyDisplayValues[key + type] || transactionPropertyDisplayValues[key];
+  const f: null | Function =
+    transactionPropertyDisplayValues[key + type] ||
+    transactionPropertyDisplayValues[key];
 
   let displayValue = value;
 
@@ -209,11 +222,14 @@ export const transactionDisplayValues = (
     displayValue = "—";
   }
 
+  const text = typeof value === "string" ? value : <>{value}</>;
+  const copyText = typeof text === "string" ? text : "";
+
   return (
     <Box direction="row" align="baseline">
       {!["shardID"].includes(key) && ![0, "0", "—"].includes(displayValue) && (
         <>
-          <Clone size="small" color="brand" />
+          {copyText ? <CopyBtn value={copyText} /> : null}
           &nbsp;
         </>
       )}
