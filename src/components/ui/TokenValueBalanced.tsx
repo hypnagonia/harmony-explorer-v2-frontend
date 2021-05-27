@@ -74,7 +74,7 @@ export const TokenValueBalanced = (props: ONEValueProps) => {
         {dollar && dollar.lastPrice ? (
           <Box direction={direction}>
             <Text size={"small"}>{`${v} ${tokenInfo.symbol}`}</Text>
-            <Text size={"small"} style={{paddingLeft: '0.3em'}}> {` ($ ${dollarPrice.toFixed(2).toString()})`}</Text>
+            <Text size={"small"} style={{paddingLeft: '0.3em'}}> {`($${dollarPrice.toFixed(2).toString()})`}</Text>
           </Box>
         ) : (
           `${v} ${tokenInfo.symbol}`
