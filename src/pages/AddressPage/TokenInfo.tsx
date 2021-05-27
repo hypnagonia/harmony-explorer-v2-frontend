@@ -88,8 +88,8 @@ export function TokensInfo(props: { value: Token[] }) {
           }}
           renderItem={(item) => {
             const symbol =
-              erc20Map[item.tokenAddress].symbol ||
-              erc721Map[item.tokenAddress].symbol;
+              erc20Map[item.tokenAddress]?.symbol ||
+              erc721Map[item.tokenAddress]?.symbol;
 
             return (
               <Box
