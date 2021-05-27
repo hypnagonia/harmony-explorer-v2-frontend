@@ -24,7 +24,7 @@ export const parseSuggestedEvent = (textSignature: string, data: string, topics:
   if (abi.inputs.length) {
     try {
       const [topic0, ...restTopics] = topics
-      const parsed = web3.eth.abi.decodeLog(abi.inputs, data,  restTopics)
+      const parsed = web3.eth.abi.decodeLog(abi.inputs, data, restTopics)
       return {
         event,
         abi,
@@ -42,6 +42,7 @@ export const parseSuggestedEvent = (textSignature: string, data: string, topics:
 const createABI = (name: string, params: string[], type: 'event' | 'function') => {
   const inputs = params.map((type, i) => ({
     name: `$${i}`, type,
+    // todo ?
     indexed: type === 'address'
   }))
   return {
