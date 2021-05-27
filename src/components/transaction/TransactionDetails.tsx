@@ -88,8 +88,7 @@ const tokenTransfers = (logs: Log[]) => {
           <Box
             direction={"column"}
             align={"start"}
-            border={"all"}
-            pad={"small"}
+            pad={"xxsmall"}
             style={{ borderRadius: "6px", marginBottom: "3px" }}
           >
             <Box direction={"row"}>
