@@ -57,8 +57,7 @@ type TransactionDetailsProps = {
   transaction: RPCStakingTransactionHarmony;
   type?: TransactionSubType;
   logs?: Log[];
-  errorMsg: string;
-  suggestMethods?: string;
+  errorMsg: string | undefined;
 };
 
 type tableEntry = {
@@ -127,12 +126,13 @@ export const TransactionDetails: FunctionComponent<TransactionDetailsProps> = ({
   transaction,
   type,
   logs = [],
-  errorMsg = "",
-  suggestMethods = ''
+  errorMsg,
 }) => {
+
+  console.log(errorMsg)
   const newTransaction = {
-    Status: <TxStatusComponent msg={errorMsg} />,
-    'Suggest methods': <>{suggestMethods}</>,
+    Status:
+      errorMsg === undefined ? <> </> : <TxStatusComponent msg={errorMsg} />,
     ...transaction,
     tokenTransfers: tokenTransfers(logs),
   };

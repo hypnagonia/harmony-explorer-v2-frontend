@@ -25,6 +25,7 @@ export const TransactionPage = () => {
   const [trxs, setTrxs] = useState<InternalTransaction[]>([]);
   const [logs, setLogs] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [txrsLoading, setTxrsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const getTx = async () => {
@@ -62,6 +63,7 @@ export const TransactionPage = () => {
           }));
 
           setTrxs(txsWithSignatures as InternalTransaction[]);
+          setTxrsLoading(false);
         } catch (err) {
           console.log(err);
         }
@@ -126,21 +128,15 @@ export const TransactionPage = () => {
               transaction={tx}
               logs={logs}
               errorMsg={
-                trxs.length
+                txrsLoading
+                  ? undefined
+                  : trxs.length
                   ? trxs
                       .map((t) => t.error)
                       .filter((_) => _)
                       .join(",")
                   : ""
               }
-              suggestMethods={trxs
-                .map(
-                  (data) =>
-                    data.signatures &&
-                    data.signatures.map((s) => s.signature)[0]?.split("(")[0]
-                )
-                .filter((_) => _)
-                .join(", ")}
             />
           </Tab>
           {trxs.length ? (
