@@ -15,6 +15,7 @@ import { parseSuggestedEvent, DisplaySignature } from "src/web3/parseByteCode";
 import { CircleQuestion } from "grommet-icons";
 import { ERC20Value } from "../ERC20Value";
 import { TokenValueBalanced } from "../ui/TokenValueBalanced";
+import { TxStatusComponent } from "../ui/TxStatusComponent";
 
 const getColumns = ({ type = "" }) => [
   {
@@ -56,6 +57,7 @@ type TransactionDetailsProps = {
   transaction: RPCStakingTransactionHarmony;
   type?: TransactionSubType;
   logs?: Log[];
+  errorMsg: string;
 };
 
 type tableEntry = {
@@ -68,11 +70,12 @@ const erc20TransferTopic =
   "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
 
 const tokenTransfers = (logs: Log[]) => {
-  const erc20Logs = logs.filter(l => l.topics.includes(erc20TransferTopic))
-  const events = erc20Logs.map(
-    l => parseSuggestedEvent('Transfer(address,address,uint256)', l.data, l.topics))
-    .filter(e => e && e.parsed)
-
+  const erc20Logs = logs.filter((l) => l.topics.includes(erc20TransferTopic));
+  const events = erc20Logs
+    .map((l) =>
+      parseSuggestedEvent("Transfer(address,address,uint256)", l.data, l.topics)
+    )
+    .filter((e) => e && e.parsed);
 
   if (!events.length) {
     return <>—</>;
@@ -106,7 +109,11 @@ const tokenTransfers = (logs: Log[]) => {
               <Text size="small" color="minorText">
                 Value : &nbsp;
               </Text>
-              <TokenValueBalanced value={val} tokenAddress={address} direction={'row'} />
+              <TokenValueBalanced
+                value={val}
+                tokenAddress={address}
+                direction={"row"}
+              />
             </Box>
           </Box>
         );
@@ -119,8 +126,10 @@ export const TransactionDetails: FunctionComponent<TransactionDetailsProps> = ({
   transaction,
   type,
   logs = [],
+  errorMsg = "",
 }) => {
   const newTransaction = {
+    Status: <TxStatusComponent msg={errorMsg} />,
     ...transaction,
     tokenTransfers: tokenTransfers(logs),
   };
@@ -139,6 +148,7 @@ export const TransactionDetails: FunctionComponent<TransactionDetailsProps> = ({
       newTransaction[key],
       type
     );
+
     if (value === undefined) {
       return arr;
     }

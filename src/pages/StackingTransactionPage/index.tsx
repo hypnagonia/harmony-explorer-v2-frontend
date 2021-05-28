@@ -37,7 +37,7 @@ export const StakingTransactionPage = () => {
         </Text>
       </Box>
 
-      <TransactionDetails transaction={tx} type="__staking" />
+      <TransactionDetails transaction={tx} type="__staking" errorMsg={''} />
       <Box
         margin={{ top: "medium" }}
         pad={{ bottom: "small" }}
@@ -48,6 +48,7 @@ export const StakingTransactionPage = () => {
       <TransactionDetails
         transaction={tx.msg}
         type={subTypeMap[tx.type] || ""}
+        errorMsg={''}
       />
     </BasePage>
   );

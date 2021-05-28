@@ -18,23 +18,26 @@ export const theme = {
     },
     colors: {
       brand: palette.Purple,
-      background: 'white',
-      backgroundBack: '#f3f3f3',
+      background: "white",
+      backgroundBack: "#f3f3f3",
       backgroundDropdownItem: "#fdf9f9",
-      backgroundBackEmpty: '#f3f3f3',
+      backgroundBackEmpty: "#f3f3f3",
       border: palette.LightGrey,
-      headerText: '#ffffff',
+      headerText: "#ffffff",
       majorText: palette.MidnightBlue,
       minorText: palette.CoolGray,
       iconMain: palette.ElectricBlue,
       tableRow: palette.ElectricBlueLight,
       mintGreen: palette.MintGreen,
-
+      errorText: "#ff0000",
+      successText: "#14a266",
+      backgroundError: "rgba(230, 0, 0, 0.4)",
+      backgroundSuccess: "rgb(106 250 188 / 44%)",
     },
     palette,
     select: {
       clear: {
-        color: 'brand',
+        color: "brand",
       },
     },
     font: {
@@ -53,7 +56,7 @@ export const theme = {
   button: {
     // backgroundColor: "transparent",
     color: "brand",
-    borderColor: 'brand'
+    borderColor: "brand",
   },
   dataTable: {
     body: {
@@ -94,15 +97,19 @@ export const darkTheme = {
     colors: {
       brand: palette.MintGreen,
       background: palette.MidnightBlue,
-      backgroundBack: '#030921',
+      backgroundBack: "#030921",
       backgroundDropdownItem: "#111f4e",
-      border: '#375873',
-      headerText: '#ffffff',
+      border: "#375873",
+      headerText: "#ffffff",
       majorText: palette.MidnightBlue,
-      minorText: '#5f98c7',
+      minorText: "#5f98c7",
       iconMain: palette.ElectricBlue,
-      tableRow: '#122852',
+      tableRow: "#122852",
       mintGreen: palette.MintGreen,
+      errorText: "#ff5858",
+      successText: "#00d67b",
+      backgroundError: "rgba(230, 0, 0, 0.4)",
+      backgroundSuccess: "rgb(106 250 188 / 23%);",
     },
     palette,
     font: {

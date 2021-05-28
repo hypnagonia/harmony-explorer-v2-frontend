@@ -17,9 +17,9 @@ interface ONEValueProps {
   direction?: "row" | "column";
 }
 
-Big.DP = 18;
-Big.NE = -18;
-Big.PE = 15;
+Big.DP = 40;
+Big.NE = -20;
+Big.PE = 20;
 
 // @ts-ignore
 export const TokenValueBalanced = (props: ONEValueProps) => {
@@ -62,7 +62,9 @@ export const TokenValueBalanced = (props: ONEValueProps) => {
 
   const dollarPrice =
     dollar && dollar.lastPrice
-      ? Big(value).div(10 ** (tokenInfo.decimals ** +dollar.lastPrice))
+      ? Big(value)
+          .times(+dollar.lastPrice)
+          .div(10 ** tokenInfo.decimals)
       : 0;
 
   const bi = Big(value).div(10 ** tokenInfo.decimals);
@@ -74,7 +76,10 @@ export const TokenValueBalanced = (props: ONEValueProps) => {
         {dollar && dollar.lastPrice ? (
           <Box direction={direction}>
             <Text size={"small"}>{`${v} ${tokenInfo.symbol}`}</Text>
-            <Text size={"small"} style={{paddingLeft: '0.3em'}}> {`($${dollarPrice.toFixed(2).toString()})`}</Text>
+            <Text size={"small"} style={{ paddingLeft: "0.3em" }}>
+              {" "}
+              {`($${dollarPrice.toFixed(2).toString()})`}
+            </Text>
           </Box>
         ) : (
           `${v} ${tokenInfo.symbol}`

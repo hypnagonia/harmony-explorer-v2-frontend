@@ -122,7 +122,18 @@ export const TransactionPage = () => {
       <BasePage>
         <Tabs alignControls="start" justify="start">
           <Tab title={<Text size="small">Transaction Details</Text>}>
-            <TransactionDetails transaction={tx} logs={logs} />
+            <TransactionDetails
+              transaction={tx}
+              logs={logs}
+              errorMsg={
+                trxs.length
+                  ? trxs
+                      .map((t) => t.error)
+                      .filter((_) => _)
+                      .join(",")
+                  : ""
+              }
+            />
           </Tab>
           {trxs.length ? (
             <Tab
