@@ -9,5 +9,5 @@ import {AnchorLink} from './AnchorLink'
 
 export const BlockNumber = ({ number }) => {
   const link = `/block/${number}`
-  return <AnchorLink to={link} label={number} />
+  return <AnchorLink to={link} label={number} style={{fontWeight: 400}} />
 }

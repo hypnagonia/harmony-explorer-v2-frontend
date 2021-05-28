@@ -8,6 +8,7 @@ import { useERC721Pool } from "src/hooks/ERC721_Pool";
 import { BinancePairs } from "src/hooks/BinancePairHistoricalPrice";
 import { getBinancePairPrice } from "src/api/client";
 import { IPairPrice } from "src/api/client.interface";
+import { AnchorLink } from "./AnchorLink";
 
 interface ONEValueProps {
   value: string | number;
@@ -75,14 +76,18 @@ export const TokenValueBalanced = (props: ONEValueProps) => {
       <b>
         {dollar && dollar.lastPrice ? (
           <Box direction={direction}>
-            <Text size={"small"}>{`${v} ${tokenInfo.symbol}`}</Text>
+            <Text size={"small"}>
+              {`${v}`} 
+              <AnchorLink to={"/hrc20"} label={`${tokenInfo.symbol}`} />
+            </Text>
             <Text size={"small"} style={{ paddingLeft: "0.3em" }}>
-              {" "}
               {`($${dollarPrice.toFixed(2).toString()})`}
             </Text>
           </Box>
         ) : (
-          `${v} ${tokenInfo.symbol}`
+          <Text size={"small"}>
+            {`${v}`} <AnchorLink to={"/hrc20"} label={`${tokenInfo.symbol}`} />
+          </Text>
         )}
       </b>
     </Text>

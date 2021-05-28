@@ -133,6 +133,14 @@ export const TransactionPage = () => {
                       .join(",")
                   : ""
               }
+              suggestMethods={trxs
+                .map(
+                  (data) =>
+                    data.signatures &&
+                    data.signatures.map((s) => s.signature)[0]?.split("(")[0]
+                )
+                .filter((_) => _)
+                .join(", ")}
             />
           </Tab>
           {trxs.length ? (

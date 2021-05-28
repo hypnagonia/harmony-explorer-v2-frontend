@@ -1,7 +1,6 @@
 import React from "react";
 import { Box, Text } from "grommet";
 import { StatusCritical, StatusGood } from "grommet-icons";
- 
 
 export function TxStatusComponent(props: { msg?: string }) {
   const { msg } = props;
@@ -15,7 +14,7 @@ export function TxStatusComponent(props: { msg?: string }) {
       >
         <StatusCritical color={"errorText"} size={"medium"} />
         <Text color={"errorText"} size={"small"} style={{ marginLeft: "5px" }}>
-          <b>Error</b>
+          Error
         </Text>
       </Box>
       <Text color={"errorText"} size={"xsmall"}>
@@ -31,7 +30,7 @@ export function TxStatusComponent(props: { msg?: string }) {
     >
       <StatusGood color={"successText"} size={"medium"} />
       <Text color={"successText"} size={"small"} style={{ marginLeft: "5px" }}>
-        <b>Success</b>
+        Success
       </Text>
     </Box>
   );

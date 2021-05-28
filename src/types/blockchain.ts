@@ -216,6 +216,7 @@ export type InternalTransaction = {
   blockHash: BlockHash;
   blockNumber: BlockNumber;
   transactionHash: TransactionHash;
+  signatures?: any[]
 };
 
 export type Transaction = {

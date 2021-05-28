@@ -58,6 +58,7 @@ type TransactionDetailsProps = {
   type?: TransactionSubType;
   logs?: Log[];
   errorMsg: string;
+  suggestMethods?: string;
 };
 
 type tableEntry = {
@@ -127,9 +128,11 @@ export const TransactionDetails: FunctionComponent<TransactionDetailsProps> = ({
   type,
   logs = [],
   errorMsg = "",
+  suggestMethods = ''
 }) => {
   const newTransaction = {
     Status: <TxStatusComponent msg={errorMsg} />,
+    'Suggest methods': <>{suggestMethods}</>,
     ...transaction,
     tokenTransfers: tokenTransfers(logs),
   };
