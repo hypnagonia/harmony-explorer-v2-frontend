@@ -95,8 +95,7 @@ export function TokensInfo(props: { value: Token[] }) {
               <Box
                 direction="row"
                 style={{
-                  minWidth: "500px",
-                  maxWidth: "500px",
+                  width: '100%',
                   flex: "0 0 auto",
                   justifyContent: "space-between",
                 }}
