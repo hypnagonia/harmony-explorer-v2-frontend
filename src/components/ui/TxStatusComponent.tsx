@@ -1,6 +1,7 @@
-import { Box, Text } from "grommet";
-import { StatusCritical, Validate } from "grommet-icons";
 import React from "react";
+import { Box, Text } from "grommet";
+import { StatusCritical, StatusGood } from "grommet-icons";
+ 
 
 export function TxStatusComponent(props: { msg?: string }) {
   const { msg } = props;
@@ -28,7 +29,7 @@ export function TxStatusComponent(props: { msg?: string }) {
       background={"backgroundSuccess"}
       style={{ borderRadius: "6px", marginRight: "10px", padding: "3px 8px" }}
     >
-      <Validate color={"successText"} size={"medium"} />
+      <StatusGood color={"successText"} size={"medium"} />
       <Text color={"successText"} size={"small"} style={{ marginLeft: "5px" }}>
         <b>Success</b>
       </Text>
