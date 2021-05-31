@@ -12,7 +12,7 @@ export function TxStatusComponent(props: { msg?: string }) {
         background="backgroundError"
         style={{ borderRadius: "6px", marginRight: "10px", padding: "3px 8px" }}
       >
-        <CircleAlert color={"errorText"} size={"medium"} />
+        <CircleAlert color={"errorText"} size={"small"} />
         <Text color={"errorText"} size={"small"} style={{ marginLeft: "5px" }}>
           Error
         </Text>
@@ -28,7 +28,7 @@ export function TxStatusComponent(props: { msg?: string }) {
       background={"backgroundSuccess"}
       style={{ borderRadius: "6px", marginRight: "10px", padding: "3px 8px" }}
     >
-      <StatusGood color={"successText"} size={"medium"} />
+      <StatusGood color={"successText"} size={"small"} />
       <Text color={"successText"} size={"small"} style={{ marginLeft: "5px" }}>
         Success
       </Text>
