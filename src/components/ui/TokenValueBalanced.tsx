@@ -86,7 +86,7 @@ export const TokenValueBalanced = (props: ONEValueProps) => {
           </Box>
         ) : (
           <Text size={"small"}>
-            {`${v}`} <AnchorLink to={"/hrc20"} label={`${tokenInfo.symbol}`} />
+            {`${v}`} <AnchorLink to={`/address/${tokenInfo.address}`} label={`${tokenInfo.symbol}`} />
           </Text>
         )}
       </b>
