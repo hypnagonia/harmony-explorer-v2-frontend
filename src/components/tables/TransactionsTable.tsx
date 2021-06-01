@@ -151,6 +151,7 @@ function getColumns(props: any) {
 }
 
 interface TransactionTableProps {
+  rowDetails?: (row: any) => JSX.Element;
   data: any[];
   columns?: ColumnConfig<any>[];
   totalElements: number;
@@ -220,7 +221,7 @@ export function TransactionsTable(props: TransactionTableProps) {
           overflow: "auto",
           opacity: _IsLoading ? "0.4" : "1",
           transition: "0.1s all",
-          height: "595px",
+          height: "600px",
         }}
       >
         {_IsLoading ? (
@@ -233,7 +234,7 @@ export function TransactionsTable(props: TransactionTableProps) {
           </Box>
         ) : (
           <TableComponent
-            alwaysOpenedRowDetails={true}
+            alwaysOpenedRowDetails={props.rowDetails ? true : false}
             tableProps={{
               className: "g-table-header",
               style: { width: "100%", minWidth },
@@ -250,15 +251,13 @@ export function TransactionsTable(props: TransactionTableProps) {
                   size: "1px",
                 },
               },
-              rowDetails: () => (
-                <Box
-                  justify={"start"}
-                  flex={true}
-                  style={{ textAlign: "left" }}
-                >
-                  test
-                </Box>
-              ),
+              rowDetails: props.rowDetails
+                ? (row: any) => (
+                    <div style={{ textAlign: "left" }}>
+                      {props.rowDetails && props.rowDetails(row)}
+                    </div>
+                  )
+                : undefined,
             }}
           />
         )}

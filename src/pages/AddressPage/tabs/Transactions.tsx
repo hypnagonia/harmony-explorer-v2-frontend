@@ -317,7 +317,10 @@ const relatedTxMap: Record<RelatedTransactionType, string> = {
   stacking_transaction: "Staking Transaction",
 };
 
-export function Transactions(props: { type: TRelatedTransaction }) {
+export function Transactions(props: {
+  type: TRelatedTransaction;
+  rowDetails?: (row: any) => JSX.Element;
+}) {
   const [relatedTrxs, setRelatedTrxs] = useState<RelatedTransaction[]>([]);
   const [filter, setFilter] = useState<{ [name: string]: Filter }>({
     transaction: { ...initFilter },
@@ -379,6 +382,7 @@ export function Transactions(props: { type: TRelatedTransaction }) {
         noScrollTop
         minWidth="1266px"
         hideCounter
+        rowDetails={props.rowDetails}
       />
     </Box>
   );

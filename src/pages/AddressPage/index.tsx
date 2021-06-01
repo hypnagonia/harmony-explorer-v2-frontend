@@ -171,7 +171,10 @@ export function AddressPage() {
           </Tab>
 
           <Tab title={<Text size="small">Internal</Text>}>
-            <Transactions type={"internal_transaction"} />
+            <Transactions
+              type={"internal_transaction"}
+              rowDetails={() => <>test</>}
+            />
           </Tab>
 
           <Tab title={<Text size="small">HRC20 Transfers</Text>}>
