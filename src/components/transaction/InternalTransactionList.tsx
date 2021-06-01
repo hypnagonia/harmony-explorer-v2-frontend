@@ -4,6 +4,7 @@ import { Box, Text } from "grommet";
 import { TransactionsTable } from "src/components/tables/TransactionsTable";
 import { Filter, InternalTransaction } from "src/types";
 import { Address, ONEValue, TransactionType } from "src/components/ui";
+import {DisplaySignatureMethod} from 'src/web3/parseByteCode'
 
 interface InternalTransactionListProps {
   list: InternalTransaction[];
@@ -38,7 +39,7 @@ export function InternalTransactionList(props: InternalTransactionListProps) {
         filter={filter}
         setFilter={setFilter}
         minWidth="960px"
-        rowDetails={(row) => <>test</>}
+        rowDetails={(row) => <DisplaySignatureMethod internalTransaction={row}/>}
       />
     </Box>
   );
@@ -61,7 +62,7 @@ function getColumns(props?: any) {
         </Text>
       ),
     },
-    {
+  /*  {
       property: "method",
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
@@ -79,7 +80,7 @@ function getColumns(props?: any) {
 
         return <Text size="small">{signature || "—"}</Text>;
       },
-    },
+    },*/
     {
       property: "from",
       header: (

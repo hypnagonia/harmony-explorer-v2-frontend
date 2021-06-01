@@ -2,11 +2,36 @@ import Web3 from 'web3'
 import { Text } from 'grommet'
 import React from 'react'
 import { Address } from '../components/ui'
+import { InternalTransaction } from '../types'
 
 const web3 = new Web3()
 
-export const parseSuggestedMethod = () => {
+export const parseSuggestedMethod = (textSignature: string, data: string) => {
+  if (!textSignature) {
+    return
+  }
 
+  const method = parseTextSignature(textSignature)
+
+
+  if (!method) {
+    return
+  }
+
+
+  const abi = createABI(method.name, method.params, 'function')
+    try {
+      const parsed = web3.eth.abi.decodeParameters(abi.inputs, '0x' + data.slice(10))
+      return {
+        event: method,
+        abi,
+        parsed
+      }
+
+    } catch (err) {
+      console.error(err)
+      return null
+    }
 }
 
 
@@ -66,14 +91,33 @@ const parseTextSignature = (sig: string) => {
     return null
   }
 }
+export const DisplaySignatureMethod = (props: any = {}) => {
+  const { internalTransaction } = props
+  const signature = internalTransaction.signatures
+    && internalTransaction.signatures[0]
+    && internalTransaction.signatures[0].signature
+  if (!signature) {
+    return <>—</>
+  }
 
+  const { parsed, event, abi } = parseSuggestedMethod(signature, internalTransaction.input) || {}
+
+  return (
+    <DisplaySignature parsed={parsed} event={event} abi={abi} />
+  )
+}
+
+// event
 export const DisplaySignature = (props: any = {}) => {
   const { parsed, event, abi } = props
 
+
   if (!parsed || !event || !abi) {
-    return <>Empty</>
+    return <>—</>
   }
 
+  console.log(parsed)
+  
   return (
     <>
       <b>{event.name}</b>
@@ -82,9 +126,21 @@ export const DisplaySignature = (props: any = {}) => {
         {abi.inputs.map((input: any, i: number) => {
           return <>
             <Text size="small" color="minorText">{input.type}</Text>:&nbsp;
-            {input.type === 'address' ?
-              <Address address={parsed[input.name].toLowerCase()} />
-              : parsed[input.name]
+            {input.type === 'address' || input.type === 'address[]' ?
+
+              (Array.isArray(parsed[input.name]) ?
+                  parsed[input.name]
+                    .map((a: any, i: number) => { return <>
+                      <Address key={a} address={a.toLowerCase()} />
+                      {i < parsed[input.name].length - 1 && ', '}
+                      </>
+                    })
+                  : <Address address={parsed[input.name].toLowerCase()} />
+              )
+              : (Array.isArray(parsed[input.name])
+                ? parsed[input.name].join(', ')
+                : parsed[input.name]
+              )
             }
 
             {i < abi.inputs.length - 1 ? ', ' : null}
