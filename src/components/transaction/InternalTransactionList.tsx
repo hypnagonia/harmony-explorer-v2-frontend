@@ -1,9 +1,9 @@
-import React, { useState} from 'react';
-import {Box, Text} from "grommet";
+import React, { useState } from "react";
+import { Box, Text } from "grommet";
 
 import { TransactionsTable } from "src/components/tables/TransactionsTable";
 import { Filter, InternalTransaction } from "src/types";
-import {Address, ONEValue, TransactionType } from "src/components/ui";
+import { Address, ONEValue, TransactionType } from "src/components/ui";
 
 interface InternalTransactionListProps {
   list: InternalTransaction[];
@@ -26,10 +26,10 @@ export function InternalTransactionList(props: InternalTransactionListProps) {
   const { limit = 10 } = filter;
 
   return (
-    <Box margin={{ top: 'medium' }}>
+    <Box margin={{ top: "medium" }}>
       <TransactionsTable
-        columns={getColumns({timestamp})}
-        data={list.sort((a, b) => a.index > b.index ? 1 : -1)}
+        columns={getColumns({ timestamp })}
+        data={list.sort((a, b) => (a.index > b.index ? 1 : -1))}
         totalElements={100}
         showIfEmpty
         hidePagination
@@ -38,9 +38,10 @@ export function InternalTransactionList(props: InternalTransactionListProps) {
         filter={filter}
         setFilter={setFilter}
         minWidth="960px"
+        rowDetails={(row) => <>test</>}
       />
     </Box>
-  )
+  );
 }
 
 function getColumns(props?: any) {
@@ -56,7 +57,7 @@ function getColumns(props?: any) {
       ),
       render: (data: InternalTransaction) => (
         <Text size="small">
-          <TransactionType type={data.type}/>
+          <TransactionType type={data.type} />
         </Text>
       ),
     },
@@ -68,18 +69,16 @@ function getColumns(props?: any) {
         </Text>
       ),
       render: (data: InternalTransaction) => {
-        let signature
+        let signature;
         try {
           // @ts-ignore
-          signature = data.signatures && data.signatures.map(s => s.signature)[0].split('(')[0]
-        } catch(err) {}
+          signature =
+            data.signatures &&
+            data.signatures.map((s) => s.signature)[0].split("(")[0];
+        } catch (err) {}
 
-        return (
-          <Text size="small">
-            {signature || '—'}
-          </Text>
-        )
-      }
+        return <Text size="small">{signature || "—"}</Text>;
+      },
     },
     {
       property: "from",
