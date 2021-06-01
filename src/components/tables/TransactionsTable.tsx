@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { Box, DataTable, Text, Spinner, ColumnConfig } from "grommet";
 import { Filter, RPCTransactionHarmony } from "src/types";
@@ -12,6 +12,7 @@ import {
   PaginationRecordsPerPage,
   ONEValue,
 } from "src/components/ui";
+import { TableComponent } from "./TableComponents";
 
 function getColumns(props: any) {
   const { history } = props;
@@ -184,7 +185,6 @@ export function TransactionsTable(props: TransactionTableProps) {
   } = props;
 
   const _IsLoading = isLoading;
-  
 
   return (
     <>
@@ -232,21 +232,33 @@ export function TransactionsTable(props: TransactionTableProps) {
             <Text size="small">{emptyText}</Text>
           </Box>
         ) : (
-          <DataTable
-            className={"g-table-header"}
-            style={{ width: "100%", minWidth }}
-            columns={columns ? columns : getColumns({ history })}
-            data={data}
-            step={10}
-            border={{
-              header: {
-                color: "brand",
+          <TableComponent
+            alwaysOpenedRowDetails={true}
+            tableProps={{
+              className: "g-table-header",
+              style: { width: "100%", minWidth },
+              columns: columns ? columns : getColumns({ history }),
+              data: data,
+              step: 10,
+              border: {
+                header: {
+                  color: "brand",
+                },
+                body: {
+                  color: "border",
+                  side: "top",
+                  size: "1px",
+                },
               },
-              body: {
-                color: "border",
-                side: "top",
-                size: "1px",
-              },
+              rowDetails: () => (
+                <Box
+                  justify={"start"}
+                  flex={true}
+                  style={{ textAlign: "left" }}
+                >
+                  test
+                </Box>
+              ),
             }}
           />
         )}
