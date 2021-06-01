@@ -111,7 +111,7 @@ const addressPropertyDisplayValues: Record<
   IPFSHash: (value) => value,
   meta: (value) => value,
   bytecode: (value) => <ExpandString value={value || ""} />,
-  balance: (value) => <ONEValue value={value} />,
+  balance: (value) => <ONEValue value={value} hideTip={true} />,
   token: (value) => <TokensInfo value={value} />,
   name: (value) => value,
   symbol: (value) => value,

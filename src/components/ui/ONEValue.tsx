@@ -9,14 +9,15 @@ import { formatNumber } from "./utils";
 interface ONEValueProps {
   value: string | number;
   timestamp?: string;
+  hideTip?: boolean;
 }
 
 // @ts-ignore
 export const ONEValue = (props: ONEValueProps) => {
-  const { value, timestamp = "" } = props;
+  const { value, timestamp = "", hideTip = false } = props;
   const { lastPrice } = useONEExchangeRate();
 
-  if(!value) {
+  if (!value) {
     return null;
   }
 
@@ -47,7 +48,7 @@ export const ONEValue = (props: ONEValueProps) => {
       >
         {v.toString()} ONE
       </Text>
-      {USDValue && +price > 0 && !isTodayTransaction && (
+      {USDValue && +price > 0 && !isTodayTransaction && !hideTip && (
         <Tip
           dropProps={{ align: { left: "right" }, margin: { left: "small" } }}
           content={
@@ -59,7 +60,9 @@ export const ONEValue = (props: ONEValueProps) => {
                   )}. Current value`}{" "}
                   <b>
                     $
-                    {formatNumber(v * +lastPrice, { maximumFractionDigits: 2 })}
+                    {formatNumber(v * +lastPrice, {
+                      maximumFractionDigits: 2,
+                    })}
                   </b>
                 </span>
               }

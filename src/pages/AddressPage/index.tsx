@@ -173,7 +173,7 @@ export function AddressPage() {
           <Tab title={<Text size="small">Internal</Text>}>
             <Transactions
               type={"internal_transaction"}
-              rowDetails={() => <>test</>}
+              rowDetails={() => <>-</>}
             />
           </Tab>
 
