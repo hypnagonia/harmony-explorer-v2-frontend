@@ -3,12 +3,13 @@ import { Box, ColumnConfig, Text } from "grommet";
 import { FormNextLink } from "grommet-icons";
 import { useParams } from "react-router-dom";
 import {
+  getByteCodeSignatureByHash,
   getRelatedTransactions,
-  getRelatedTransactionsByType,
-} from "src/api/client";
+  getRelatedTransactionsByType
+} from 'src/api/client'
 import { TransactionsTable } from "src/components/tables/TransactionsTable";
 import { Address, ONEValue, RelativeTimer } from "src/components/ui";
-import { Filter, RelatedTransaction, RelatedTransactionType } from "src/types";
+import { Filter, RelatedTransaction, RelatedTransactionType, RPCTransaction } from 'src/types'
 import styled, { css } from "styled-components";
 import { TRelatedTransaction } from "src/api/client.interface";
 
@@ -74,6 +75,39 @@ function getColumns(id: string): ColumnConfig<any>[] {
         <Address address={data.transactionHash} type="tx" isShort />
       ),
     },
+    {
+      property: "method",
+      header: (
+        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+          Method
+        </Text>
+      ),
+      render: (data: any) => {
+        let signature;
+
+        try {
+          // @ts-ignore
+          signature =
+            data.signatures &&
+            data.signatures.map((s: any) => s.signature)[0].split("(")[0];
+        } catch (err) {}
+
+        if (!signature && data.value!=='0') {
+          signature = 'transfer'
+        }
+
+        if (!signature) {
+          return <Text size="small">{"—"}</Text>;
+        }
+
+        return (
+          <Text size="12px">
+            <Marker out={false}>
+              {signature}
+            </Marker>
+          </Text>
+        )
+    }},
     // {
     //   property: "shard",
     //   header: (
@@ -144,9 +178,9 @@ function getColumns(id: string): ColumnConfig<any>[] {
         <Text
           color="minorText"
           size="small"
-          style={{ fontWeight: 300, width: "220px" }}
+          style={{ fontWeight: 300, width: "120px" }}
         >
-          ONEValue
+          Value
         </Text>
       ),
       render: (data: RelatedTransaction) => (
@@ -346,6 +380,22 @@ export function Transactions(props: {
           props.type,
           filter[props.type],
         ]);
+
+        // for transactions we display call method if any
+        if (props.type === 'transaction') {
+          const methodSignatures = await Promise.all(
+            relatedTransactions.map((tx: any) => {
+              return tx.input && tx.input.length > 10
+                ? getByteCodeSignatureByHash([tx.input.slice(0, 10)])
+                : Promise.resolve([]);
+            }))
+
+          relatedTransactions = relatedTransactions.map((l, i) => ({
+            ...l,
+            signatures: methodSignatures[i],
+          }));
+        }
+
         setIsLoading(false);
         setRelatedTrxs(relatedTransactions);
       } catch (err) {
