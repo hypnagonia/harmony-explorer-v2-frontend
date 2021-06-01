@@ -31,6 +31,7 @@ export function InternalTransactionList(props: InternalTransactionListProps) {
         columns={getColumns({ timestamp })}
         data={list.sort((a, b) => (a.index > b.index ? 1 : -1))}
         totalElements={100}
+        step={list.length + 1}
         showIfEmpty
         hidePagination
         emptyText={"No Internal Transactions for this hash " + hash}

@@ -24,9 +24,6 @@ const Flex = styled.div`
 
 export class TableComponent extends React.Component<ITableComponentProps> {
   private element!: HTMLDivElement;
-  //   componentDidMount() {
-  //     this.clickExpandButtons();
-  //   }
 
   clickExpandButtons = () => {
     if (this.props.alwaysOpenedRowDetails) {
@@ -51,12 +48,16 @@ export class TableComponent extends React.Component<ITableComponentProps> {
         (svg.parentNode as HTMLDivElement).style.display = "none";
         expandButton.style.width = "1px";
         expandButton.style.height = "1px";
-        setTimeout(() => expandButton.click());
       });
+
+      setTimeout(() => {
+        expandButtons.forEach((item) => item.click());
+      }, 10);
     }
   };
 
   render() {
+    console.log(this.props);
     return (
       <Flex
         ref={(element: any) => (this.element = element)}
@@ -68,7 +69,6 @@ export class TableComponent extends React.Component<ITableComponentProps> {
             if (this.props.tableProps.onMore) {
               this.props.tableProps.onMore();
             }
-
             this.clickExpandButtons();
           }}
         />

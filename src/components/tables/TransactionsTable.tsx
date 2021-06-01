@@ -165,6 +165,7 @@ interface TransactionTableProps {
   hideCounter?: boolean;
   minWidth?: string;
   noScrollTop?: boolean;
+  step?: number
 }
 
 export function TransactionsTable(props: TransactionTableProps) {
@@ -173,6 +174,7 @@ export function TransactionsTable(props: TransactionTableProps) {
     data,
     totalElements,
     limit,
+    step = 10,
     filter,
     setFilter,
     showIfEmpty,
@@ -240,7 +242,7 @@ export function TransactionsTable(props: TransactionTableProps) {
               style: { width: "100%", minWidth },
               columns: columns ? columns : getColumns({ history }),
               data: data,
-              step: 10,
+              step,
               border: {
                 header: {
                   color: "brand",
