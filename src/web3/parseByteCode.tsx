@@ -93,6 +93,10 @@ const parseTextSignature = (sig: string) => {
 }
 export const DisplaySignatureMethod = (props: any = {}) => {
   const { internalTransaction } = props
+  if (internalTransaction.input.length < 3) {
+    return <>No input</>
+  }
+
   const signature = internalTransaction.signatures
     && internalTransaction.signatures[0]
     && internalTransaction.signatures[0].signature
@@ -115,12 +119,10 @@ export const DisplaySignature = (props: any = {}) => {
   if (!parsed || !event || !abi) {
     return <>—</>
   }
-
-  console.log(parsed)
   
   return (
     <>
-      <b>{event.name}</b>
+      {event.name}
       (
       <>
         {abi.inputs.map((input: any, i: number) => {
