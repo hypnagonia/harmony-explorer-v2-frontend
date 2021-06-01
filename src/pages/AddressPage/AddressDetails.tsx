@@ -4,6 +4,7 @@ import {
   Address,
   ExpandString,
   formatNumber,
+  ONEValue,
   TokenValue,
 } from "src/components/ui";
 import { AddressDetails } from "src/types";
@@ -14,22 +15,24 @@ interface AddressDetailsProps {
   address: string;
   contracts: AddressDetails;
   tokens: any[];
+  balance?: string;
 }
 
 export function AddressDetailsDisplay(props: AddressDetailsProps) {
-  const { address, contracts, tokens } = props;
+  const { address, contracts, tokens, balance } = props;
   const erc20Map = useERC20Pool();
 
   const erc20Token = erc20Map[address] || null;
   const type = getType(contracts, erc20Token);
 
-  const data = { ...contracts, ...erc20Token, address, token: tokens };
+  const data = { ...contracts, ...erc20Token, address, token: tokens, balance };
 
   if (!data) {
     return null;
   }
 
   const items: string[] = Object.keys(data);
+  
   return (
     <Box>
       {items.sort(sortByOrder).map((i) => (
@@ -85,6 +88,7 @@ const addressPropertyDisplayNames: Record<
   solidityVersion: () => "Solidity version",
   IPFSHash: () => "IPFS hash",
   meta: () => "Meta",
+  balance: () => "Balance",
   bytecode: () => "Bytecode",
   token: () => "Token",
   name: () => "Name",
@@ -107,6 +111,7 @@ const addressPropertyDisplayValues: Record<
   IPFSHash: (value) => value,
   meta: (value) => value,
   bytecode: (value) => <ExpandString value={value || ""} />,
+  balance: (value) => <ONEValue value={value} />,
   token: (value) => <TokensInfo value={value} />,
   name: (value) => value,
   symbol: (value) => value,
@@ -120,8 +125,9 @@ function sortByOrder(a: string, b: string) {
 }
 
 const addressPropertyOrder: Record<string, number> = {
-  address: 10,
-  value: 11,
+  address: 9,
+  value: 10,
+  balance: 11,
   token: 12,
   creatorAddress: 13,
 
