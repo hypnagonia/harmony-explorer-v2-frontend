@@ -5,11 +5,16 @@ import { useParams } from "react-router-dom";
 import {
   getByteCodeSignatureByHash,
   getRelatedTransactions,
-  getRelatedTransactionsByType
-} from 'src/api/client'
+  getRelatedTransactionsByType,
+} from "src/api/client";
 import { TransactionsTable } from "src/components/tables/TransactionsTable";
 import { Address, ONEValue, RelativeTimer } from "src/components/ui";
-import { Filter, RelatedTransaction, RelatedTransactionType, RPCTransaction } from 'src/types'
+import {
+  Filter,
+  RelatedTransaction,
+  RelatedTransactionType,
+  RPCTransaction,
+} from "src/types";
 import styled, { css } from "styled-components";
 import { TRelatedTransaction } from "src/api/client.interface";
 
@@ -38,6 +43,14 @@ const Marker = styled.div<{ out: boolean }>`
           background: rgba(105, 250, 189, 0.8);
           color: #1b295e;
         `};
+`;
+
+const NeutralMarker = styled(Box)`
+  border-radius: 2px;
+  padding: 5px;
+
+  text-align: center;
+  font-weight: bold;
 `;
 
 function getColumns(id: string): ColumnConfig<any>[] {
@@ -92,8 +105,8 @@ function getColumns(id: string): ColumnConfig<any>[] {
             data.signatures.map((s: any) => s.signature)[0].split("(")[0];
         } catch (err) {}
 
-        if (!signature && data.value!=='0') {
-          signature = 'transfer'
+        if (!signature && data.value !== "0") {
+          signature = "transfer";
         }
 
         if (!signature) {
@@ -102,12 +115,11 @@ function getColumns(id: string): ColumnConfig<any>[] {
 
         return (
           <Text size="12px">
-            <Marker out={false}>
-              {signature}
-            </Marker>
+            <NeutralMarker background={'backgroundBack'}>{signature}</NeutralMarker>
           </Text>
-        )
-    }},
+        );
+      },
+    },
     // {
     //   property: "shard",
     //   header: (
@@ -382,13 +394,14 @@ export function Transactions(props: {
         ]);
 
         // for transactions we display call method if any
-        if (props.type === 'transaction') {
+        if (props.type === "transaction") {
           const methodSignatures = await Promise.all(
             relatedTransactions.map((tx: any) => {
               return tx.input && tx.input.length > 10
                 ? getByteCodeSignatureByHash([tx.input.slice(0, 10)])
                 : Promise.resolve([]);
-            }))
+            })
+          );
 
           relatedTransactions = relatedTransactions.map((l, i) => ({
             ...l,
