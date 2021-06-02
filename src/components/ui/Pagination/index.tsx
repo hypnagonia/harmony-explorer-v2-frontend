@@ -11,7 +11,7 @@ interface PaginationNavigator {
   elements: any[];
   totalElements: number;
   onChange: (filter: Filter, action: TPaginationAction) => void;
-  property: string;
+  property?: string;
   noScrollTop?: boolean;
   showPages?: boolean;
   lastElement?: number;

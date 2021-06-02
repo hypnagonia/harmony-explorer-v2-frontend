@@ -3,8 +3,13 @@ import { Box, Text } from "grommet";
 
 import { TransactionsTable } from "src/components/tables/TransactionsTable";
 import { Filter, InternalTransaction } from "src/types";
-import { Address, ONEValue, TransactionType } from "src/components/ui";
-import {DisplaySignatureMethod} from 'src/web3/parseByteCode'
+import {
+  Address,
+  ONEValue,
+  PaginationNavigator,
+  TransactionType,
+} from "src/components/ui";
+import { DisplaySignatureMethod } from "src/web3/parseByteCode";
 
 interface InternalTransactionListProps {
   list: InternalTransaction[];
@@ -14,7 +19,7 @@ interface InternalTransactionListProps {
 
 const initFilter: Filter = {
   offset: 0,
-  limit: 100,
+  limit: 10,
   orderBy: "block_number",
   orderDirection: "desc",
   filters: [{ type: "gte", property: "block_number", value: 0 }],
@@ -24,23 +29,35 @@ export function InternalTransactionList(props: InternalTransactionListProps) {
   const { list, hash, timestamp } = props;
   const [filter, setFilter] = useState<Filter>(initFilter);
 
-  const { limit = 10 } = filter;
+  const { limit = 10, offset = 0 } = filter;
+  const pageSize = 10;
+  const curPage = +(+offset / limit).toFixed(0) + 1;
+
+  const data = list
+    .sort((a, b) => (a.index > b.index ? 1 : -1))
+    .slice(pageSize * curPage, pageSize * (curPage + 1))
+    .map((item) => ({ ...item }));
 
   return (
     <Box margin={{ top: "medium" }}>
       <TransactionsTable
         columns={getColumns({ timestamp })}
-        data={list.sort((a, b) => (a.index > b.index ? 1 : -1))}
-        totalElements={100}
-        step={list.length + 1}
+        data={data.sort((a, b) => (a.index > b.index ? 1 : -1))}
+        totalElements={data.length}
+        step={data.length}
         showIfEmpty
-        hidePagination
         emptyText={"No Internal Transactions for this hash " + hash}
         limit={+limit}
         filter={filter}
         setFilter={setFilter}
         minWidth="960px"
-        rowDetails={(row) => <DisplaySignatureMethod internalTransaction={row}/>}
+        primaryKey={"index"}
+        rowDetails={(row) => (
+          <DisplaySignatureMethod
+            internalTransaction={row}
+            key={`${row.from}_${row.to}`}
+          />
+        )}
       />
     </Box>
   );
@@ -63,7 +80,7 @@ function getColumns(props?: any) {
         </Text>
       ),
     },
-  /*  {
+    /*  {
       property: "method",
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>

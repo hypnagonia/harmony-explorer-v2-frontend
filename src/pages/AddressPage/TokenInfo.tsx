@@ -59,6 +59,7 @@ export function TokensInfo(props: { value: Token[] }) {
       <Box style={{ width: "550px" }}>
         <Dropdown<Token>
           keyField={"tokenAddress"}
+          itemHeight={'47px'}
           searchable={(item, searchText) => {
             const outPutAddress =
               currency === "ONE"

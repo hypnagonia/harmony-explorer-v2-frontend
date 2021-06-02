@@ -10,6 +10,7 @@ import {
 import { AddressDetails } from "src/types";
 import { TokensInfo } from "./TokenInfo";
 import { Erc20, useERC20Pool } from "src/hooks/ERC20_Pool";
+import { ONEValueDropdown } from "src/components/ui/OneValueDropdown";
 
 interface AddressDetailsProps {
   address: string;
@@ -32,7 +33,7 @@ export function AddressDetailsDisplay(props: AddressDetailsProps) {
   }
 
   const items: string[] = Object.keys(data);
-  
+
   return (
     <Box>
       {items.sort(sortByOrder).map((i) => (
@@ -111,7 +112,11 @@ const addressPropertyDisplayValues: Record<
   IPFSHash: (value) => value,
   meta: (value) => value,
   bytecode: (value) => <ExpandString value={value || ""} />,
-  balance: (value) => <ONEValue value={value} hideTip={true} />,
+  balance: (value) => (
+    <Box width={'550px'}> 
+      <ONEValueDropdown value={value} />
+    </Box>
+  ),
   token: (value) => <TokensInfo value={value} />,
   name: (value) => value,
   symbol: (value) => value,

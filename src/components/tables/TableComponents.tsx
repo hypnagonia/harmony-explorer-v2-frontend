@@ -25,6 +25,10 @@ const Flex = styled.div`
 export class TableComponent extends React.Component<ITableComponentProps> {
   private element!: HTMLDivElement;
 
+  componentDidUpdate() {
+    this.clickExpandButtons();
+  }
+
   clickExpandButtons = () => {
     if (this.props.alwaysOpenedRowDetails) {
       const headerTd = Array.from(
@@ -57,7 +61,6 @@ export class TableComponent extends React.Component<ITableComponentProps> {
   };
 
   render() {
-    console.log(this.props);
     return (
       <Flex
         ref={(element: any) => (this.element = element)}

@@ -1,7 +1,7 @@
 import { Box, TextInput } from "grommet";
 import { CaretDownFill, CaretUpFill, Search } from "grommet-icons";
 import React, { Fragment } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export interface IDropdownProps<T = {}> {
   defaultValue?: T;
@@ -20,6 +20,7 @@ export interface IDropdownProps<T = {}> {
   onToggle?: (isOpen: boolean) => void;
   onClickItem?: (dataItem: T) => void;
   themeMode: "dark" | "light";
+  itemHeight: string;
 }
 
 const DropdownWrapper = styled(Box)`
@@ -48,11 +49,17 @@ const DataList = styled(Box)`
   z-index: 1;
 `;
 
-const DataItem = styled(Box)`
+const DataItem = styled(Box)<{ itemHeight: string }>`
   min-height: 47px;
   padding: 5px;
   cursor: pointer;
   margin-bottom: 10px;
+
+  ${(props) => {
+    return css`
+      min-height: ${props.itemHeight};
+    `;
+  }}
 `;
 
 export class Dropdown<T = {}> extends React.Component<
@@ -97,7 +104,7 @@ export class Dropdown<T = {}> extends React.Component<
   };
 
   renderGroupItems() {
-    const { group = [], searchable } = this.props;
+    const { group = [], searchable, itemHeight = "47px" } = this.props;
 
     return group.map((groupItem) => {
       const items = this.props.items
@@ -118,6 +125,7 @@ export class Dropdown<T = {}> extends React.Component<
               key={`${item[this.props.keyField]}`}
               background={"backgroundDropdownItem"}
               onClick={(evt) => this.onClickItem(item, evt)}
+              itemHeight={itemHeight}
             >
               {this.props.renderItem(item)}
             </DataItem>
@@ -128,7 +136,12 @@ export class Dropdown<T = {}> extends React.Component<
   }
 
   render() {
-    const { group = [], searchable, themeMode } = this.props;
+    const {
+      group = [],
+      searchable,
+      themeMode,
+      itemHeight = "47px",
+    } = this.props;
 
     return (
       <DropdownWrapper
@@ -178,6 +191,7 @@ export class Dropdown<T = {}> extends React.Component<
                   <DataItem
                     key={`${item[this.props.keyField]}`}
                     onClick={(evt) => this.onClickItem(item, evt)}
+                    itemHeight={itemHeight}
                   >
                     {this.props.renderItem(item)}
                   </DataItem>

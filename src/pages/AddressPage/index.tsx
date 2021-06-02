@@ -17,11 +17,11 @@ import {
   TRelatedTransaction,
 } from "src/api/client.interface";
 import { Inventory } from "./tabs/inventory/Inventory";
-import { getBalance } from "src/api/rpc";
+import { getAllBalance, getBalance } from "src/api/rpc";
 
 export function AddressPage() {
   const [contracts, setContracts] = useState<any>(null);
-  const [balance, setBalance] = useState<any>("");
+  const [balance, setBalance] = useState<any>([]);
   const [tokens, setTokens] = useState<any>(null);
   const [inventory, setInventory] = useState<IUserERC721Assets[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -43,11 +43,11 @@ export function AddressPage() {
 
   useEffect(() => {
     const getBal = async () => {
-      let bal = "";
+      let bal: string[] = [];
       try {
-        bal = await (await getBalance([id, "latest"])).result;
+        bal = await getAllBalance([id, "latest"]);
       } catch {
-        bal = "";
+        bal = [];
       }
 
       setBalance(bal);

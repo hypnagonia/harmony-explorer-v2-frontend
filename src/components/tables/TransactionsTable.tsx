@@ -165,7 +165,8 @@ interface TransactionTableProps {
   hideCounter?: boolean;
   minWidth?: string;
   noScrollTop?: boolean;
-  step?: number
+  step?: number;
+  primaryKey?: string;
 }
 
 export function TransactionsTable(props: TransactionTableProps) {
@@ -223,7 +224,7 @@ export function TransactionsTable(props: TransactionTableProps) {
           overflow: "auto",
           opacity: _IsLoading ? "0.4" : "1",
           transition: "0.1s all",
-          height: "600px",
+          minHeight: "600px",
         }}
       >
         {_IsLoading ? (
@@ -243,6 +244,7 @@ export function TransactionsTable(props: TransactionTableProps) {
               columns: columns ? columns : getColumns({ history }),
               data: data,
               step,
+              primaryKey: props.primaryKey ? props.primaryKey : undefined,
               border: {
                 header: {
                   color: "brand",
