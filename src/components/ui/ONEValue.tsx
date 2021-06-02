@@ -73,7 +73,9 @@ export const ONEValue = (props: ONEValueProps) => {
           <Text size="small">(${USDValue})</Text>
         </Tip>
       )}
-      {USDValue && +price > 0 && <Text size="small">(${USDValue})</Text>}
+      {USDValue && +price > 0 && isTodayTransaction && (
+        <Text size="small">(${USDValue})</Text>
+      )}
     </Box>
   );
 };
