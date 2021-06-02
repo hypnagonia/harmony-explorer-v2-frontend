@@ -35,7 +35,7 @@ export function InternalTransactionList(props: InternalTransactionListProps) {
 
   const data = list
     .sort((a, b) => (a.index > b.index ? 1 : -1))
-    .slice(pageSize * curPage, pageSize * (curPage + 1))
+    .slice(pageSize * (curPage - 1), pageSize * curPage)
     .map((item) => ({ ...item }));
 
   return (
