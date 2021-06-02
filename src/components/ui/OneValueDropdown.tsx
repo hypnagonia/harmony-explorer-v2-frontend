@@ -34,32 +34,27 @@ export const ONEValueDropdown = (props: ONEValueProps) => {
   const normilizedValue: {
     value: string | number;
     one: number;
-    usd: string;
-    index: number
+    usd: string | number;
+    index: number;
   }[] = value.map((hashValue, index) => {
     const bi = BigInt(hashValue) / BigInt(10 ** 14);
     const v = parseInt(bi.toString()) / 10000;
-    let USDValue = "";
+    let USDValue = 0;
     if (price && v > 0) {
-      USDValue = (v * +price).toLocaleString("en-US", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-        currency: "USD",
-      });
+      USDValue = v * +price;
     }
 
-    return { value: hashValue, one: v, usd: USDValue, index };
+    return { value: hashValue, one: v, usd: USDValue || 0, index };
   });
 
-  const USDValue = normilizedValue[0].usd;
-  const v = normilizedValue[0].one;
+  console.log(normilizedValue);
 
   return (
     <Dropdown
       items={normilizedValue}
       keyField={"value"}
       themeMode={themeMode}
-      itemHeight={'30px'}
+      itemHeight={"30px"}
       renderValue={() => (
         <Box direction={"row"}>
           <Text size={"small"}>
@@ -71,18 +66,26 @@ export const ONEValueDropdown = (props: ONEValueProps) => {
           </Text>
           <Text size={"small"} style={{ paddingLeft: "4px" }}>
             ($
-            {normilizedValue.reduce((prev, cur) => {
-              prev += +cur.usd;
-              return prev;
-            }, 0)}{" "}
+            {normilizedValue
+              .reduce((prev, cur) => {
+                prev += +cur.usd;
+                return prev;
+              }, 0)
+              .toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+                currency: "USD",
+              })}{" "}
             )
           </Text>
         </Box>
       )}
       renderItem={(item) => (
         <Box direction={"row"}>
-          <Text size={"small"}>SHARD {item.index}: </Text>
-          <Text size={"small"} style={{ paddingLeft: "4px" }}>{item.one} ONE </Text>
+          <Text size={"small"}>Shard {item.index}: </Text>
+          <Text size={"small"} style={{ paddingLeft: "4px" }}>
+            {item.one} ONE{" "}
+          </Text>
           {item.usd ? (
             <Text size={"small"} style={{ paddingLeft: "4px" }}>
               (${item.usd})
@@ -91,47 +94,5 @@ export const ONEValueDropdown = (props: ONEValueProps) => {
         </Box>
       )}
     />
-  );
-
-  return (
-    <Box direction="row" gap="xsmall">
-      <Text
-        weight={v > 0 ? "bold" : "normal"}
-        size="small"
-        margin={{ right: "xxmall" }}
-      >
-        {v.toString()} ONE
-      </Text>
-      {USDValue && +price > 0 && !isTodayTransaction && !hideTip ? (
-        <Tip
-          dropProps={{ align: { left: "right" }, margin: { left: "small" } }}
-          content={
-            <TipContent
-              message={
-                <span>
-                  {`Displaying value on ${dayjs(timestamp).format(
-                    "YYYY-MM-DD"
-                  )}. Current value`}{" "}
-                  <b>
-                    $
-                    {formatNumber(v * +lastPrice, {
-                      maximumFractionDigits: 2,
-                    })}
-                  </b>
-                </span>
-              }
-            />
-          }
-          plain
-        >
-          <Text size="small">(${USDValue})</Text>
-        </Tip>
-      ) : (
-        <Text size="small">(${USDValue})</Text>
-      )}
-      {USDValue && +price > 0 && isTodayTransaction && (
-        <Text size="small">(${USDValue})</Text>
-      )}
-    </Box>
   );
 };
