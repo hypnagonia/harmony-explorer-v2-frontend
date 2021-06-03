@@ -17,12 +17,17 @@ const copyText = (value: string) => {
   }
 };
 
-export function CopyBtn(props: { value: string }) {
+export function CopyBtn(props: { value: string; onClick?: () => void }) {
   return (
     <Clone
       size="small"
       color="brand"
-      onClick={() => copyText(props.value)}
+      onClick={() => {
+        copyText(props.value);
+        if (props.onClick) {
+          props.onClick();
+        }
+      }}
       style={{ cursor: "pointer" }}
     />
   );

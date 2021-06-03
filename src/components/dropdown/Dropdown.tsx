@@ -21,6 +21,7 @@ export interface IDropdownProps<T = {}> {
   onClickItem?: (dataItem: T) => void;
   themeMode: "dark" | "light";
   itemHeight: string;
+  itemStyles: React.CSSProperties;
 }
 
 const DropdownWrapper = styled(Box)`
@@ -49,11 +50,10 @@ const DataList = styled(Box)`
   z-index: 1;
 `;
 
-const DataItem = styled(Box)<{ itemHeight: string }>`
-  min-height: 47px;
-  padding: 5px;
+const DataItem = styled(Box)<{
+  itemHeight: string;
+}>`
   cursor: pointer;
-  margin-bottom: 10px;
 
   ${(props) => {
     return css`
@@ -104,7 +104,12 @@ export class Dropdown<T = {}> extends React.Component<
   };
 
   renderGroupItems() {
-    const { group = [], searchable, itemHeight = "47px" } = this.props;
+    const {
+      group = [],
+      searchable,
+      itemHeight = "47px",
+      itemStyles = {},
+    } = this.props;
 
     return group.map((groupItem) => {
       const items = this.props.items
@@ -126,6 +131,7 @@ export class Dropdown<T = {}> extends React.Component<
               background={"backgroundDropdownItem"}
               onClick={(evt) => this.onClickItem(item, evt)}
               itemHeight={itemHeight}
+              style={{ ...itemStyles }}
             >
               {this.props.renderItem(item)}
             </DataItem>
@@ -141,6 +147,7 @@ export class Dropdown<T = {}> extends React.Component<
       searchable,
       themeMode,
       itemHeight = "47px",
+      itemStyles = {},
     } = this.props;
 
     return (
@@ -161,7 +168,7 @@ export class Dropdown<T = {}> extends React.Component<
         </Value>
         {this.state.isOpen ? (
           <DataList
-            pad="small"
+            pad="xsmall"
             background="background"
             border={{ size: "xsmall", color: "border" }}
             style={{ borderRadius: "0px" }}
@@ -192,6 +199,7 @@ export class Dropdown<T = {}> extends React.Component<
                     key={`${item[this.props.keyField]}`}
                     onClick={(evt) => this.onClickItem(item, evt)}
                     itemHeight={itemHeight}
+                    style={{ ...itemStyles }}
                   >
                     {this.props.renderItem(item)}
                   </DataItem>

@@ -47,22 +47,23 @@ export const ONEValueDropdown = (props: ONEValueProps) => {
     return { value: hashValue, one: v, usd: USDValue || 0, index };
   });
 
-  console.log(normilizedValue);
-
   return (
     <Dropdown
       items={normilizedValue}
       keyField={"value"}
       themeMode={themeMode}
       itemHeight={"30px"}
+      itemStyles={{ justifyContent: "center" }}
       renderValue={() => (
-        <Box direction={"row"}>
+        <Box direction={"row"} align={"center"} style={{ paddingTop: "2px" }}>
           <Text size={"small"}>
-            {normilizedValue.reduce((prev, cur) => {
-              prev += cur.one;
-              return prev;
-            }, 0)}{" "}
-            ONE
+            <b>
+              {normilizedValue.reduce((prev, cur) => {
+                prev += cur.one;
+                return prev;
+              }, 0)}{" "}
+              ONE
+            </b>
           </Text>
           <Text size={"small"} style={{ paddingLeft: "4px" }}>
             ($
@@ -75,7 +76,7 @@ export const ONEValueDropdown = (props: ONEValueProps) => {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
                 currency: "USD",
-              })}{" "}
+              })}
             )
           </Text>
         </Box>
@@ -84,7 +85,7 @@ export const ONEValueDropdown = (props: ONEValueProps) => {
         <Box direction={"row"}>
           <Text size={"small"}>Shard {item.index}: </Text>
           <Text size={"small"} style={{ paddingLeft: "4px" }}>
-            {item.one} ONE{" "}
+            <b>{item.one} ONE </b>
           </Text>
           {item.usd ? (
             <Text size={"small"} style={{ paddingLeft: "4px" }}>

@@ -59,7 +59,8 @@ export function TokensInfo(props: { value: Token[] }) {
       <Box style={{ width: "550px" }}>
         <Dropdown<Token>
           keyField={"tokenAddress"}
-          itemHeight={'47px'}
+          itemHeight={"47px"}
+          itemStyles={{ padding: "5px", marginBottom: "10px" }}
           searchable={(item, searchText) => {
             const outPutAddress =
               currency === "ONE"
@@ -96,12 +97,12 @@ export function TokensInfo(props: { value: Token[] }) {
               <Box
                 direction="row"
                 style={{
-                  width: '100%',
+                  width: "100%",
                   flex: "0 0 auto",
                   justifyContent: "space-between",
+                  marginBottom: "10px",
+                  padding: "5px",
                 }}
-                margin={{ bottom: "3px" }}
-                gap="medium"
               >
                 <Box style={{ flex: "1 1 50%" }}>
                   <Address

@@ -13,6 +13,7 @@ import {
 } from "../ui";
 import { Box } from "grommet";
 import { CopyBtn } from "../ui/CopyBtn";
+import { toaster } from "src/App";
 
 export const todo = {};
 
@@ -229,7 +230,12 @@ export const transactionDisplayValues = (
     <Box direction="row" align="baseline">
       {!["shardID"].includes(key) && ![0, "0", "—"].includes(displayValue) && (
         <>
-          {copyText ? <CopyBtn value={copyText} /> : null}
+          {copyText ? (
+            <CopyBtn
+              value={copyText}
+              onClick={() => toaster.show({ message: "COPIED" })}
+            />
+          ) : null}
           &nbsp;
         </>
       )}

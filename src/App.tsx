@@ -13,6 +13,9 @@ import { ERC20_Pool } from "src/components/ERC20_Pool";
 import { ERC721_Pool } from "src/components/ERC721_Pool";
 import { useThemeMode } from "src/hooks/themeSwitcherHook";
 import { theme, darkTheme } from "./theme";
+import { Toaster, ToasterComponent } from "./components/ui/toaster";
+
+export const toaster = new Toaster();
 
 function App() {
   return (
@@ -45,6 +48,7 @@ function AppWithHistory() {
       full
       id="scrollBody"
     >
+      {/* <ToasterComponent toaster={toaster} /> */}
       <Box
         background="backgroundBack"
         style={{ margin: "auto", minHeight: "100%" }}

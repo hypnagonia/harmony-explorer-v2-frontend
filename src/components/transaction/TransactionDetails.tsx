@@ -128,8 +128,6 @@ export const TransactionDetails: FunctionComponent<TransactionDetailsProps> = ({
   logs = [],
   errorMsg,
 }) => {
-
-  console.log(errorMsg)
   const newTransaction = {
     Status:
       errorMsg === undefined ? <> </> : <TxStatusComponent msg={errorMsg} />,
