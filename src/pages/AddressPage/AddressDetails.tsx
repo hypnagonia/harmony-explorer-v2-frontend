@@ -58,6 +58,7 @@ function DetailItem(props: { data: any; name: string; type: TAddressType }) {
   return (
     <Box
       direction="row"
+      align={'center'}
       margin={{ bottom: "small" }}
       pad={{ bottom: "small" }}
       border={{ size: "xsmall", side: "bottom", color: "border" }}

@@ -10,6 +10,7 @@ import {
   TransactionHash,
   ONEValue,
   StakingTransactionTypeValue,
+  CalculateFee,
 } from "../ui";
 import { Box } from "grommet";
 import { CopyBtn } from "../ui/CopyBtn";
@@ -31,6 +32,7 @@ export const transactionPropertyDisplayNames: Record<string, string> = {
   value: "Value",
   blockNumber: "Block Number",
   from: "From",
+  txnFee: "Txn fee",
   gas: "Gas",
   gasPrice: "Gas Price",
   input: "Input",
@@ -72,8 +74,10 @@ export const transactionPropertySort: Record<string, number> = {
   tokenTransfers: 599,
   blockNumber: 800,
   blockHash: 799,
+   
   from: 700,
   to: 650,
+  txnFee: 560,
   gas: 550,
   gasPrice: 500,
   input: 300,
@@ -97,6 +101,7 @@ export const transactionPropertyDescriptions: Record<string, string> = {
     "The sending party of the transaction (could be from a contract address).",
   to: "The receiving party of the transaction (could be a contract address).",
   value: "The value being transacted in ONE and fiat value.",
+  txnFee: "Transaction fee",
   gas: "The exact units of gas that was used for the transaction.",
   transactionIndex: "Transaction's number in the block",
   gasUsed: "The exact units of gas that was used for the transaction.",
@@ -169,6 +174,7 @@ export const transactionPropertyDisplayValues: any = {
   amount: (value: any, tx: any) => (
     <ONEValue value={value} timestamp={tx.timestamp} />
   ),
+  
   name: (value: any) => <span>{value}</span>,
   delegatorAddress: (value: any) => <Address address={value} />,
   validatorAddress: (value: any) => <Address address={value} />,

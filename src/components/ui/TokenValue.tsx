@@ -13,8 +13,8 @@ interface ONEValueProps {
   formatNumber?: boolean;
 }
 
-Big.DP = 18;
-Big.NE = -18;
+Big.DP = 21;
+Big.NE = -20;
 Big.PE = 15;
 
 // @ts-ignore

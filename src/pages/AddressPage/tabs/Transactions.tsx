@@ -10,7 +10,7 @@ import {
 import { TransactionsTable } from "src/components/tables/TransactionsTable";
 import {
   Address,
-  calculateFee,
+  CalculateFee,
   ONEValue,
   RelativeTimer,
 } from "src/components/ui";
@@ -207,22 +207,7 @@ function getColumns(id: string): ColumnConfig<any>[] {
           <ONEValue value={data.value} timestamp={data.timestamp} />
         </Box>
       ),
-    },
-    {
-      property: "gas",
-      header: (
-        <Text
-          color="minorText"
-          size="small"
-          style={{ fontWeight: 300, width: "100px" }}
-        >
-          Txn fee
-        </Text>
-      ),
-      render: (data: RelatedTransaction) => {
-        return <Box justify="center">{calculateFee(data)}</Box>;
-      },
-    },
+    }, 
 
     {
       property: "timestamp",

@@ -7,7 +7,7 @@ import {
   transactionPropertySort,
   transactionPropertyDescriptions,
 } from "./helpers";
-import { Address, TipContent } from "src/components/ui";
+import { Address, CalculateFee, TipContent } from "src/components/ui";
 import { Box, DataTable, Text, Tip } from "grommet";
 import { TransactionSubType } from "src/components/transaction/helpers";
 import { parseSuggestedEvent, DisplaySignature } from "src/web3/parseByteCode";
@@ -133,6 +133,7 @@ export const TransactionDetails: FunctionComponent<TransactionDetailsProps> = ({
       errorMsg === undefined ? <> </> : <TxStatusComponent msg={errorMsg} />,
     ...transaction,
     tokenTransfers: tokenTransfers(logs),
+    txnFee: <Box justify="center">{CalculateFee(transaction)}</Box>,
   };
   const keys = Object.keys(newTransaction);
   const sortedKeys = keys.sort(
