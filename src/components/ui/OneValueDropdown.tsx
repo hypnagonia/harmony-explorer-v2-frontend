@@ -83,7 +83,7 @@ export const ONEValueDropdown = (props: ONEValueProps) => {
       )}
       renderItem={(item) => (
         <Box direction={"row"}>
-          <Text size={"small"}>Shard {item.index}: </Text>
+          <Text size={"small"} style={{width: '52.5px'}}>Shard {item.index}: </Text>
           <Text size={"small"} style={{ paddingLeft: "4px" }}>
             <b>{item.one} ONE </b>
           </Text>
