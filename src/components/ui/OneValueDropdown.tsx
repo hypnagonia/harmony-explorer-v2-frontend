@@ -83,13 +83,21 @@ export const ONEValueDropdown = (props: ONEValueProps) => {
       )}
       renderItem={(item) => (
         <Box direction={"row"}>
-          <Text size={"small"} style={{width: '52.5px'}}>Shard {item.index}: </Text>
+          <Text size={"small"} style={{ width: "52.5px" }}>
+            Shard {item.index}:{" "}
+          </Text>
           <Text size={"small"} style={{ paddingLeft: "4px" }}>
             <b>{item.one} ONE </b>
           </Text>
           {item.usd ? (
             <Text size={"small"} style={{ paddingLeft: "4px" }}>
-              (${item.usd})
+              ($
+              {item.usd.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+                currency: "USD",
+              })}
+              )
             </Text>
           ) : null}
         </Box>
