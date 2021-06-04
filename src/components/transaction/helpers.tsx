@@ -239,7 +239,7 @@ export const transactionDisplayValues = (
           {copyText ? (
             <CopyBtn
               value={copyText}
-              onClick={() => toaster.show({ message: "COPIED" })}
+              onClick={() => toaster.show({ message: "Copied" })}
             />
           ) : null}
           &nbsp;

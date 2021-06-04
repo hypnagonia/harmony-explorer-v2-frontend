@@ -48,7 +48,7 @@ function AppWithHistory() {
       full
       id="scrollBody"
     >
-      {/* <ToasterComponent toaster={toaster} /> */}
+      <ToasterComponent toaster={toaster} />
       <Box
         background="backgroundBack"
         style={{ margin: "auto", minHeight: "100%" }}

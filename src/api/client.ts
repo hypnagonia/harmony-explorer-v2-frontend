@@ -11,6 +11,7 @@ import {
   IUserERC721Assets,
   TRelatedTransaction,
 } from "./client.interface";
+import { ApiCache } from "./ApiCache";
 // import { ClientCache } from "./clientCache";
 
 // const clientCache = new ClientCache({
@@ -22,6 +23,8 @@ let pairCache: { [pair: string]: IPairPrice } = {};
 setInterval(() => {
   pairCache = {};
 }, 90000);
+
+const signatureHash = new ApiCache({ key: "signatureHashCache" });
 
 export function getBlockByNumber(params: any[]) {
   return transport("getBlockByNumber", params) as Promise<Block>;
@@ -69,8 +72,14 @@ export function getTransactionLogsByField(params: any[]) {
   return transport("getLogsByField", params) as Promise<any>;
 }
 
-export function getByteCodeSignatureByHash(params: any[]) {
-  return transport("getSignaturesByHash", params) as Promise<any>;
+export function getByteCodeSignatureByHash(params: [string]) {
+  return signatureHash.get(params[0])
+    ? Promise.resolve(signatureHash.get(params[0]))
+    : (transport("getSignaturesByHash", params).then((res) => {
+        signatureHash.set(params[0], res);
+
+        return Promise.resolve(res);
+      }) as Promise<any>);
 }
 
 export function getRelatedTransactions(params: any[]) {

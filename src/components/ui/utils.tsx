@@ -40,8 +40,6 @@ export function CalculateFee(transaction: any) {
     maximumFractionDigits: 18,
   }).format(fee);
 
-  console.log(normolizedFee);
-
   const price = lastPrice;
 
   const bi =

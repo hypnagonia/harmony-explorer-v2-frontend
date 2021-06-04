@@ -32,7 +32,8 @@ export const theme = {
       errorText: "#ff0000",
       successText: "#14a266",
       backgroundError: "rgba(230, 0, 0, 0.4)",
-      backgroundSuccess: "rgb(106 250 188 / 44%)",
+      backgroundSuccess: "rgb(106 250 188 / 44%)", 
+      backgroundToaster: "rgba(0, 174, 233, 0.7)"
     },
     palette,
     select: {
@@ -109,7 +110,8 @@ export const darkTheme = {
       errorText: "#ff5858",
       successText: "#00d67b",
       backgroundError: "rgba(230, 0, 0, 0.4)",
-      backgroundSuccess: "rgb(106 250 188 / 23%);",
+      backgroundSuccess: "rgb(106 250 188 / 23%)",
+      backgroundToaster: "rgb(93 111 181 / 70%)"
     },
     palette,
     font: {
