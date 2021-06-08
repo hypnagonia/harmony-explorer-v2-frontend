@@ -38,7 +38,7 @@ function getColumns(props: any) {
           size="small"
           style={{ cursor: "pointer" }}
           onClick={() => {
-            history.push(`/block/${data.number}`);
+            history.push(`/block/${data.hash}`);
           }}
           color="brand"
         >
