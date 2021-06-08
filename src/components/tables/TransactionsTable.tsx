@@ -28,13 +28,13 @@ function getColumns(props: any) {
       ),
       render: (data: RPCTransactionHarmony) => (
         <Box direction="row" gap="3px" align="center">
-          <Text size="small">{0}</Text>
+          <Text size="small">{data.shardID}</Text>
           <FormNextLink
             size="small"
             color="brand"
             style={{ marginBottom: "2px" }}
           />
-          <Text size="small">{0}</Text>
+          <Text size="small">{data.toShardID}</Text>
         </Box>
       ),
     },
