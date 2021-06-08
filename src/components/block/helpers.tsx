@@ -5,12 +5,24 @@ import {
   BlockNumber,
   TransactionHash,
 } from "src/components/ui";
-import { Clone, FormPreviousLink, FormNextLink } from "grommet-icons";
+import {
+  Clone,
+  FormPreviousLink,
+  FormNextLink,
+  StatusGood,
+} from "grommet-icons";
 import { Link } from "react-router-dom";
 
 import React from "react";
 import { Block } from "src/types";
 import { CopyBtn } from "../ui/CopyBtn";
+import { toaster } from "src/App";
+import { Box, Text } from "grommet";
+import styled from "styled-components";
+
+const Icon = styled(StatusGood)`
+  margin-right: 5px;
+`;
 
 export const blockPropertyDisplayNames: Record<string, string> = {
   number: "Height",
@@ -118,7 +130,19 @@ export const blockPropertyDisplayValues: any = {
     value.length > 0
       ? value.map((tx) => (
           <>
-            <CopyBtn value={tx} />
+            <CopyBtn
+              value={tx}
+              onClick={() =>
+                toaster.show({
+                  message: () => (
+                    <Box direction={"row"} align={"center"} pad={"small"}>
+                      <Icon size={"small"} color={"headerText"} />
+                      <Text size={"small"}>Copied to clipboard</Text>
+                    </Box>
+                  ),
+                })
+              }
+            />
             &nbsp;
             <TransactionHash key={tx} hash={tx} />
             <br />
@@ -129,7 +153,19 @@ export const blockPropertyDisplayValues: any = {
     value.length > 0
       ? value.map((tx) => (
           <>
-            <CopyBtn value={tx} />
+            <CopyBtn
+              value={tx}
+              onClick={() =>
+                toaster.show({
+                  message: () => (
+                    <Box direction={"row"} align={"center"} pad={"small"}>
+                      <Icon size={"small"} color={"headerText"} />
+                      <Text size={"small"}>Copied to clipboard</Text>
+                    </Box>
+                  ),
+                })
+              }
+            />
             &nbsp;
             <TransactionHash link="staking-tx" key={tx} hash={tx} />
             <br />
@@ -177,7 +213,19 @@ export const blockDisplayValues = (block: Block, key: string, value: any) => {
       ) &&
         !["0x", "0", 0, null].includes(displayValue) && (
           <>
-           <CopyBtn value={value} />
+            <CopyBtn
+              value={value}
+              onClick={() =>
+                toaster.show({
+                  message: () => (
+                    <Box direction={"row"} align={"center"} pad={"small"}>
+                      <Icon size={"small"} color={"headerText"} />
+                      <Text size={"small"}>Copied to clipboard</Text>
+                    </Box>
+                  ),
+                })
+              }
+            />
             &nbsp;
           </>
         )}
