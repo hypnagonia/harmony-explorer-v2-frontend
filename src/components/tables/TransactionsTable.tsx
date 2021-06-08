@@ -93,9 +93,7 @@ function getColumns(props: any) {
           From
         </Text>
       ),
-      render: (data: RPCTransactionHarmony) => (
-        <Address address={data.from} style={{ fontSize: "12px" }} />
-      ),
+      render: (data: RPCTransactionHarmony) => <Address address={data.from} />,
     },
     {
       property: "to",
@@ -106,9 +104,7 @@ function getColumns(props: any) {
           To
         </Text>
       ),
-      render: (data: RPCTransactionHarmony) => (
-        <Address address={data.to} style={{ fontSize: "12px" }} />
-      ),
+      render: (data: RPCTransactionHarmony) => <Address address={data.to} />,
     },
     {
       property: "value",
