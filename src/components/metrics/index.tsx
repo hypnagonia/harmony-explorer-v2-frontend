@@ -157,7 +157,7 @@ function TransactionsCount() {
 }
 
 function ShardCount() {
-  const count = 4;
+  const count = process.env.REACT_APP_AVAILABLE_SHARDS?.split(",").length || 0;
 
   return (
     <Box direction="row" align="stretch">

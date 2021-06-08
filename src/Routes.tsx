@@ -1,14 +1,14 @@
-import React from 'react'
-import { Switch, Route } from 'react-router-dom'
-import { BlockPage } from 'src/pages/BlockPage'
-import { MainPage } from 'src/pages/MainPage'
-import { TransactionPage } from 'src/pages/TransactionPage'
-import { StakingTransactionPage } from 'src/pages/StackingTransactionPage'
-import { AllBlocksPage } from 'src/pages/AllBlocksPage'
-import { AllTransactionsPage } from 'src/pages/AllTransactionsPage'
-import { AddressPage } from 'src/pages/AddressPage'
-import { ERC20List } from 'src/pages/ERC20List'
-import { ERC721List } from 'src/pages/ERC721List'
+import React from "react";
+import { Switch, Route, Redirect } from "react-router-dom";
+import { BlockPage } from "src/pages/BlockPage";
+import { MainPage } from "src/pages/MainPage";
+import { TransactionPage } from "src/pages/TransactionPage";
+import { StakingTransactionPage } from "src/pages/StackingTransactionPage";
+import { AllBlocksPage } from "src/pages/AllBlocksPage";
+import { AllTransactionsPage } from "src/pages/AllTransactionsPage";
+import { AddressPage } from "src/pages/AddressPage";
+import { ERC20List } from "src/pages/ERC20List";
+import { ERC721List } from "src/pages/ERC721List";
 
 export function Routes() {
   return (
@@ -19,6 +19,11 @@ export function Routes() {
         </Route>
 
         <Route exact path="/blocks">
+          {/* <AllBlocksPage /> */}
+          <Redirect to="/blocks/shard/0" />
+        </Route>
+
+        <Route exact path="/blocks/shard/:shardNumber">
           <AllBlocksPage />
         </Route>
 
@@ -26,7 +31,12 @@ export function Routes() {
           <BlockPage />
         </Route>
 
-        <Route path="/transactions">
+        <Route exact path="/transactions">
+          {/* <AllTransactionsPage /> */}
+          <Redirect to="/transactions/shard/0" />
+        </Route>
+
+        <Route exact path="/transactions/shard/:shardNumber">
           <AllTransactionsPage />
         </Route>
 
@@ -50,6 +60,6 @@ export function Routes() {
           <ERC721List />
         </Route>
       </Switch>
-      </>
-  )
+    </>
+  );
 }

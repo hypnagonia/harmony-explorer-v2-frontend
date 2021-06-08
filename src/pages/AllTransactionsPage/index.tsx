@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Heading } from "grommet";
+import { Box, Heading, Text } from "grommet";
 import { BasePage, BaseContainer } from "src/components/ui";
 import { TransactionsTable } from "../../components/tables/TransactionsTable";
 import { Filter, RPCTransactionHarmony } from "../../types";
 import { useHistory } from "react-router";
 import { getTransactions, getCount } from "src/api/client";
+import { ShardDropdown } from "src/components/ui/ShardDropdown";
+import { useParams } from "react-router-dom";
 
 const initFilter: Filter = {
   offset: 0,
@@ -19,12 +21,15 @@ export function AllTransactionsPage() {
   const [count, setCount] = useState<string>("");
   const [filter, setFilter] = useState<Filter>(initFilter);
 
+  // @ts-ignore
+  const { shardNumber } = useParams();
+
   const history = useHistory();
 
   useEffect(() => {
     const getRes = async () => {
       try {
-        let res = await getCount([0, "transactions"]);
+        let res = await getCount([+shardNumber, "transactions"]);
         setCount(res.count);
       } catch (err) {
         console.log(err);
@@ -42,12 +47,12 @@ export function AllTransactionsPage() {
 
       setFilter(newFilter);
     });
-  }, []);
+  }, [shardNumber]);
 
   useEffect(() => {
     const getElements = async () => {
       try {
-        let trxs = await getTransactions([0, filter]);
+        let trxs = await getTransactions([+shardNumber, filter]);
 
         setTrxs(trxs as RPCTransactionHarmony[]);
       } catch (err) {
@@ -55,7 +60,7 @@ export function AllTransactionsPage() {
       }
     };
     getElements();
-  }, [filter]);
+  }, [filter, shardNumber]);
 
   const { limit = 10 } = filter;
 
@@ -64,6 +69,17 @@ export function AllTransactionsPage() {
       <Heading size="small" margin={{ bottom: "medium", top: "0" }}>
         Transactions
       </Heading>
+      <BasePage pad={"small"} style={{ overflow: "inherit" }}>
+        <Box style={{ width: "200px" }} direction={"row"} align={"center"}>
+          <Text>Filter: </Text>
+          <ShardDropdown
+            selected={shardNumber}
+            onClick={(shardNumber) =>
+              history.push(`/transactions/shard/${shardNumber}`)
+            }
+          />
+        </Box>
+      </BasePage>
       <BasePage>
         <TransactionsTable
           data={trxs}
@@ -71,6 +87,7 @@ export function AllTransactionsPage() {
           limit={+limit}
           filter={filter}
           setFilter={setFilter}
+          primaryKey={'blockHash'}
         />
       </BasePage>
     </BaseContainer>

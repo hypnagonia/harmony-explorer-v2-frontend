@@ -27,12 +27,29 @@ export const TransactionPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [txrsLoading, setTxrsLoading] = useState<boolean>(true);
 
+  const availableShards = (process.env.REACT_APP_AVAILABLE_SHARDS as string)
+    .split(",")
+    .map((t) => +t);
+
   useEffect(() => {
     const getTx = async () => {
       let trx;
       if (id.length === 66) {
         trx = await getTransactionByField([0, "hash", id]);
       }
+
+      if (!trx && availableShards.find((i) => i === 1)) {
+        trx = await getTransactionByField([1, "hash", id]);
+      }
+
+      if (!trx && availableShards.find((i) => i === 2)) {
+        trx = await getTransactionByField([2, "hash", id]);
+      }
+
+      if (!trx && availableShards.find((i) => i === 3)) {
+        trx = await getTransactionByField([3, "hash", id]);
+      }
+
       setTx(trx as RPCStakingTransactionHarmony);
     };
 
@@ -40,8 +57,8 @@ export const TransactionPage = () => {
   }, [id]);
 
   useEffect(() => {
-    const getInternalTxs = async () => {
-      if (tx.hash) {
+    const getInternalTxs = async () => { 
+      if (tx.hash && tx.shardID === 0) {
         try {
           //@ts-ignore
           const txs = await getInternalTransactionsByField([
@@ -77,7 +94,7 @@ export const TransactionPage = () => {
 
   useEffect(() => {
     const getLogs = async () => {
-      if (tx.hash) {
+      if (tx.hash && tx.shardID === 0) {
         try {
           //@ts-ignore
           const logs: any[] = await getTransactionLogsByField([

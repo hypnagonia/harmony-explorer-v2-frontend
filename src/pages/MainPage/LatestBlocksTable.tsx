@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
-import { useMediaQuery } from 'react-responsive';
+import { useMediaQuery } from "react-responsive";
 import { Box, DataTable, Spinner, Text } from "grommet";
 import { Block } from "src/types";
 import { useHistory } from "react-router-dom";
@@ -18,7 +18,16 @@ function getColumns(props: any) {
           Shard
         </Text>
       ),
-      render: (data: Block) => <Text size="small">{0}</Text>,
+      render: (data: Block) => (
+        <Text
+          size="small"
+          onClick={() => history.push(`/blocks/shard/${data.shardNumber}`)}
+          style={{ cursor: "pointer" }}
+          color={"brand"}
+        >
+          {data.shardNumber}
+        </Text>
+      ),
     },
     {
       property: "number",
@@ -65,7 +74,11 @@ function getColumns(props: any) {
           {/*<Text size="small">*/}
           {/*  {dayjs(data.timestamp).format("YYYY-MM-DD, HH:mm:ss")},*/}
           {/*</Text>*/}
-          <RelativeTimer date={data.timestamp} updateInterval={1000} style={{ textAlign: "right" }} />
+          <RelativeTimer
+            date={data.timestamp}
+            updateInterval={1000}
+            style={{ textAlign: "right" }}
+          />
         </Box>
       ),
     },
@@ -84,14 +97,36 @@ const filter = {
 export function LatestBlocksTable() {
   const history = useHistory();
   const [blocks, setBlocks] = useState<Block[]>([]);
-  const isLess1110 = useMediaQuery({ maxDeviceWidth: '1110px' });
+  const isLess1110 = useMediaQuery({ maxDeviceWidth: "1110px" });
+  const availableShards = (process.env
+    .REACT_APP_AVAILABLE_SHARDS as string).split(",");
 
   useEffect(() => {
     let tId = 0 as any;
     const exec = async () => {
       try {
-        let blocks = await getBlocks([0, filter]);
-        setBlocks(blocks as Block[]);
+        let blocks = await Promise.all(
+          availableShards.map((shardNumber) =>
+            getBlocks([+shardNumber, filter])
+          )
+        );
+
+        const blocksList = blocks.reduce((prev, cur, index) => {
+          prev = [
+            ...prev,
+            ...cur.map((item) => ({
+              ...item,
+              shardNumber: +availableShards[index],
+            })),
+          ];
+          return prev;
+        }, []);
+
+        setBlocks(
+          blocksList
+            .sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1))
+            .slice(0, 10)
+        );
       } catch (err) {
         console.log(err);
       }
@@ -114,10 +149,10 @@ export function LatestBlocksTable() {
   }
 
   return (
-    <Box style={{ overflow: 'auto' }}>
+    <Box style={{ overflow: "auto" }}>
       <DataTable
         className={"g-table-header"}
-        style={{ width: "100%", minWidth: '620px' }}
+        style={{ width: "100%", minWidth: "620px" }}
         columns={getColumns({ history })}
         data={blocks}
         step={10}

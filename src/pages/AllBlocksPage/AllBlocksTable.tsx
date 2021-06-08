@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 
 import { Box, DataTable, Text, Spinner } from "grommet";
 import { Block, Filter } from "src/types";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import {
   Address,
   formatNumber,
@@ -11,10 +11,11 @@ import {
   PaginationBlockNavigator,
   PaginationRecordsPerPage,
 } from "src/components/ui";
-import { getBlocks, getCount } from 'src/api/client';
+import { getBlocks, getCount } from "src/api/client";
+import { ShardDropdown } from "src/components/ui/ShardDropdown";
 
 function getColumns(props: any) {
-  const { history } = props;
+  const { history, shardNumber } = props;
   return [
     {
       property: "shard",
@@ -23,7 +24,7 @@ function getColumns(props: any) {
           Shard
         </Text>
       ),
-      render: (data: Block) => <Text size="small">{0}</Text>,
+      render: (data: Block) => <Text size="small">{shardNumber}</Text>,
     },
     {
       property: "number",
@@ -79,7 +80,9 @@ function getColumns(props: any) {
         </Text>
       ),
       render: (data: Block) => (
-        <Text size="small">{data.transactions.length + data.stakingTransactions.length}</Text>
+        <Text size="small">
+          {data.transactions.length + data.stakingTransactions.length}
+        </Text>
       ),
     },
     {
@@ -103,45 +106,28 @@ const initFilter: Filter = {
   limit: 10,
   orderBy: "number",
   orderDirection: "desc",
-  filters: [
-     { type: "gte", property: "number", value: 0 }
-    ],
+  filters: [{ type: "gte", property: "number", value: 0 }],
 };
 
 export function AllBlocksTable() {
   const [blocks, setBlocks] = useState<Block[]>([]);
-  const [count, setCount] = useState<string>('');
   const [filter, setFilter] = useState<Filter>(initFilter);
+
+  // @ts-ignore
+  const { shardNumber } = useParams();
 
   const history = useHistory();
 
   useEffect(() => {
-    const getRes = async () => {
-      try {
-        let res = await getCount([0, "blocks"]);
-        setCount(res.count);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+    const newFilter = JSON.parse(JSON.stringify(initFilter)) as Filter;
 
-    getRes().then(() => {
-      const newFilter = JSON.parse(JSON.stringify(filter)) as Filter;
-      const innerFilter = newFilter.filters.find(
-        (i) => i.property === "number"
-      );
-      if (innerFilter && count) {
-        innerFilter.value = +count;
-      }
-
-      setFilter(newFilter);
-    });
-  }, []);
+    setFilter(newFilter);
+  }, [shardNumber]);
 
   useEffect(() => {
     const getElements = async () => {
       try {
-        let blocks = await getBlocks([0, filter]);
+        let blocks = await getBlocks([+shardNumber, filter]);
         setBlocks(blocks as Block[]);
       } catch (err) {
         console.log(err);
@@ -169,25 +155,25 @@ export function AllBlocksTable() {
         pad={{ bottom: "small" }}
         margin={{ bottom: "small" }}
         border={{ size: "xsmall", side: "bottom", color: "border" }}
-
       >
-        <Text style={{ flex: '1 1 auto' }}>
-          <b>{filter.limit}</b> blocks shown, from <b>#{formatNumber(+endValue)}</b> to{" "}
+        <Text style={{ flex: "1 1 auto" }}>
+          <b>{filter.limit}</b> blocks shown, from{" "}
+          <b>#{formatNumber(+endValue)}</b> to{" "}
           <b>#{formatNumber(+beginValue)}</b>
         </Text>
         <PaginationBlockNavigator
           onChange={setFilter}
           filter={filter}
-          totalElements={+count}
+          totalElements={blocks.length}
           blocks={blocks}
           property="number"
         />
       </Box>
-      <Box style={{ overflow: 'auto' }}>
+      <Box style={{ overflow: "auto" }}>
         <DataTable
           className={"g-table-header"}
-          style={{ width: "100%",  minWidth: '1110px' }}
-          columns={getColumns({ history })}
+          style={{ width: "100%", minWidth: "1110px" }}
+          columns={getColumns({ history, shardNumber })}
           data={blocks}
           step={10}
           border={{
@@ -202,13 +188,18 @@ export function AllBlocksTable() {
           }}
         />
       </Box>
-      <Box direction="row" justify="between" align="center" margin={{ top: "medium" }}>
+      <Box
+        direction="row"
+        justify="between"
+        align="center"
+        margin={{ top: "medium" }}
+      >
         <PaginationRecordsPerPage filter={filter} onChange={setFilter} />
         <PaginationBlockNavigator
           blocks={blocks}
           onChange={setFilter}
           filter={filter}
-          totalElements={+count}
+          totalElements={blocks.length}
           property="number"
         />
       </Box>

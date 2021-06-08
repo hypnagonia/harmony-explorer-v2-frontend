@@ -133,7 +133,7 @@ export const TransactionDetails: FunctionComponent<TransactionDetailsProps> = ({
       errorMsg === undefined ? <> </> : <TxStatusComponent msg={errorMsg} />,
     ...transaction,
     tokenTransfers: tokenTransfers(logs),
-    txnFee: <Box justify="center">{CalculateFee(transaction)}</Box>,
+    gasPrice: <Box justify="center">{CalculateFee(transaction)}</Box>,
   };
   const keys = Object.keys(newTransaction);
   const sortedKeys = keys.sort(

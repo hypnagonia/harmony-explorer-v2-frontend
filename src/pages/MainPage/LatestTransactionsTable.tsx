@@ -19,13 +19,13 @@ function getColumns(props: any) {
       ),
       render: (data: RPCTransactionHarmony) => (
         <Box direction="row" gap="3px" align="center">
-          <Text size="small">{0}</Text>
+          <Text size="small">{data.shardID}</Text>
           <FormNextLink
             size="small"
             color="brand"
             style={{ marginBottom: "2px" }}
           />
-          <Text size="small">{0}</Text>
+          <Text size="small">{data.toShardID}</Text>
         </Box>
       ),
     },
@@ -101,12 +101,30 @@ const filter = {
 export function LatestTransactionsTable() {
   const history = useHistory();
   const [transactions, setTransactions] = useState<RPCTransactionHarmony[]>([]);
+  const availableShards = (process.env.REACT_APP_AVAILABLE_SHARDS as string)
+    .split(",")
+    .map((t) => +t);
+
   useEffect(() => {
     let tId = 0 as any;
     const exec = async () => {
       try {
-        let trxs = await getTransactions([0, filter]);
-        setTransactions(trxs as RPCTransactionHarmony[]);
+        let trxs = await Promise.all(
+          availableShards.map((shardNumber) =>
+            getTransactions([shardNumber, filter])
+          )
+        );
+
+        const trxsList = trxs.reduce((prev, cur) => {
+          prev = [...prev, ...cur];
+          return prev;
+        }, []);
+
+        setTransactions(
+          trxsList
+            .sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1))
+            .slice(0, 10) as RPCTransactionHarmony[]
+        );
       } catch (err) {
         console.log(err);
       }
@@ -129,10 +147,10 @@ export function LatestTransactionsTable() {
   }
 
   return (
-    <Box style={{ overflow: 'auto' }}>
+    <Box style={{ overflow: "auto" }}>
       <DataTable
         className={"g-table-header"}
-        style={{ width: "100%", minWidth: '620px' }}
+        style={{ width: "100%", minWidth: "620px" }}
         columns={getColumns({ history })}
         data={transactions}
         step={10}

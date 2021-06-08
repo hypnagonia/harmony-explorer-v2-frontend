@@ -78,6 +78,7 @@ export type Block = Modify<
     gasUsed: string;
     nonce: string;
     size: string;
+    shardNumber?: number;
   }
 >;
 
@@ -216,7 +217,7 @@ export type InternalTransaction = {
   blockHash: BlockHash;
   blockNumber: BlockNumber;
   transactionHash: TransactionHash;
-  signatures?: any[]
+  signatures?: any[];
 };
 
 export type Transaction = {
@@ -244,7 +245,7 @@ export interface RelatedTransaction {
   to: string;
   value: string;
   timestamp: string;
-  type?: string
+  type?: string;
   msg?: { amount: string; delegatorAddress: string; validatorAddress: string };
 }
 

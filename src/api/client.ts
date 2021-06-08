@@ -55,7 +55,7 @@ export function getTransactionByField(params: any[]) {
   ) as Promise<RPCStakingTransactionHarmony>;
 }
 
-export function getStakingTransactionByField(params: [0, "hash", string]) {
+export function getStakingTransactionByField(params: [number, "hash", string]) {
   return transport(
     "getStakingTransactionsByField",
     params

@@ -17,6 +17,10 @@ export const SearchInput = () => {
   const [readySubmit, setReadySubmit] = useState(false);
   const themeMode = useThemeMode();
 
+  const availableShards = (process.env.REACT_APP_AVAILABLE_SHARDS as string)
+    .split(",")
+    .map((t) => +t);
+
   const history = useHistory();
 
   useEffect(() => {
@@ -51,31 +55,65 @@ export const SearchInput = () => {
       if (v.length === 66 && v[0] === "0" && v[1] === "x") {
         // is block hash or tx hash
         try {
-          await Promise.all([
-            getBlockByHash([0, v])
-              .then((res) => {
+          try {
+            await Promise.all([
+              getBlockByHash([0, v])
+                .then((res) => {
+                  if (!res) {
+                    return;
+                  }
+                  history.push(`/block/${v}`);
+                })
+                .catch(),
+              getTransactionByField([0, "hash", v])
+                .then((res) => {
+                  if (!res) {
+                    return;
+                  }
+                  history.push(`/tx/${v}`);
+                })
+                .catch(),
+              getStakingTransactionByField([0, "hash", v]).then((res) => {
                 if (!res) {
                   return;
                 }
-                history.push(`/block/${v}`);
-              })
-              .catch(),
-            getTransactionByField([0, "hash", v])
-              .then((res) => {
-                if (!res) {
-                  return;
-                }
-                history.push(`/tx/${v}`);
-              })
-              .catch(),
-            getStakingTransactionByField([0, "hash", v]).then((res) => {
-              if (!res) {
-                return
-              }
 
-              history.push(`/staking-tx/${v}`)
-            }),
-          ]);
+                history.push(`/staking-tx/${v}`);
+              }),
+            ]);
+          } catch {
+            await Promise.all(
+              availableShards
+                .filter((t) => t !== 0)
+                .map((shard) => {
+                  console.log(shard);
+                  return Promise.all([
+                    getBlockByHash([shard, v]).then((res) => {
+                      if (!res) {
+                        return;
+                      }
+                      history.push(`/block/${v}`);
+                    }),
+                    getTransactionByField([shard, "hash", v]).then((res) => {
+                      if (!res) {
+                        return;
+                      }
+                      history.push(`/tx/${v}`);
+                    }),
+                    getStakingTransactionByField([shard, "hash", v]).then(
+                      (res) => {
+                        if (!res) {
+                          return;
+                        }
+
+                        history.push(`/staking-tx/${v}`);
+                      }
+                    ),
+                  ]);
+                })
+            );
+          }
+
           return;
         } catch (e) {}
       }

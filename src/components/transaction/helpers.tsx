@@ -74,7 +74,7 @@ export const transactionPropertySort: Record<string, number> = {
   tokenTransfers: 599,
   blockNumber: 800,
   blockHash: 799,
-   
+
   from: 700,
   to: 650,
   txnFee: 560,
@@ -174,7 +174,7 @@ export const transactionPropertyDisplayValues: any = {
   amount: (value: any, tx: any) => (
     <ONEValue value={value} timestamp={tx.timestamp} />
   ),
-  
+
   name: (value: any) => <span>{value}</span>,
   delegatorAddress: (value: any) => <Address address={value} />,
   validatorAddress: (value: any) => <Address address={value} />,
@@ -226,6 +226,10 @@ export const transactionDisplayValues = (
   }
 
   if (displayValue === null || displayValue === undefined) {
+    if (['success', 'error'].find(nameKey => nameKey === key)) {
+      return
+    }
+
     displayValue = "—";
   }
 

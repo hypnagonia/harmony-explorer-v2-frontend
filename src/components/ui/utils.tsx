@@ -59,7 +59,7 @@ export function CalculateFee(transaction: any) {
   return (
     <>
       {Intl.NumberFormat("en-US", { maximumFractionDigits: 18 }).format(fee)}
-      {USDValue === "0.00" ? null : <>($ {USDValue})</>}
+      {USDValue === "0.00" || USDValue == "0" ? null : <>($ {USDValue})</>}
     </>
   );
   //return Math.round(fee * 10 ** 9) / 10 ** 9;
