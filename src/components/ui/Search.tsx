@@ -86,7 +86,6 @@ export const SearchInput = () => {
               availableShards
                 .filter((t) => t !== 0)
                 .map((shard) => {
-                  console.log(shard);
                   return Promise.all([
                     getBlockByHash([shard, v]).then((res) => {
                       if (!res) {
