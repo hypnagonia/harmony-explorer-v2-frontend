@@ -1,5 +1,10 @@
 import { Block, RPCTransactionHarmony } from "../../types";
-import { Clone, FormNextLink, FormPreviousLink } from "grommet-icons";
+import {
+  Clone,
+  FormNextLink,
+  FormPreviousLink,
+  StatusGood,
+} from "grommet-icons";
 import React from "react";
 import { blockPropertyDisplayValues } from "../block/helpers";
 import {
@@ -12,11 +17,16 @@ import {
   StakingTransactionTypeValue,
   CalculateFee,
 } from "../ui";
-import { Box } from "grommet";
+import { Box, Text } from "grommet";
 import { CopyBtn } from "../ui/CopyBtn";
 import { toaster } from "src/App";
+import styled from "styled-components";
 
 export const todo = {};
+
+const Icon = styled(StatusGood)`
+  margin-right: 5px;
+`;
 
 export type TransactionSubType =
   | "__staking"
@@ -226,8 +236,8 @@ export const transactionDisplayValues = (
   }
 
   if (displayValue === null || displayValue === undefined) {
-    if (['success', 'error'].find(nameKey => nameKey === key)) {
-      return
+    if (["success", "error"].find((nameKey) => nameKey === key)) {
+      return;
     }
 
     displayValue = "—";
@@ -243,7 +253,16 @@ export const transactionDisplayValues = (
           {copyText ? (
             <CopyBtn
               value={copyText}
-              onClick={() => toaster.show({ message: "Copied" })}
+              onClick={() =>
+                toaster.show({
+                  message: () => (
+                    <Box direction={"row"} align={"center"} pad={'small'}>
+                      <Icon size={"small"} color={"headerText"} />
+                      <Text size={"small"}>Copied to clipboard</Text>
+                    </Box>
+                  ),
+                })
+              }
             />
           ) : null}
           &nbsp;
