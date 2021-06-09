@@ -32,8 +32,8 @@ export const theme = {
       errorText: "#ff0000",
       successText: "#14a266",
       backgroundError: "rgba(230, 0, 0, 0.4)",
-      backgroundSuccess: "rgb(106 250 188 / 44%)", 
-      backgroundToaster: "rgba(0, 174, 233, 0.7)"
+      backgroundSuccess: "rgb(106 250 188 / 44%)",
+      backgroundToaster: "rgba(0, 174, 233, 0.7)",
     },
     palette,
     select: {
@@ -89,11 +89,19 @@ export const theme = {
 
 export const darkTheme = {
   ...theme,
+  select: {
+    container: {
+      extend: () => [{ color: "#ffffff", background: palette.MidnightBlue }],
+    },
+  },
   global: {
     focus: {
       border: {
         color: "transparent",
       },
+    },
+    hover: {
+      background: "#111f4e",
     },
     colors: {
       brand: palette.MintGreen,
@@ -111,7 +119,8 @@ export const darkTheme = {
       successText: "#00d67b",
       backgroundError: "rgba(230, 0, 0, 0.4)",
       backgroundSuccess: "rgb(106 250 188 / 23%)",
-      backgroundToaster: "rgb(93 111 181 / 70%)"
+      backgroundToaster: "rgb(93 111 181 / 70%)",
+      selected: "#3c53a2",
     },
     palette,
     font: {
