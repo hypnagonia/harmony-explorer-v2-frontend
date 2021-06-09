@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-const socket = io("https://ws.explorer-v2.hmny.io", {
+const socket = io("http://64.227.121.223:3001", {
   transports: ["websocket"],
 });
 

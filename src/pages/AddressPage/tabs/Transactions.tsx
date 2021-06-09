@@ -90,7 +90,7 @@ function getColumns(id: string): ColumnConfig<any>[] {
         </Text>
       ),
       render: (data: any) => (
-        <Address address={data.transactionHash} type="tx" isShort />
+        <Address address={data.transactionHash || data.hash} type="tx" isShort />
       ),
     },
     {
@@ -112,6 +112,10 @@ function getColumns(id: string): ColumnConfig<any>[] {
 
         if (!signature && data.value !== "0") {
           signature = "transfer";
+        }
+
+        if (!signature && data.input.length >= 10 ) {
+          signature = data.input.slice(2, 10)
         }
 
         if (!signature) {
