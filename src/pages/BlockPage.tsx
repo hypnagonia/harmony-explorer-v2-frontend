@@ -13,15 +13,47 @@ export const BlockPage = () => {
   const { id } = useParams();
   const [block, setBlock] = useState<Block | null>(null);
 
+  const availableShards = (process.env.REACT_APP_AVAILABLE_SHARDS as string)
+    .split(",")
+    .map((t) => +t);
+
   useEffect(() => {
     let cleanupFunction = false;
 
     const exec = async () => {
       let block;
       if ("" + +id === id) {
-        block = await getBlockByNumber([0, +id]);
+        try {
+          block = await getBlockByNumber([0, +id]);
+        } catch {
+          if (!block && availableShards.find((i) => i === 1)) {
+            block = await getBlockByNumber([1, +id]);
+          }
+
+          if (!block && availableShards.find((i) => i === 2)) {
+            block = await getBlockByNumber([2, +id]);
+          }
+
+          if (!block && availableShards.find((i) => i === 3)) {
+            block = await getBlockByNumber([3, +id]);
+          }
+        }
       } else {
-        block = await getBlockByHash([0, id]);
+        try {
+          block = await getBlockByHash([0, id]);
+        } catch {
+          if (!block && availableShards.find((i) => i === 1)) {
+            block = await getBlockByHash([1, id]);
+          }
+
+          if (!block && availableShards.find((i) => i === 2)) {
+            block = await getBlockByHash([2, id]);
+          }
+
+          if (!block && availableShards.find((i) => i === 3)) {
+            block = await getBlockByHash([3, id]);
+          }
+        }
       }
       if (!cleanupFunction) {
         setBlock(block as Block);
