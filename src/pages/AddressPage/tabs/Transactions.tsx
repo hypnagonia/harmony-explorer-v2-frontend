@@ -251,7 +251,7 @@ const getStackingColumns = (id: string): ColumnConfig<any>[] => {
         </Text>
       ),
       render: (data: any) => (
-        <Address address={data.transactionHash} type="staking-tx" isShort />
+        <Address address={data.transactionHash || data.hash} type="staking-tx" isShort />
       ),
     },
     {
