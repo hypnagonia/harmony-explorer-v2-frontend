@@ -258,6 +258,6 @@ export interface AddressDetails {
   creator_address: string;
   solidity_version: string;
   ipfs_hash?: string;
-  meta?: string;
+  meta?: { name?: string; image?: string };
   bytecode: string;
 }
