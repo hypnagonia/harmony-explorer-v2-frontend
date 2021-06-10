@@ -21,6 +21,7 @@ import { Inventory } from "./tabs/inventory/Inventory";
 import { getAllBalance, getBalance } from "src/api/rpc";
 import { loadSourceCode } from "../../api/explorerV1";
 import { AddressDetails } from "../../types";
+import { ContractDetails } from "./ContractDetails";
 
 export function AddressPage() {
   const [contracts, setContracts] = useState<AddressDetails | null>(null);
@@ -215,6 +216,16 @@ export function AddressPage() {
               title={<Text size="small">Inventory ({inventory.length})</Text>}
             >
               <Inventory inventory={inventory} />
+            </Tab>
+          ) : null}
+
+          {!!contracts ? (
+            <Tab title={<Text size="small">Contract</Text>}>
+              <ContractDetails
+                address={id}
+                contracts={contracts}
+                sourceCode={sourceCode}
+              />
             </Tab>
           ) : null}
 
