@@ -146,7 +146,6 @@ export function AddressPage() {
     }
 
     if (type === "erc1155") {
-      console.log(data)
       return `ERC1155 ${data.meta?.name}`;
     }
 
