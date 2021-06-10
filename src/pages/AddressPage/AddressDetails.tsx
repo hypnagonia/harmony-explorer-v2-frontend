@@ -14,7 +14,8 @@ import { ONEValueDropdown } from "src/components/ui/OneValueDropdown";
 
 interface AddressDetailsProps {
   address: string;
-  contracts: AddressDetails;
+  contracts: AddressDetails | null;
+  sourceCode?: string;
   tokens: any[];
   balance?: string;
 }
@@ -58,7 +59,7 @@ function DetailItem(props: { data: any; name: string; type: TAddressType }) {
   return (
     <Box
       direction="row"
-      align={'center'}
+      align={"center"}
       margin={{ bottom: "small" }}
       pad={{ bottom: "small" }}
       border={{ size: "xsmall", side: "bottom", color: "border" }}
@@ -92,6 +93,7 @@ const addressPropertyDisplayNames: Record<
   meta: () => "Meta",
   balance: () => "Balance",
   bytecode: () => "Bytecode",
+  sourceCode: () => "Source Code",
   token: () => "Token",
   name: () => "Name",
   symbol: () => "Symbol",
@@ -113,8 +115,9 @@ const addressPropertyDisplayValues: Record<
   IPFSHash: (value) => value,
   meta: (value) => value,
   bytecode: (value) => <ExpandString value={value || ""} />,
+  sourceCode: (value) => <ExpandString value={value || ""} />,
   balance: (value) => (
-    <Box width={'550px'}> 
+    <Box width={"550px"}>
       <ONEValueDropdown value={value} />
     </Box>
   ),
@@ -147,12 +150,13 @@ const addressPropertyOrder: Record<string, number> = {
   IPFSHash: 32,
   meta: 33,
   bytecode: 34,
+  sourceCode: 34,
 };
 
 type TAddressType = "address" | "contract" | "erc20" | "erc721";
 
 export function getType(
-  contracts: AddressDetails,
+  contracts: AddressDetails | null,
   erc20Token: Erc20
 ): TAddressType {
   if (!!contracts && !!erc20Token) {
