@@ -4,6 +4,7 @@ import { RelatedTransaction } from 'src/types'
 import React from 'react'
 import { parseSuggestedEvent } from 'src/web3/parseByteCode'
 import styled, { css } from 'styled-components'
+import {zeroAddress} from 'src/utils/zeroAddress'
 
 const erc20TransferTopic =
   '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
@@ -75,6 +76,14 @@ const Marker = styled.div<{ out: boolean }>`
         `};
 `;
 
+const NeutralMarker = styled(Box)`
+  border-radius: 2px;
+  padding: 5px;
+
+  text-align: center;
+  font-weight: bold;
+`;
+
 export function getERC20Columns(id: string): ColumnConfig<any>[] {
   return [
     {
@@ -91,6 +100,28 @@ export function getERC20Columns(id: string): ColumnConfig<any>[] {
       render: (data: any) => (
         <Address address={data.transactionHash || data.hash} type="tx" isShort />
       )
+    },
+    {
+      property: "event",
+      header: (
+        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+          Event
+        </Text>
+      ),
+      render: (data: any) => {
+        const { parsed } = extractTransfer(data)
+        const address1 = parsed['$0']
+        const address2 = parsed['$1']
+        const method = address1 === zeroAddress ? 'Mint' : address2 === zeroAddress ? 'Burn' : 'Transfer'
+
+        return (
+          <Text size="12px">
+            <NeutralMarker background={"backgroundBack"}>
+              {method}
+            </NeutralMarker>
+          </Text>
+        );
+      },
     },
     {
       property: 'from',
