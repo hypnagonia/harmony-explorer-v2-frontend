@@ -160,7 +160,7 @@ const addressPropertyOrder: Record<string, number> = {
   sourceCode: 34,
 };
 
-type TAddressType = "address" | "contract" | "erc20" | "erc721";
+type TAddressType = "address" | "contract" | "erc20" | "erc721" | "erc1155";
 
 export function getType(
   contracts: AddressDetails | null,

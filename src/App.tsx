@@ -11,6 +11,7 @@ import { SearchInput, BaseContainer } from "src/components/ui";
 import { ONE_USDT_Rate } from "src/components/ONE_USDT_Rate";
 import { ERC20_Pool } from "src/components/ERC20_Pool";
 import { ERC721_Pool } from "src/components/ERC721_Pool";
+import { ERC1155_Pool } from "src/components/ERC1155_Pool";
 import { useThemeMode } from "src/hooks/themeSwitcherHook";
 import { theme, darkTheme } from "./theme";
 import { Toaster, ToasterComponent } from "./components/ui/toaster";
@@ -64,6 +65,7 @@ function AppWithHistory() {
         <ONE_USDT_Rate />
         <ERC20_Pool />
         <ERC721_Pool />
+        <ERC1155_Pool />
       </Box>
     </Grommet>
   );

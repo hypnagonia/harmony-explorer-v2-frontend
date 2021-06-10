@@ -11,6 +11,7 @@ import {
 import { useParams } from "react-router-dom";
 import { useERC20Pool } from "src/hooks/ERC20_Pool";
 import { useERC721Pool } from "src/hooks/ERC721_Pool";
+import { useERC1155Pool } from "src/hooks/ERC1155_Pool";
 import { Transactions } from "./tabs/Transactions";
 import {
   IUserERC721Assets,
@@ -30,12 +31,18 @@ export function AddressPage() {
   const [activeIndex, setActiveIndex] = useState(0);
   const erc20Map = useERC20Pool();
   const erc721Map = useERC721Pool();
+  const erc1155Map = useERC1155Pool();
 
   //TODO remove hardcode
   // @ts-ignore
   const { id } = useParams();
   const erc20Token = erc20Map[id] || null;
-  const type = erc721Map[id] ? "erc721" : getType(contracts, erc20Token);
+
+  let type = erc721Map[id] ? "erc721" : getType(contracts, erc20Token);
+
+  if (erc1155Map[id]) {
+    type = "erc1155";
+  }
 
   useEffect(() => {
     const getActiveIndex = () => {
@@ -138,6 +145,10 @@ export function AddressPage() {
       return `ERC721 ${data.name}`;
     }
 
+    if (type === "erc1155") {
+      return `ERC1155 ${data.name}`;
+    }
+
     if (type === "contract") {
       return "Contract";
     }
@@ -151,6 +162,7 @@ export function AddressPage() {
     "internal_transaction",
     "erc20",
     "erc721",
+    "erc1155",
   ];
 
   return (
@@ -194,6 +206,10 @@ export function AddressPage() {
             <Transactions type={"erc721"} />
           </Tab>
 
+          {/*<Tab title={<Text size="small">HRC1155 Transfers</Text>}>*/}
+          {/*  <Transactions type={"erc1155"} />*/}
+          {/*</Tab>*/}
+
           {type === "erc721" && inventory.length ? (
             <Tab
               title={<Text size="small">Inventory ({inventory.length})</Text>}
@@ -201,6 +217,14 @@ export function AddressPage() {
               <Inventory inventory={inventory} />
             </Tab>
           ) : null}
+
+          {/*{type === "erc1155" && inventory.length ? (*/}
+          {/*  <Tab*/}
+          {/*    title={<Text size="small">Inventory ({inventory.length})</Text>}*/}
+          {/*  >*/}
+          {/*    <Inventory inventory={inventory} />*/}
+          {/*  </Tab>*/}
+          {/*) : null}*/}
         </Tabs>
       </BasePage>
     </BaseContainer>

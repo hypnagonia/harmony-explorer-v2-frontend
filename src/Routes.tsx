@@ -10,6 +10,7 @@ import { AddressPage } from "src/pages/AddressPage";
 import { ERC20List } from "src/pages/ERC20List";
 import { ERC721List } from "src/pages/ERC721List";
 import { VerifyContract } from "./pages/VerifyContract/VerifyContract";
+import {ERC1155List} from "./pages/ERC1155List";
 
 export function Routes() {
   return (
@@ -59,6 +60,10 @@ export function Routes() {
 
         <Route path="/hrc721">
           <ERC721List />
+        </Route>
+
+        <Route path="/hrc1155">
+          <ERC1155List />
         </Route>
 
         <Route path="/verifycontract">

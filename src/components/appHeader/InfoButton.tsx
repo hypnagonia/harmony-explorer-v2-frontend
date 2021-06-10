@@ -10,7 +10,9 @@ export function InfoButton() {
     <DropButton
       label={
         <Box direction={"row"} align="center">
-          <Text size="small" color="white" weight="bold">Tokens</Text>
+          <Text size="small" color="white" weight="bold">
+            Tokens
+          </Text>
           <CaretDownFill color="white" />
         </Box>
       }
@@ -43,9 +45,24 @@ export function InfoButton() {
           >
             HRC721 tokens
           </Anchor>
+          <Anchor
+            style={{ textDecoration: "underline" }}
+            href={"/hrc1155"}
+            onClick={(e) => {
+              e.preventDefault();
+              history.push("/hrc1155");
+            }}
+          >
+            HRC1155 tokens
+          </Anchor>
         </Box>
       }
-      style={{ border: "none", boxShadow: "none", paddingRight: "6px", paddingBottom: '8px' }}
+      style={{
+        border: "none",
+        boxShadow: "none",
+        paddingRight: "6px",
+        paddingBottom: "8px",
+      }}
     />
   );
 }

@@ -5,6 +5,7 @@ import { useERC20Pool } from "src/hooks/ERC20_Pool";
 import { getAddress } from "src/utils";
 import { useCurrency } from "src/hooks/ONE-ETH-SwitcherHook";
 import { useERC721Pool } from "src/hooks/ERC721_Pool";
+import { useERC1155Pool } from "src/hooks/ERC1155_Pool";
 
 interface IAddress {
   address: string;
@@ -27,6 +28,7 @@ export const Address = (props: IAddress) => {
   const history = useHistory();
   const ERC20Map = useERC20Pool();
   const erc721Map = useERC721Pool();
+  const erc1155Map = useERC1155Pool();
   const currency = useCurrency();
 
   const EMPTY_ADDRESS = "0x0000000000000000000000000000000000000000";
@@ -43,6 +45,10 @@ export const Address = (props: IAddress) => {
 
   if (erc721Map[address] && !displayHash) {
     parsedName = erc721Map[address].name;
+  }
+
+  if (erc1155Map[address] && !displayHash) {
+    parsedName = erc1155Map[address].name;
   }
 
   parsedName = address === EMPTY_ADDRESS ? "0x0" : parsedName;
