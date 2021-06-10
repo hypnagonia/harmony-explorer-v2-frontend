@@ -83,6 +83,7 @@ export const blockPropertyDescriptions: Record<string, string> = {
 
 export const blockPropertySort: Record<string, number> = {
   number: 1000,
+  shard: 997,
   hash: 995,
   miner: 960,
   extraData: 500,

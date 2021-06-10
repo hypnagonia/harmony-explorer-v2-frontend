@@ -14,6 +14,18 @@ import {
   getByteCodeSignatureByHash,
 } from "src/api/client";
 import { AllBlocksTable } from "../AllBlocksPage/AllBlocksTable";
+import {revertErrorMessage} from 'src/web3/parseByteCode'
+
+const extractError = (err: any) => {
+  const errorMessages = err!.split(':')
+  if (errorMessages[1]) {
+    const errorMessage = revertErrorMessage(errorMessages[1])
+    return errorMessage || err
+  }
+
+  const errorMessage = revertErrorMessage(err)
+  return errorMessage || err
+}
 
 export const TransactionPage = () => {
   // hash or number
@@ -151,6 +163,7 @@ export const TransactionPage = () => {
                   ? trxs
                       .map((t) => t.error)
                       .filter((_) => _)
+                      .map(extractError)
                       .join(",")
                   : ""
               }

@@ -2,7 +2,7 @@ import Web3 from "web3";
 import { Text } from "grommet";
 import React from "react";
 import { Address } from "../components/ui";
-import { InternalTransaction } from "../types";
+import { ByteCode, InternalTransaction } from '../types'
 
 const web3 = new Web3();
 
@@ -167,3 +167,15 @@ export const DisplaySignature = (props: any = {}) => {
     </>
   );
 };
+
+export const revertErrorMessage = (error: ByteCode) => {
+  if (!error) {
+    return null
+  }
+  if (!error.startsWith('0x08c379a0')) {
+    return null
+  }
+
+  const s = error.slice(10)
+  return web3.eth.abi.decodeParameter('string', s);
+}

@@ -22,6 +22,7 @@ import {
 } from "src/types";
 import styled, { css } from "styled-components";
 import { TRelatedTransaction } from "src/api/client.interface";
+import {getERC20Columns} from './erc20Columns'
 
 const initFilter: Filter = {
   offset: 0,
@@ -211,7 +212,7 @@ function getColumns(id: string): ColumnConfig<any>[] {
           <ONEValue value={data.value} timestamp={data.timestamp} />
         </Box>
       ),
-    }, 
+    },
 
     {
       property: "timestamp",
@@ -421,6 +422,11 @@ export function Transactions(props: {
           }));
         }
 
+        relatedTransactions = relatedTransactions.map((tx: any) => {
+          tx.relatedAddress = id
+          return tx
+        })
+
         setIsLoading(false);
         setRelatedTrxs(relatedTransactions);
       } catch (err) {
@@ -435,6 +441,10 @@ export function Transactions(props: {
   switch (props.type) {
     case "staking_transaction": {
       columns = getStackingColumns(id);
+      break;
+    }
+    case "erc20": {
+      columns = getERC20Columns(id);
       break;
     }
 
