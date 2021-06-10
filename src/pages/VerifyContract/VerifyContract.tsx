@@ -2,23 +2,12 @@ import { Box, Heading, Select, Text, TextArea, TextInput } from "grommet";
 import React from "react";
 import { BasePage, Button } from "src/components/ui";
 import styled from "styled-components";
-
-export interface IVerifyContractState {
-  contractAddress: string;
-  compiler: string;
-  optimizer: string;
-  optimizerTimes: string;
-  sourceCode: string;
-  libraries: string[];
-  constructorArguments: string;
-  chainType: string;
-  contractName: string;
-}
+import { IVerifyContractData, verifyContractCode } from "src/api/explorerV1";
 
 const Field = styled(Box)``;
 
-export class VerifyContract extends React.Component<{}, IVerifyContractState> {
-  public state: IVerifyContractState = {
+export class VerifyContract extends React.Component<{}, IVerifyContractData> {
+  public state: IVerifyContractData = {
     chainType: "Mainnet",
     contractAddress: "",
     compiler: "",
@@ -30,8 +19,8 @@ export class VerifyContract extends React.Component<{}, IVerifyContractState> {
     contractName: "",
   };
 
-  onClickSubmitBtn = () => {
-    console.log(this.state);
+  onClickSubmitBtn = async () => {
+    return await verifyContractCode(this.state);
   };
 
   render() {
@@ -41,80 +30,84 @@ export class VerifyContract extends React.Component<{}, IVerifyContractState> {
           Verify Contract
         </Heading>
         <BasePage>
-          <Box direction={"column"} width={"800px"}>
-            <Field margin={"small"}>
-              <Text>Contract Address</Text>
-              <TextInput
-                placeholder={"ONE contract address"}
-                onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-                  this.setState({
-                    ...this.state,
-                    contractAddress: evt.currentTarget.value,
-                  });
-                }}
-              />
-            </Field>
-
-            <Field margin={"small"}>
-              <Text>Contract Name</Text>
-              <TextInput
-                placeholder={"ONE name"}
-                onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-                  this.setState({
-                    ...this.state,
-                    contractName: evt.currentTarget.value,
-                  });
-                }}
-              />
-            </Field>
-
-            <Field margin={"small"}>
-              <Text>Compiler</Text>
-              <TextInput
-                placeholder={"Solidity compiler version"}
-                onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
-                  this.setState({
-                    ...this.state,
-                    compiler: evt.currentTarget.value,
-                  });
-                }}
-              />
-            </Field>
-
-            <Field margin={"small"}>
-              <Text>Optimizer</Text>
-              <Box direction={"row"}>
-                <Select
-                  options={["yes", "no"]}
-                  value={this.state.optimizer}
-                  onChange={({ option }) =>
-                    this.setState({ ...this.state, optimizer: option })
-                  }
-                />
+          <Box direction={"column"} width={"1000px"}>
+            <Box direction="row" fill={true} justify="between">
+              <Field margin={"small"} width={"48%"}>
+                <Text>Contract Address</Text>
                 <TextInput
-                  type={"number"}
-                  placeholder={"Number of times"}
-                  style={{ marginLeft: "5px" }}
+                  placeholder={"ONE contract address"}
                   onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
                     this.setState({
                       ...this.state,
-                      optimizerTimes: evt.currentTarget.value,
+                      contractAddress: evt.currentTarget.value,
                     });
                   }}
                 />
-              </Box>
-            </Field>
+              </Field>
 
-            <Field margin={"small"}>
-              <Text>Chain Type</Text>
-              <Select
-                options={["Mainnet", "Testnet"]}
-                value={this.state.chainType}
-                onChange={({ option }) =>
-                  this.setState({ ...this.state, chainType: option })
-                }
-              />
-            </Field>
+              <Field margin={"small"} width={"48%"}>
+                <Text>Contract Name</Text>
+                <TextInput
+                  placeholder={"ONE name"}
+                  onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
+                    this.setState({
+                      ...this.state,
+                      contractName: evt.currentTarget.value,
+                    });
+                  }}
+                />
+              </Field>
+            </Box>
+
+            <Box direction="row" fill={true} justify="between">
+              <Field margin={"small"} width={"30%"}>
+                <Text>Chain Type</Text>
+                <Select
+                  options={["Mainnet", "Testnet"]}
+                  value={this.state.chainType}
+                  onChange={({ option }) =>
+                    this.setState({ ...this.state, chainType: option })
+                  }
+                />
+              </Field>
+
+              <Field margin={"small"} width={"30%"}>
+                <Text>Compiler</Text>
+                <TextInput
+                  placeholder={"Solidity compiler version"}
+                  onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
+                    this.setState({
+                      ...this.state,
+                      compiler: evt.currentTarget.value,
+                    });
+                  }}
+                />
+              </Field>
+
+              <Field margin={"small"} width={"30%"}>
+                <Text>Optimizer</Text>
+                <Box direction={"row"}>
+                  <Select
+                    options={["yes", "no"]}
+                    value={this.state.optimizer}
+                    onChange={({ option }) =>
+                      this.setState({ ...this.state, optimizer: option })
+                    }
+                  />
+                  <TextInput
+                    type={"number"}
+                    placeholder={"Number of times"}
+                    style={{ marginLeft: "5px" }}
+                    onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
+                      this.setState({
+                        ...this.state,
+                        optimizerTimes: evt.currentTarget.value,
+                      });
+                    }}
+                  />
+                </Box>
+              </Field>
+            </Box>
 
             <Field margin={"small"}>
               <Text>Enter the Solidity Contract Code below</Text>
