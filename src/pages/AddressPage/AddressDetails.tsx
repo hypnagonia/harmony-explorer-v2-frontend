@@ -16,13 +16,12 @@ import { binanceAddressMap } from "src/config/BinanceAddressMap";
 interface AddressDetailsProps {
   address: string;
   contracts: AddressDetails | null;
-  sourceCode?: string;
   tokens: any[];
   balance?: string;
 }
 
 export function AddressDetailsDisplay(props: AddressDetailsProps) {
-  const { address, contracts, sourceCode, tokens, balance } = props;
+  const { address, contracts, tokens, balance } = props;
   const erc20Map = useERC20Pool();
 
   const erc20Token = erc20Map[address] || null;
@@ -34,7 +33,6 @@ export function AddressDetailsDisplay(props: AddressDetailsProps) {
     address,
     token: tokens,
     balance,
-    sourceCode,
   };
 
   if (!data) {

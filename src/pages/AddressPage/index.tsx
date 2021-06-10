@@ -19,13 +19,13 @@ import {
 } from "src/api/client.interface";
 import { Inventory } from "./tabs/inventory/Inventory";
 import { getAllBalance, getBalance } from "src/api/rpc";
-import { loadSourceCode } from "../../api/explorerV1";
+import { ISourceCode, loadSourceCode } from "../../api/explorerV1";
 import { AddressDetails } from "../../types";
 import { ContractDetails } from "./ContractDetails";
 
 export function AddressPage() {
   const [contracts, setContracts] = useState<AddressDetails | null>(null);
-  const [sourceCode, setSourceCode] = useState<any>(null);
+  const [sourceCode, setSourceCode] = useState<ISourceCode | null>(null);
   const [balance, setBalance] = useState<any>([]);
   const [tokens, setTokens] = useState<any>(null);
   const [inventory, setInventory] = useState<IUserERC721Assets[]>([]);
@@ -177,7 +177,6 @@ export function AddressPage() {
           contracts={contracts}
           tokens={tokens}
           balance={balance}
-          sourceCode={sourceCode}
         />
       </BasePage>
       <BasePage margin={{ top: "15px" }}>
