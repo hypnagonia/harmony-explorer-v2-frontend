@@ -10,8 +10,12 @@ import { AddressPage } from "src/pages/AddressPage";
 import { ERC20List } from "src/pages/ERC20List";
 import { ERC721List } from "src/pages/ERC721List";
 import { VerifyContract } from "./pages/VerifyContract/VerifyContract";
+import { breakpoints } from "./Responive/breakpoints";
+import { useMediaQuery } from "react-responsive";
 
 export function Routes() {
+  const isLessTablet = useMediaQuery({ maxDeviceWidth: breakpoints.tablet });
+
   return (
     <>
       <Switch>
@@ -62,7 +66,7 @@ export function Routes() {
         </Route>
 
         <Route path="/verifycontract">
-          <VerifyContract />
+          <VerifyContract isLessTablet={isLessTablet} />
         </Route>
       </Switch>
     </>

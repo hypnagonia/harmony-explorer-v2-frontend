@@ -4,13 +4,27 @@ export interface IVerifyContractData {
   optimizer: string;
   optimizerTimes: string;
   sourceCode: string;
+  libraries: { value: string; id: string }[];
+  constructorArguments: string;
+  chainType: string;
+  contractName: string;
+  statusText: string;
+  isLoading: boolean;
+}
+
+export interface IVerifyContractDataSendData {
+  contractAddress: string;
+  compiler: string;
+  optimizer: string;
+  optimizerTimes: string;
+  sourceCode: string;
   libraries: string[];
   constructorArguments: string;
   chainType: string;
   contractName: string;
 }
 
-export const verifyContractCode = async (data: IVerifyContractData) => {
+export const verifyContractCode = async (data: IVerifyContractDataSendData) => {
   const response = await fetch(
     `${process.env.REACT_APP_EXPLORER_V1_API_URL}/codeVerification`,
     {
