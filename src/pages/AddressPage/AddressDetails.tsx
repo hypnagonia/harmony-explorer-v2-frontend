@@ -22,13 +22,20 @@ interface AddressDetailsProps {
 }
 
 export function AddressDetailsDisplay(props: AddressDetailsProps) {
-  const { address, contracts, tokens, balance } = props;
+  const { address, contracts, sourceCode, tokens, balance } = props;
   const erc20Map = useERC20Pool();
 
   const erc20Token = erc20Map[address] || null;
   const type = getType(contracts, erc20Token);
 
-  const data = { ...contracts, ...erc20Token, address, token: tokens, balance };
+  const data = {
+    ...contracts,
+    ...erc20Token,
+    address,
+    token: tokens,
+    balance,
+    sourceCode,
+  };
 
   if (!data) {
     return null;
