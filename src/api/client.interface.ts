@@ -25,6 +25,7 @@ export type TRelatedTransaction =
   | "staking_transaction"
   | "internal_transaction"
   | "erc20"
+  | "erc1155"
   | "erc721";
 
 export interface IPairPrice {

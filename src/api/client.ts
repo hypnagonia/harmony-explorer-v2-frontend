@@ -104,6 +104,10 @@ export function getAllERC721() {
   return transport("getAllERC721", []) as Promise<any[]>;
 }
 
+export function getAllERC1155() {
+  return transport("getAllERC1155", []) as Promise<any[]>;
+}
+
 export function getUserERC20Balances(params: any[]) {
   return transport("getUserERC20Balances", params) as Promise<any[]>;
 }

@@ -12,6 +12,7 @@ import { ERC721List } from "src/pages/ERC721List";
 import { VerifyContract } from "./pages/VerifyContract/VerifyContract";
 import { breakpoints } from "./Responive/breakpoints";
 import { useMediaQuery } from "react-responsive";
+import {ERC1155List} from "./pages/ERC1155List";
 
 export function Routes() {
   const isLessTablet = useMediaQuery({ maxDeviceWidth: breakpoints.tablet });
@@ -63,6 +64,10 @@ export function Routes() {
 
         <Route path="/hrc721">
           <ERC721List />
+        </Route>
+
+        <Route path="/hrc1155">
+          <ERC1155List />
         </Route>
 
         <Route path="/verifycontract">

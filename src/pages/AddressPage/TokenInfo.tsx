@@ -11,18 +11,21 @@ import { useThemeMode } from "src/hooks/themeSwitcherHook";
 import { useCurrency } from "src/hooks/ONE-ETH-SwitcherHook";
 import { getAddress } from "src/utils/getAddress/GetAddress";
 import { useHistory } from "react-router-dom";
+import { useERC1155Pool } from "../../hooks/ERC1155_Pool";
 
 interface Token {
   balance: string;
   tokenAddress: string;
   isERC20?: boolean;
   isERC721?: boolean;
+  isERC1155?: boolean;
   symbol: string;
 }
 
 export function TokensInfo(props: { value: Token[] }) {
   const erc20Map = useERC20Pool();
   const erc721Map = useERC721Pool();
+  const erc1155Map = useERC1155Pool();
   const themeMode = useThemeMode();
   const currency = useCurrency();
   const history = useHistory();
@@ -52,7 +55,16 @@ export function TokensInfo(props: { value: Token[] }) {
       name: erc721Map[item.tokenAddress].name,
     }));
 
-  const data = [...erc20Tokens, ...erc721Tokens];
+  const erc1155Tokens = value
+    .filter((i) => filterWithBalance(i.balance))
+    .filter((i) => i.isERC1155)
+    .map((item) => ({
+      ...item,
+      symbol: erc1155Map[item.tokenAddress].symbol,
+      name: erc1155Map[item.tokenAddress].name,
+    }));
+
+  const data = [...erc20Tokens, ...erc721Tokens, ...erc1155Tokens];
 
   return (
     <Box>
@@ -91,7 +103,8 @@ export function TokensInfo(props: { value: Token[] }) {
           renderItem={(item) => {
             const symbol =
               erc20Map[item.tokenAddress]?.symbol ||
-              erc721Map[item.tokenAddress]?.symbol;
+              erc721Map[item.tokenAddress]?.symbol ||
+              erc1155Map[item.tokenAddress]?.symbol;
 
             return (
               <Box
@@ -154,6 +167,23 @@ export function TokensInfo(props: { value: Token[] }) {
                     }}
                   >
                     {erc721Tokens.length}
+                  </Box>
+                </Box>
+              ) : null}
+              {erc1155Tokens.length ? (
+                <Box direction={"row"}>
+                  HRC1155{" "}
+                  <Box
+                    background={"backgroundBack"}
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                      marginLeft: "5px",
+                      textAlign: "center",
+                      borderRadius: "4px",
+                    }}
+                  >
+                    {erc1155Tokens.length}
                   </Box>
                 </Box>
               ) : null}
