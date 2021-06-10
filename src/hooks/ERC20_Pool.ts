@@ -31,6 +31,10 @@ export interface Erc20 {
   holders: string;
   decimals: number;
   symbol: string;
+  meta?: {
+    name?: string
+    image?: string;
+  };
 }
 
 export type ERC20_Pool = Record<string, Erc20>;

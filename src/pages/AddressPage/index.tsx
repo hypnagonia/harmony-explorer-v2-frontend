@@ -147,7 +147,7 @@ export function AddressPage() {
     }
 
     if (type === "erc1155") {
-      return `ERC1155 ${data.name}`;
+      return `ERC1155 ${data.meta?.name}`;
     }
 
     if (type === "contract") {
