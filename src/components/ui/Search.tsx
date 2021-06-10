@@ -133,6 +133,11 @@ export const SearchInput = () => {
       <TextInput
         value={value}
         onChange={onChange}
+        onKeyDown={(e) => {
+          if (e.keyCode === 13) {
+            onChange(e);
+          }
+        }}
         color="red"
         icon={<Search color="brand" />}
         style={{

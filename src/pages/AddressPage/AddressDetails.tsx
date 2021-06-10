@@ -11,6 +11,7 @@ import { AddressDetails } from "src/types";
 import { TokensInfo } from "./TokenInfo";
 import { Erc20, useERC20Pool } from "src/hooks/ERC20_Pool";
 import { ONEValueDropdown } from "src/components/ui/OneValueDropdown";
+import { binanceAddressMap } from "src/config/BinanceAddressMap";
 
 interface AddressDetailsProps {
   address: string;
@@ -114,7 +115,12 @@ const addressPropertyDisplayValues: Record<
   (value: any, data: any, options: { type: TAddressType }) => React.ReactNode
 > = {
   address: (value, data, options: { type: TAddressType }) => {
-    return <Address address={value} displayHash />;
+    return (
+      <>
+        <Address address={value} displayHash />
+        {binanceAddressMap[value] ? ` (${binanceAddressMap[value]})` : null}
+      </>
+    );
   },
   value: (value) => <TokenValue value={value} />,
   creatorAddress: (value) => <Address address={value} />,
