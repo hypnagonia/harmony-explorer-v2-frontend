@@ -74,47 +74,49 @@ export const Address = (props: IAddress) => {
   }
 
   return (
-    <Box direction={"row"} align={"center"} justify={"start"}>
-      <CopyBtn
-        value={outPutAddress}
-        onClick={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          toaster.show({
-            message: () => (
-              <Box direction={"row"} align={"center"} pad={"small"}>
-                <Icon size={"small"} color={"headerText"} />
-                <Text size={"small"}>Copied to clipboard</Text>
-              </Box>
-            ),
-          });
-        }}
-      />
-      <Text
-        size="small"
-        color={color}
-        style={{
-          marginLeft: "7px",
-          cursor: "pointer",
-          textDecoration:
+    <div style={{ display: "inline-block" }}>
+      <Box direction={"row"} align={"center"} justify={"start"}>
+        <CopyBtn
+          value={outPutAddress}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toaster.show({
+              message: () => (
+                <Box direction={"row"} align={"center"} pad={"small"}>
+                  <Icon size={"small"} color={"headerText"} />
+                  <Text size={"small"}>Copied to clipboard</Text>
+                </Box>
+              ),
+            });
+          }}
+        />
+        <Text
+          size="small"
+          color={color}
+          style={{
+            marginLeft: "7px",
+            cursor: "pointer",
+            textDecoration:
+              address === EMPTY_ADDRESS
+                ? "none"
+                : !!parsedName
+                ? "underline"
+                : "none",
+            ...style,
+          }}
+          onClick={
             address === EMPTY_ADDRESS
-              ? "none"
-              : !!parsedName
-              ? "underline"
-              : "none",
-          ...style,
-        }}
-        onClick={
-          address === EMPTY_ADDRESS
-            ? undefined
-            : () => history.push(`/${type}/${address}`)
-        }
-      >
-        {parsedName ||
-          (isShort
-            ? `${outPutAddress.substr(0, 4)}...${outPutAddress.substr(-4)}`
-            : outPutAddress)}
-      </Text>
-    </Box>
+              ? undefined
+              : () => history.push(`/${type}/${address}`)
+          }
+        >
+          {parsedName ||
+            (isShort
+              ? `${outPutAddress.substr(0, 4)}...${outPutAddress.substr(-4)}`
+              : outPutAddress)}
+        </Text>
+      </Box>
+    </div>
   );
 };
