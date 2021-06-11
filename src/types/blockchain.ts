@@ -256,8 +256,8 @@ export type RelatedTransactionType =
 
 export interface AddressDetails {
   creator_address: string;
-  solidity_version: string;
+  solidityVersion: string;
   ipfs_hash?: string;
-  meta?: string;
+  meta?: { name?: string; image?: string };
   bytecode: string;
 }

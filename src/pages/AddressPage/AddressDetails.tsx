@@ -16,13 +16,12 @@ import { binanceAddressMap } from "src/config/BinanceAddressMap";
 interface AddressDetailsProps {
   address: string;
   contracts: AddressDetails | null;
-  sourceCode?: string;
   tokens: any[];
   balance?: string;
 }
 
 export function AddressDetailsDisplay(props: AddressDetailsProps) {
-  const { address, contracts, sourceCode, tokens, balance } = props;
+  const { address, contracts, tokens, balance } = props;
   const erc20Map = useERC20Pool();
 
   const erc20Token = erc20Map[address] || null;
@@ -34,7 +33,6 @@ export function AddressDetailsDisplay(props: AddressDetailsProps) {
     address,
     token: tokens,
     balance,
-    sourceCode,
   };
 
   if (!data) {
@@ -53,17 +51,7 @@ export function AddressDetailsDisplay(props: AddressDetailsProps) {
   );
 }
 
-function DetailItem(props: { data: any; name: string; type: TAddressType }) {
-  const { data, name, type } = props;
-
-  if (
-    !addressPropertyDisplayNames[name] ||
-    !addressPropertyDisplayValues[name] ||
-    data[name] === null
-  ) {
-    return null;
-  }
-
+export const Item = (props: { label: any; value: any }) => {
   return (
     <Box
       direction="row"
@@ -78,12 +66,31 @@ function DetailItem(props: { data: any; name: string; type: TAddressType }) {
         size="small"
         margin={{ right: "xsmall" }}
       >
-        {addressPropertyDisplayNames[name](data, { type })}
+        {props.label}
       </Text>
       <Text style={{ width: "80%", wordBreak: "break-all" }} size="small">
-        {addressPropertyDisplayValues[name](data[name], data, { type })}
+        {props.value}
       </Text>
     </Box>
+  );
+};
+
+function DetailItem(props: { data: any; name: string; type: TAddressType }) {
+  const { data, name, type } = props;
+
+  if (
+    !addressPropertyDisplayNames[name] ||
+    !addressPropertyDisplayValues[name] ||
+    data[name] === null
+  ) {
+    return null;
+  }
+
+  return (
+    <Item
+      label={addressPropertyDisplayNames[name](data, { type })}
+      value={addressPropertyDisplayValues[name](data[name], data, { type })}
+    />
   );
 }
 
@@ -96,12 +103,11 @@ const addressPropertyDisplayNames: Record<
   },
   value: () => "Value",
   creatorAddress: () => "Creator",
-  solidityVersion: () => "Solidity version",
+  // solidityVersion: () => "Solidity version",
   IPFSHash: () => "IPFS hash",
   meta: () => "Meta",
   balance: () => "Balance",
-  bytecode: () => "Bytecode",
-  sourceCode: () => "Source Code",
+  // bytecode: () => "Bytecode",
   token: () => "Token",
   name: () => "Name",
   symbol: () => "Symbol",
@@ -124,11 +130,10 @@ const addressPropertyDisplayValues: Record<
   },
   value: (value) => <TokenValue value={value} />,
   creatorAddress: (value) => <Address address={value} />,
-  solidityVersion: (value) => value,
+  // solidityVersion: (value) => value,
   IPFSHash: (value) => value,
   meta: (value) => value,
-  bytecode: (value) => <ExpandString value={value || ""} />,
-  sourceCode: (value) => <ExpandString value={value || ""} />,
+  // bytecode: (value) => <ExpandString value={value || ""} />,
   balance: (value) => (
     <Box width={"550px"}>
       <ONEValueDropdown value={value} />

@@ -116,7 +116,10 @@ export const ERC20List = () => {
 function filterWithFields(fields: Array<keyof Erc20>, search: string) {
   return (erc20: Erc20) => {
     return fields.some((field) =>
-      erc20[field].toString().toLowerCase().includes(search.toLowerCase())
+      (erc20 as any)[field]
+        .toString()
+        .toLowerCase()
+        .includes(search.toLowerCase())
     );
   };
 }

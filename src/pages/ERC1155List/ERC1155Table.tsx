@@ -12,6 +12,7 @@ import {
   TPaginationAction,
 } from "src/components/ui";
 import { Erc20 } from "../../hooks/ERC20_Pool";
+import { ERC1155Icon } from "src/components/ui/ERC1155Icon";
 
 interface TransactionTableProps {
   data: any[];
@@ -117,8 +118,21 @@ export function ERC1155Table(props: TransactionTableProps) {
 function getColumns(props: any) {
   return [
     {
+      property: "icon", 
+      header: (
+        <Text
+          color="minorText"
+          size="small"
+          style={{ fontWeight: 300, width: "50px" }}
+        ></Text>
+      ),
+      render: (data: Erc20) => {
+        return <ERC1155Icon imageUrl={data.meta?.image} />;
+      },
+    },
+    {
       property: "name",
-      size: 'small',
+      size: "small",
       resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
@@ -129,7 +143,7 @@ function getColumns(props: any) {
     },
     {
       property: "symbol",
-      size: 'xsmall',
+      size: "xsmall",
       resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
@@ -163,7 +177,7 @@ function getColumns(props: any) {
     // },
     {
       property: "holders",
-      size: 'small',
+      size: "small",
       resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
