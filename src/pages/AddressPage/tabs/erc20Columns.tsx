@@ -13,7 +13,7 @@ const memo = (f: Function) => {
   const cache: Record<string, any> = {}
 
   return (data: any) => {
-    const hash: string = data.hash
+    const hash: string = data.hash + data.index
 
     if (cache[hash]) {
       return cache[hash]
@@ -32,9 +32,7 @@ const extractTransfer = memo((data: any) => {
 
   for (let i = 0; i < transferLogs.length; i++) {
     const transferLog = transferLogs[i]
-    const event = transferLog
-      ? parseSuggestedEvent('Transfer(address,address,uint256)', transferLog.data, transferLog.topics)
-      : null
+    const event = parseSuggestedEvent('Transfer(address,address,uint256)', transferLog.data, transferLog.topics) || null
 
     if (!event) {
       continue

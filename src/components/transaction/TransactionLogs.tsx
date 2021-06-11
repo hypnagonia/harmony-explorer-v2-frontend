@@ -71,16 +71,16 @@ const LogItem = (props: LogItemProps) => {
         </Text>
       </Box>
 
-      {signatures && signatures.length &&
+      {signatures && signatures.length ?
       <Box>
         <Text color="minorText" size="small">
           Suggested Event
         </Text>
         <Text size="small" color="black">
-          {displaySignature || signatures[0].signature}
+          {displaySignature || signatures[0].signature || ''}
         </Text>
       </Box>
-      }
+      : null}
 
       <Box>
         <Text color="minorText" size="small">

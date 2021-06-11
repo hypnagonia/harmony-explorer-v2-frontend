@@ -3,6 +3,7 @@ import { Text } from "grommet";
 import React from "react";
 import { Address } from "../components/ui";
 import { ByteCode, InternalTransaction } from '../types'
+import { clearConfigCache } from 'prettier'
 
 const web3 = new Web3();
 
@@ -44,15 +45,18 @@ export const parseSuggestedEvent = (
   }
 
   const event = parseTextSignature(textSignature);
+
   if (!event) {
     return;
   }
+
 
   const abi = createABI(event.name, event.params, "event");
   if (abi.inputs.length) {
     try {
       const [topic0, ...restTopics] = topics;
       const parsed = web3.eth.abi.decodeLog(abi.inputs, data, restTopics);
+
       return {
         event,
         abi,
