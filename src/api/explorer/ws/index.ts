@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
-
-const socket = io("https://ws.explorer-v2.hmny.io", {
+ 
+const socket = io(process.env.REACT_APP_PROD_ADDRESS as string, {
   transports: ["websocket"],
 });
 

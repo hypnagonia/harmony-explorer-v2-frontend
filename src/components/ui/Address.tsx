@@ -1,5 +1,5 @@
 import React, { CSSProperties } from "react";
-import { Text } from "grommet";
+import { Box, Text } from "grommet";
 import { useHistory } from "react-router-dom";
 import { useERC20Pool } from "src/hooks/ERC20_Pool";
 import { getAddress } from "src/utils";
@@ -7,6 +7,14 @@ import { useCurrency } from "src/hooks/ONE-ETH-SwitcherHook";
 import { useERC721Pool } from "src/hooks/ERC721_Pool";
 import { binanceAddressMap } from "src/config/BinanceAddressMap";
 import { useERC1155Pool } from "src/hooks/ERC1155_Pool";
+import { CopyBtn } from "./CopyBtn";
+import { toaster } from "src/App";
+import styled from "styled-components";
+import { StatusGood } from "grommet-icons";
+
+const Icon = styled(StatusGood)`
+  margin-right: 5px;
+`;
 
 interface IAddress {
   address: string;
@@ -66,29 +74,45 @@ export const Address = (props: IAddress) => {
   }
 
   return (
-    <Text
-      size="small"
-      color={color}
-      style={{
-        cursor: "pointer",
-        textDecoration:
+    <Box direction={"row"} align={"center"} justify={"start"}>
+      <CopyBtn
+        value={address}
+        onClick={() =>
+          toaster.show({
+            message: () => (
+              <Box direction={"row"} align={"center"} pad={"small"}>
+                <Icon size={"small"} color={"headerText"} />
+                <Text size={"small"}>Copied to clipboard</Text>
+              </Box>
+            ),
+          })
+        }
+      />
+      <Text
+        size="small"
+        color={color}
+        style={{
+          marginLeft: '7px',
+          cursor: "pointer",
+          textDecoration:
+            address === EMPTY_ADDRESS
+              ? "none"
+              : !!parsedName
+              ? "underline"
+              : "none",
+          ...style,
+        }}
+        onClick={
           address === EMPTY_ADDRESS
-            ? "none"
-            : !!parsedName
-            ? "underline"
-            : "none",
-        ...style,
-      }}
-      onClick={
-        address === EMPTY_ADDRESS
-          ? undefined
-          : () => history.push(`/${type}/${address}`)
-      }
-    >
-      {parsedName ||
-        (isShort
-          ? `${outPutAddress.substr(0, 4)}...${outPutAddress.substr(-4)}`
-          : outPutAddress)}
-    </Text>
+            ? undefined
+            : () => history.push(`/${type}/${address}`)
+        }
+      >
+        {parsedName ||
+          (isShort
+            ? `${outPutAddress.substr(0, 4)}...${outPutAddress.substr(-4)}`
+            : outPutAddress)}
+      </Text>
+    </Box>
   );
 };
