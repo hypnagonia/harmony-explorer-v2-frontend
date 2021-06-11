@@ -4,27 +4,33 @@ import { RelatedTransaction } from 'src/types'
 import React from 'react'
 import { parseSuggestedEvent } from 'src/web3/parseByteCode'
 import styled, { css } from 'styled-components'
-import {zeroAddress} from 'src/utils/zeroAddress'
+import { zeroAddress } from 'src/utils/zeroAddress'
 
 const erc20TransferTopic =
   '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
 
+
 const memo = (f: Function) => {
-  const cache: Record<string, any> = {}
+  const cache = new Map()
 
   return (data: any) => {
-    const hash: string = data.hash + data.index
-
-    if (cache[hash]) {
-      return cache[hash]
+    const hash: string = data.hash + (data.logs ? data.logs.length : '')
+    if (cache.has(hash)) {
+      return cache.get(hash)
     }
 
     const res = f(data)
-    cache[hash] = res
+    const { parsed } = res
+    if (!parsed) {
+      return res
+    }
+
+    cache.set(hash, res)
     return res
   }
 }
 
+// take only first related at the moment
 const extractTransfer = memo((data: any) => {
   const { relatedAddress } = data
   const transferLogs = data.logs ? data.logs
@@ -72,7 +78,7 @@ const Marker = styled.div<{ out: boolean }>`
           background: rgba(105, 250, 189, 0.8);
           color: #1b295e;
         `};
-`;
+`
 
 const NeutralMarker = styled(Box)`
   border-radius: 2px;
@@ -80,7 +86,7 @@ const NeutralMarker = styled(Box)`
 
   text-align: center;
   font-weight: bold;
-`;
+`
 
 export function getERC20Columns(id: string): ColumnConfig<any>[] {
   return [
@@ -100,7 +106,7 @@ export function getERC20Columns(id: string): ColumnConfig<any>[] {
       )
     },
     {
-      property: "event",
+      property: 'event',
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
           Event
@@ -114,12 +120,12 @@ export function getERC20Columns(id: string): ColumnConfig<any>[] {
 
         return (
           <Text size="12px">
-            <NeutralMarker background={"backgroundBack"}>
+            <NeutralMarker background={'backgroundBack'}>
               {method}
             </NeutralMarker>
           </Text>
-        );
-      },
+        )
+      }
     },
     {
       property: 'from',
@@ -143,20 +149,20 @@ export function getERC20Columns(id: string): ColumnConfig<any>[] {
       }
     },
     {
-      property: "marker",
+      property: 'marker',
       header: <></>,
       render: (data: RelatedTransaction) => {
         const { parsed } = extractTransfer(data)
         const address = (parsed['$0'] || '') || '?'
 
         return (
-        <Text size="12px">
-          <Marker out={address === id}>
-            {address === id? "OUT" : "IN"}
-          </Marker>
-        </Text>
-      )
-      },
+          <Text size="12px">
+            <Marker out={address === id}>
+              {address === id ? 'OUT' : 'IN'}
+            </Marker>
+          </Text>
+        )
+      }
     },
     {
       property: 'to',

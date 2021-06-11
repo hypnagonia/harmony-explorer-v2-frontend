@@ -3,7 +3,6 @@ import { Text } from "grommet";
 import React from "react";
 import { Address } from "../components/ui";
 import { ByteCode, InternalTransaction } from '../types'
-import { clearConfigCache } from 'prettier'
 
 const web3 = new Web3();
 
