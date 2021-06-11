@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Heading } from "grommet";
+import { Box, Heading, Text } from "grommet";
 import { FiatPrice, BaseContainer } from "src/components/ui";
 import { useHistory } from "react-router-dom";
 import { ConfigureButton } from "./ConfigureButton";
@@ -26,7 +26,7 @@ const HeaderLine = (props: any) => {
   );
 };
 
-const ProjectName = styled.div`
+const ProjectName = styled(Box)`
   margin-left: 3px;
 `;
 
@@ -50,7 +50,15 @@ export function AppHeader(props: { style: CSSProperties }) {
         >
           <Box direction={"row"} align={"center"}>
             <img src={require("../../assets/Logo.svg").default} />
-            <ProjectName>Harmony Block Explorer</ProjectName>
+            <ProjectName direction={"row"} align={'center'}>
+              Harmony Block Explorer{" "}
+              <Box
+                background={"mintGreen"}
+                style={{ borderRadius: "8px", height: "18px", marginLeft: '5px', padding: '1px 7px' }}
+              >
+                <Text size={"xsmall"}>beta</Text>
+              </Box>
+            </ProjectName>
           </Box>
           <FiatPrice />
         </Heading>
