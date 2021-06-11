@@ -54,7 +54,7 @@ export function AppHeader(props: { style: CSSProperties }) {
               Harmony Block Explorer{" "}
               <Box
                 background={"mintGreen"}
-                style={{ borderRadius: "8px", height: "18px", marginLeft: '5px', padding: '1px 7px' }}
+                style={{ borderRadius: "8px", height: "20px", marginLeft: '5px', padding: '1px 7px' }}
               >
                 <Text size={"xsmall"}>beta</Text>
               </Box>

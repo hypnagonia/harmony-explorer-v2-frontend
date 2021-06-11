@@ -260,4 +260,5 @@ export interface AddressDetails {
   ipfs_hash?: string;
   meta?: { name?: string; image?: string };
   bytecode: string;
+  IPFSHash?: string
 }

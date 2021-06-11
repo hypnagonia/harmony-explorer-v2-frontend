@@ -12,6 +12,7 @@ import { TokensInfo } from "./TokenInfo";
 import { Erc20, useERC20Pool } from "src/hooks/ERC20_Pool";
 import { ONEValueDropdown } from "src/components/ui/OneValueDropdown";
 import { binanceAddressMap } from "src/config/BinanceAddressMap";
+import { useERC1155Pool } from "src/hooks/ERC1155_Pool";
 
 interface AddressDetailsProps {
   address: string;
@@ -23,16 +24,21 @@ interface AddressDetailsProps {
 export function AddressDetailsDisplay(props: AddressDetailsProps) {
   const { address, contracts, tokens, balance } = props;
   const erc20Map = useERC20Pool();
+  const erc1155Map = useERC1155Pool();
 
   const erc20Token = erc20Map[address] || null;
   const type = getType(contracts, erc20Token);
+  const erc1151data = erc1155Map[address] || {};
+  const { meta = {}, ...restErc1151data } = erc1151data;
 
   const data = {
     ...contracts,
     ...erc20Token,
-    address,
     token: tokens,
     balance,
+    ...restErc1151data,
+    ...meta,
+    address,
   };
 
   if (!data) {
@@ -104,7 +110,6 @@ const addressPropertyDisplayNames: Record<
   value: () => "Value",
   creatorAddress: () => "Creator",
   // solidityVersion: () => "Solidity version",
-  IPFSHash: () => "IPFS hash",
   meta: () => "Meta",
   balance: () => "Balance",
   // bytecode: () => "Bytecode",
@@ -114,6 +119,7 @@ const addressPropertyDisplayNames: Record<
   decimals: () => "Decimals",
   totalSupply: () => "Total Supply",
   holders: () => "Holders",
+  description: () => "Description",
 };
 
 const addressPropertyDisplayValues: Record<
@@ -145,6 +151,7 @@ const addressPropertyDisplayValues: Record<
   decimals: (value) => value,
   totalSupply: (value) => <TokenValue value={value} />,
   holders: (value: string) => formatNumber(+value),
+  description: (value) => <>{value}</>,
 };
 
 function sortByOrder(a: string, b: string) {

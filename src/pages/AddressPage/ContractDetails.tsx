@@ -55,6 +55,9 @@ export const NoVerifiedContractDetails = (props: {
             label="Solidity version"
             value={props.contracts.solidityVersion}
           />
+          {props.contracts.IPFSHash ? (
+            <Item label="IPFS hash" value={props.contracts.IPFSHash} />
+          ) : null}
           <Item
             label="Bytecode"
             value={

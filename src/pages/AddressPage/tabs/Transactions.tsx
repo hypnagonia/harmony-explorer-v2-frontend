@@ -22,7 +22,7 @@ import {
 } from "src/types";
 import styled, { css } from "styled-components";
 import { TRelatedTransaction } from "src/api/client.interface";
-import {getERC20Columns} from './erc20Columns'
+import { getERC20Columns } from "./erc20Columns";
 
 const initFilter: Filter = {
   offset: 0,
@@ -91,7 +91,11 @@ function getColumns(id: string): ColumnConfig<any>[] {
         </Text>
       ),
       render: (data: any) => (
-        <Address address={data.transactionHash || data.hash} type="tx" isShort />
+        <Address
+          address={data.transactionHash || data.hash}
+          type="tx"
+          isShort
+        />
       ),
     },
     {
@@ -115,8 +119,8 @@ function getColumns(id: string): ColumnConfig<any>[] {
           signature = "transfer";
         }
 
-        if (!signature && data.input.length >= 10 ) {
-          signature = data.input.slice(2, 10)
+        if (!signature && data.input.length >= 10) {
+          signature = data.input.slice(2, 10);
         }
 
         if (!signature) {
@@ -252,7 +256,11 @@ const getStackingColumns = (id: string): ColumnConfig<any>[] => {
         </Text>
       ),
       render: (data: any) => (
-        <Address address={data.transactionHash || data.hash} type="staking-tx" isShort />
+        <Address
+          address={data.transactionHash || data.hash}
+          type="staking-tx"
+          isShort
+        />
       ),
     },
     {
@@ -387,6 +395,7 @@ export function Transactions(props: {
     internal_transaction: { ...initFilter },
     erc20: { ...initFilter },
     erc721: { ...initFilter },
+    erc1155: { ...initFilter },
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -423,9 +432,9 @@ export function Transactions(props: {
         }
 
         relatedTransactions = relatedTransactions.map((tx: any) => {
-          tx.relatedAddress = id
-          return tx
-        })
+          tx.relatedAddress = id;
+          return tx;
+        });
 
         setIsLoading(false);
         setRelatedTrxs(relatedTransactions);
@@ -453,8 +462,6 @@ export function Transactions(props: {
       break;
     }
   }
-
-  console.log(relatedTrxs)
 
   return (
     <Box style={{ padding: "10px" }}>

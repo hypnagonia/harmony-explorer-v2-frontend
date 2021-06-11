@@ -31,6 +31,7 @@ export interface ERC1155 {
   holders: string;
   decimals: number;
   symbol: string;
+  meta?: any
 }
 
 export type ERC1155_Pool = Record<string, ERC1155>;

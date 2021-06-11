@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, Tabs, Tab } from "grommet";
+import { Text, Tabs, Tab, Box } from "grommet";
 import { BasePage, BaseContainer } from "src/components/ui";
 import { AddressDetailsDisplay, getType } from "./AddressDetails";
 import {
@@ -22,6 +22,7 @@ import { getAllBalance, getBalance } from "src/api/rpc";
 import { ISourceCode, loadSourceCode } from "../../api/explorerV1";
 import { AddressDetails } from "../../types";
 import { ContractDetails } from "./ContractDetails";
+import { ERC1155Icon } from "src/components/ui/ERC1155Icon";
 
 export function AddressPage() {
   const [contracts, setContracts] = useState<AddressDetails | null>(null);
@@ -136,7 +137,15 @@ export function AddressPage() {
   }, [id]);
 
   const renderTitle = () => {
-    const data = { ...contracts, ...erc20Token, address: id, token: tokens };
+    const erc1155 = erc1155Map[id] || {};
+    const { meta = {}, ...restErc1155 } = erc1155;
+    const data = {
+      ...contracts,
+      ...erc20Token,
+      address: id,
+      token: tokens,
+      ...meta,
+    };
 
     if (type === "erc20") {
       return `HRC20 ${data.name}`;
@@ -147,7 +156,16 @@ export function AddressPage() {
     }
 
     if (type === "erc1155") {
-      return `ERC1155 ${data.meta?.name}`;
+      const title = `ERC1155 ${data.name || ""}`;
+      return meta.image ? (
+        <Box direction={"row"} align={"center"}>
+          <ERC1155Icon imageUrl={meta.image} />
+          &nbsp;
+          {title}
+        </Box>
+      ) : (
+        title
+      );
     }
 
     if (type === "contract") {
@@ -202,13 +220,9 @@ export function AddressPage() {
             <Transactions type={"erc20"} />
           </Tab>
 
-          <Tab title={<Text size="small">HRC721 Transfers</Text>}>
+          <Tab title={<Text size="small">NFT Transfers</Text>}>
             <Transactions type={"erc721"} />
           </Tab>
-
-          {/*<Tab title={<Text size="small">HRC1155 Transfers</Text>}>*/}
-          {/*  <Transactions type={"erc1155"} />*/}
-          {/*</Tab>*/}
 
           {type === "erc721" && inventory.length ? (
             <Tab
