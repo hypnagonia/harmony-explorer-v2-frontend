@@ -9,29 +9,30 @@ export interface IERC1155IconProps {
 
 const Loader = styled.div`
   position: absolute;
-  width: 45px;
-  height: 45px;
+  width: 30px;
+  height: 30px;
   background: ${(props) => props.theme.backgroundBack};
 `;
 
 const InventImg = styled.img`
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
 `;
 
 const ErrorPreview = styled(Box)`
-  width: 45px;
-  height: 45px;
+  width: 30px;
+  height: 30px;
 
   border-radius: 8px;
 `;
 
 const EmptyImage = styled(Box)`
-  width: 45px;
-  height: 45px;
+  width: 30px;
+  height: 30px;
 
   border-radius: 8px;
+  background: ${props => props.theme.global.colors.backgroundEmptyIcon};
 `;
 
 export function ERC1155Icon(props: IERC1155IconProps) {
@@ -43,7 +44,7 @@ export function ERC1155Icon(props: IERC1155IconProps) {
     : "";
 
   return (
-    <>
+    <Box style={{ marginLeft: "15px" }}>
       {isLoading ? (
         <Loader>
           <Box align={"center"} justify={"center"} flex height={"100%"}>
@@ -53,7 +54,10 @@ export function ERC1155Icon(props: IERC1155IconProps) {
       ) : null}
       {isErrorLoading ? (
         <ErrorPreview direction={"column"} justify={"center"} align={"center"}>
-          <Image size={"large"} style={{ marginBottom: "10px" }} />
+          <Image
+            size={"medium"}
+            style={{ marginBottom: "10px", marginTop: "10px" }}
+          />
         </ErrorPreview>
       ) : url ? (
         <InventImg
@@ -65,10 +69,12 @@ export function ERC1155Icon(props: IERC1155IconProps) {
           }}
         />
       ) : (
-        <EmptyImage direction={"column"} justify={"center"} align={"center"}>
-          <Image size={"large"} style={{ marginBottom: "10px" }} />
-        </EmptyImage>
+        <EmptyImage
+          direction={"column"}
+          justify={"center"}
+          align={"center"}
+        ></EmptyImage>
       )}
-    </>
+    </Box>
   );
 }

@@ -76,8 +76,10 @@ export const Address = (props: IAddress) => {
   return (
     <Box direction={"row"} align={"center"} justify={"start"}>
       <CopyBtn
-        value={address}
-        onClick={() =>
+        value={outPutAddress}
+        onClick={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
           toaster.show({
             message: () => (
               <Box direction={"row"} align={"center"} pad={"small"}>
@@ -85,14 +87,14 @@ export const Address = (props: IAddress) => {
                 <Text size={"small"}>Copied to clipboard</Text>
               </Box>
             ),
-          })
-        }
+          });
+        }}
       />
       <Text
         size="small"
         color={color}
         style={{
-          marginLeft: '7px',
+          marginLeft: "7px",
           cursor: "pointer",
           textDecoration:
             address === EMPTY_ADDRESS

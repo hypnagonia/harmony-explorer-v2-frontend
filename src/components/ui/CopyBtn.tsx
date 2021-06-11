@@ -17,15 +17,18 @@ const copyText = (value: string) => {
   }
 };
 
-export function CopyBtn(props: { value: string; onClick?: () => void }) {
+export function CopyBtn(props: {
+  value: string;
+  onClick?: (e: React.MouseEvent<SVGSVGElement>) => void;
+}) {
   return (
     <Clone
       size="small"
       color="brand"
-      onClick={() => {
+      onClick={(e) => {
         copyText(props.value);
         if (props.onClick) {
-          props.onClick();
+          props.onClick(e);
         }
       }}
       style={{ cursor: "pointer" }}

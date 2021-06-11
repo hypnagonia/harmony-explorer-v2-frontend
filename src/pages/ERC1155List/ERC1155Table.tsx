@@ -119,11 +119,13 @@ function getColumns(props: any) {
   return [
     {
       property: "icon", 
+      resizeable: false,
+      size: 'xxsmall',
       header: (
         <Text
           color="minorText"
           size="small"
-          style={{ fontWeight: 300, width: "50px" }}
+          style={{ fontWeight: 300, width: "30px" }}
         ></Text>
       ),
       render: (data: Erc20) => {
@@ -131,8 +133,7 @@ function getColumns(props: any) {
       },
     },
     {
-      property: "name",
-      size: "small",
+      property: "name", 
       resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
