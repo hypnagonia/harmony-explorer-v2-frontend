@@ -454,6 +454,8 @@ export function Transactions(props: {
     }
   }
 
+  console.log(relatedTrxs)
+
   return (
     <Box style={{ padding: "10px" }}>
       <TransactionsTable

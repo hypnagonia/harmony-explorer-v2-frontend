@@ -68,12 +68,16 @@ export class TableComponent extends React.Component<ITableComponentProps> {
       >
         <DataTable
           {...(this.props.tableProps as any)}
-          onMore={() => {
-            if (this.props.tableProps.onMore) {
-              this.props.tableProps.onMore();
-            }
-            this.clickExpandButtons();
-          }}
+          onMore={
+            this.props.alwaysOpenedRowDetails
+              ? () => {
+                  if (this.props.tableProps.onMore) {
+                    this.props.tableProps.onMore();
+                  }
+                  this.clickExpandButtons();
+                }
+              : undefined
+          }
         />
       </Flex>
     );
