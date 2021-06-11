@@ -1,8 +1,8 @@
 import Web3 from "web3";
-import { Text } from "grommet";
+import { Box, Text } from "grommet";
 import React from "react";
 import { Address } from "../components/ui";
-import { ByteCode, InternalTransaction } from '../types'
+import { ByteCode, InternalTransaction } from "../types";
 
 const web3 = new Web3();
 
@@ -48,7 +48,6 @@ export const parseSuggestedEvent = (
   if (!event) {
     return;
   }
-
 
   const abi = createABI(event.name, event.params, "event");
   if (abi.inputs.length) {
@@ -138,7 +137,7 @@ export const DisplaySignature = (props: any = {}) => {
       <>
         {abi.inputs.map((input: any, i: number) => {
           return (
-            <>
+            <div style={{ alignItems: "center", display: "inline-flex" }}>
               <Text size="small" color="minorText">
                 {input.type}
               </Text>
@@ -162,7 +161,7 @@ export const DisplaySignature = (props: any = {}) => {
                 parsed[input.name]
               )}
               {i < abi.inputs.length - 1 ? ", " : null}
-            </>
+            </div>
           );
         })}
       </>
@@ -173,12 +172,12 @@ export const DisplaySignature = (props: any = {}) => {
 
 export const revertErrorMessage = (error: ByteCode) => {
   if (!error) {
-    return null
+    return null;
   }
-  if (!error.startsWith('0x08c379a0')) {
-    return null
+  if (!error.startsWith("0x08c379a0")) {
+    return null;
   }
 
-  const s = error.slice(10)
-  return web3.eth.abi.decodeParameter('string', s);
-}
+  const s = error.slice(10);
+  return web3.eth.abi.decodeParameter("string", s);
+};
