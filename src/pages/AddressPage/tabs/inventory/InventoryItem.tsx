@@ -44,7 +44,7 @@ const EmptyImage = styled(Box)`
 `;
 
 export function InventoryItem(props: IInventoryItemProps) {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(!!props.item?.meta?.image);
   const [isErrorLoading, setIsErrorLoading] = useState(false);
 
   const url = props.item?.meta?.image || "";
