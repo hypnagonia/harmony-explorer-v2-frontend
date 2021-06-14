@@ -47,6 +47,7 @@ export const blockPropertyDisplayNames: Record<string, string> = {
   uncles: "Uncles",
   epoch: "Epoch",
   viewID: "View ID",
+  shard: "Shard"
 };
 
 export const blockPropertyDescriptions: Record<string, string> = {
