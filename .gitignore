@@ -6,6 +6,8 @@
 .pnp.js
 .firebase/*
 
+ 
+
 .cache
 
 # testing
@@ -30,3 +32,4 @@ yarn.lock
 firebase.json
 firebase-debug.log
 .firebase
+.env
