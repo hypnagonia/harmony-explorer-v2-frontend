@@ -244,7 +244,10 @@ export const transactionDisplayValues = (
   }
 
   const text = typeof value === "string" ? value : <>{value}</>;
-  const copyText = typeof text === "string" ? text : "";
+  const copyText =
+    typeof text === "string" && !["from", "to"].find((item) => item === key)
+      ? text
+      : "";
 
   return (
     <Box direction="row" align="baseline">
@@ -256,7 +259,7 @@ export const transactionDisplayValues = (
               onClick={() =>
                 toaster.show({
                   message: () => (
-                    <Box direction={"row"} align={"center"} pad={'small'}>
+                    <Box direction={"row"} align={"center"} pad={"small"}>
                       <Icon size={"small"} color={"headerText"} />
                       <Text size={"small"}>Copied to clipboard</Text>
                     </Box>

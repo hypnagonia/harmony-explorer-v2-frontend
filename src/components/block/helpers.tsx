@@ -47,7 +47,7 @@ export const blockPropertyDisplayNames: Record<string, string> = {
   uncles: "Uncles",
   epoch: "Epoch",
   viewID: "View ID",
-  shard: "Shard"
+  shard: "Shard",
 };
 
 export const blockPropertyDescriptions: Record<string, string> = {
@@ -213,7 +213,8 @@ export const blockDisplayValues = (block: Block, key: string, value: any) => {
       {!["transactions", "stakingTransactions", "uncles", "nonce"].includes(
         key
       ) &&
-        !["0x", "0", 0, null].includes(displayValue) && (
+        !["0x", "0", 0, null].includes(displayValue) &&
+        !["miner"].find((item) => item === key) && (
           <>
             <CopyBtn
               value={value}
