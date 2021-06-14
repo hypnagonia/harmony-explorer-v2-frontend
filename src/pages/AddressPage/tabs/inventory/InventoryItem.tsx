@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { IUserERC721Assets } from "src/api/client.interface";
 import { Box, Spinner, Text } from "grommet";
 import { Address } from "src/components/ui";
-import { Alert, Image } from "grommet-icons";
+import { Alert } from "grommet-icons";
 
 export interface IInventoryItemProps {
   item: IUserERC721Assets;
@@ -43,6 +43,14 @@ const EmptyImage = styled(Box)`
   border-radius: 8px;
 `;
 
+const Image = styled(Box)`
+  width: 30px;
+  height: 30px;
+
+  border-radius: 8px;
+  background: ${(props) => props.theme.global.colors.backgroundEmptyIcon};
+`;
+
 export function InventoryItem(props: IInventoryItemProps) {
   const [isLoading, setIsLoading] = useState(!!props.item?.meta?.image);
   const [isErrorLoading, setIsErrorLoading] = useState(false);
@@ -62,7 +70,7 @@ export function InventoryItem(props: IInventoryItemProps) {
       ) : null}
       {isErrorLoading ? (
         <ErrorPreview direction={"column"} justify={"center"} align={"center"}>
-          <Image size={"large"} style={{ marginBottom: "10px" }} />
+          <Image style={{ marginBottom: "10px" }} />
           <Text style={{ opacity: 0.7 }}>No Image</Text>
         </ErrorPreview>
       ) : url ? (
@@ -77,7 +85,7 @@ export function InventoryItem(props: IInventoryItemProps) {
         />
       ) : (
         <EmptyImage direction={"column"} justify={"center"} align={"center"}>
-          <Image size={"large"} style={{ marginBottom: "10px" }} />
+          <Image style={{ marginBottom: "10px" }} />
           <Text style={{ opacity: 0.7 }}>No image</Text>
         </EmptyImage>
       )}
@@ -89,7 +97,7 @@ export function InventoryItem(props: IInventoryItemProps) {
             : tokenID}
         </Text>
         <Text>
-          <Text color="minorText" size="small"> 
+          <Text color="minorText" size="small">
             Owner
           </Text>{" "}
           <Address address={ownerAddress} isShort={true} />
