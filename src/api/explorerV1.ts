@@ -46,7 +46,7 @@ export const verifyContractCode = async (data: IVerifyContractDataSendData) => {
 
 export const loadSourceCode = async (address: string): Promise<ISourceCode> => {
   const response = await fetch(
-    `${process.env.VUE_APP_EXPLORER_BACKEND_URL}/fetchContractCode?contractCode=${address}`,
+    `${process.env.REACT_APP_EXPLORER_V1_API_URL}/fetchContractCode?contractCode=${address}`,
     {
       mode: "cors",
       cache: "no-cache",
