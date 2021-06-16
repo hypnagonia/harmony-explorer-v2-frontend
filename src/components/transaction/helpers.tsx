@@ -16,6 +16,7 @@ import {
   ONEValue,
   StakingTransactionTypeValue,
   CalculateFee,
+  formatNumber,
 } from "../ui";
 import { Box, Text } from "grommet";
 import { CopyBtn } from "../ui/CopyBtn";
@@ -201,6 +202,7 @@ export const transactionPropertyDisplayValues: any = {
   slotPubKeyToAdd: (value: any) => <span>{value}</span>,
   slotPubKeyToRemove: (value: any) => <span>{value}</span>,
   tokenTransfers: (value: any) => <span>{value}</span>,
+  gas: (value: any) => <>{formatNumber(+value)}</>,
 };
 
 export const transactionDisplayValues = (

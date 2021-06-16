@@ -4,6 +4,7 @@ import {
   BlockHash,
   BlockNumber,
   TransactionHash,
+  formatNumber,
 } from "src/components/ui";
 import {
   Clone,
@@ -180,9 +181,11 @@ export const blockPropertyDisplayValues: any = {
   timestamp: (value: any) => <Timestamp timestamp={value} withRelative />,
   gasUsed: (value: any, block: Block) => (
     <span>
-      {value} ({+value / +block.gasLimit}%){" "}
+      {formatNumber(+value)} ({+value / +block.gasLimit}%){" "}
     </span>
   ),
+  gasLimit: (value: any) => <>{formatNumber(+value)}</>,
+  size: (value: any) => <>{formatNumber(+value)}</>,
 };
 
 export const blockDisplayValues = (block: Block, key: string, value: any) => {

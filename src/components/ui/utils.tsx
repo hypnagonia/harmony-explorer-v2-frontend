@@ -2,7 +2,7 @@ import Big from "big.js";
 import React from "react";
 import { useONEExchangeRate } from "src/hooks/useONEExchangeRate";
 
-export function formatNumber(num: number, options?: object): string {
+export function formatNumber(num: number, options?: Intl.NumberFormatOptions): string {
   if (num === undefined) return "";
 
   return num.toLocaleString("en-US", options);
