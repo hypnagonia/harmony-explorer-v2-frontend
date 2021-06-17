@@ -23,6 +23,8 @@ import { ISourceCode, loadSourceCode } from "../../api/explorerV1";
 import { AddressDetails } from "../../types";
 import { ContractDetails } from "./ContractDetails";
 import { ERC1155Icon } from "src/components/ui/ERC1155Icon";
+import { getAddress } from "src/utils";
+import { useCurrency } from "src/hooks/ONE-ETH-SwitcherHook";
 
 export function AddressPage() {
   const [contracts, setContracts] = useState<AddressDetails | null>(null);
@@ -34,16 +36,24 @@ export function AddressPage() {
   const erc20Map = useERC20Pool();
   const erc721Map = useERC721Pool();
   const erc1155Map = useERC1155Pool();
+  const currency = useCurrency();
 
   //TODO remove hardcode
   // @ts-ignore
   const { id } = useParams();
   const erc20Token = erc20Map[id] || null;
+  let oneAddress = id;
 
   let type = erc721Map[id] ? "erc721" : getType(contracts, erc20Token);
 
   if (erc1155Map[id]) {
     type = "erc1155";
+  }
+
+  try {
+    oneAddress = getAddress(oneAddress).bech32;
+  } catch {
+    oneAddress = oneAddress;
   }
 
   useEffect(() => {
@@ -69,7 +79,7 @@ export function AddressPage() {
 
   useEffect(() => {
     if (!!contracts) {
-      loadSourceCode(id)
+      loadSourceCode(oneAddress)
         .then(setSourceCode)
         .catch(() => setSourceCode(null));
     }
