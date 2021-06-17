@@ -83,11 +83,12 @@ export function AddressPage() {
         .then(setSourceCode)
         .catch(() => setSourceCode(null));
     }
-  }, [contracts, id]);
+  }, [contracts]);
 
   useEffect(() => {
     const getContracts = async () => {
       try {
+        console.log('test')
         let contracts: any = await getContractsByField([0, "address", id]);
 
         const mergedContracts: AddressDetails = erc721Map[contracts.address]
@@ -100,7 +101,7 @@ export function AddressPage() {
       }
     };
     getContracts();
-  }, [id, erc721Map]);
+  }, [id]);
 
   useEffect(() => {
     const getInventory = async () => {
