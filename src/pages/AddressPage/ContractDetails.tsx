@@ -15,7 +15,7 @@ const StyledTextArea = styled("textarea")`
 
 export const ContractDetails = (props: {
   address: string;
-  contracts?: AddressDetails;
+  contracts?: AddressDetails | null;
   sourceCode?: ISourceCode | null;
 }) => {
   if (!!props.sourceCode) {
@@ -86,7 +86,7 @@ export const VerifiedContractDetails = (props: { sourceCode: ISourceCode }) => {
           <Item
             label="Optimization Enabled"
             value={
-              props.sourceCode.optimizer +
+              props.sourceCode.optimizer || 'No' +
               (Number(props.sourceCode.optimizerTimes)
                 ? ` with ${props.sourceCode.optimizerTimes} runs`
                 : "")

@@ -78,17 +78,17 @@ export function AddressPage() {
   }, [id]);
 
   useEffect(() => {
-    if (!!contracts) {
-      loadSourceCode(oneAddress)
-        .then(setSourceCode)
-        .catch(() => setSourceCode(null));
-    }
-  }, [contracts]);
+    // if (!!contracts) {
+    loadSourceCode(oneAddress)
+      .then(setSourceCode)
+      .catch(() => setSourceCode(null));
+    // }
+  }, [oneAddress]);
 
   useEffect(() => {
     const getContracts = async () => {
       try {
-        console.log('test')
+        console.log("test");
         let contracts: any = await getContractsByField([0, "address", id]);
 
         const mergedContracts: AddressDetails = erc721Map[contracts.address]
@@ -243,7 +243,7 @@ export function AddressPage() {
             </Tab>
           ) : null}
 
-          {!!contracts ? (
+          {!!contracts || !!sourceCode ? (
             <Tab title={<Text size="small">Contract</Text>}>
               <ContractDetails
                 address={id}

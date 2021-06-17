@@ -37,7 +37,7 @@ export class VerifyContract extends React.Component<
   IVerifyContractData
 > {
   public state: IVerifyContractData = {
-    chainType: "Mainnet",
+    chainType: "mainnet",
     contractAddress: "",
     compiler: "",
     optimizer: "no",
@@ -113,7 +113,7 @@ export class VerifyContract extends React.Component<
               <Field margin={"small"} width={isLessTablet ? "100%" : "30%"}>
                 <Text>Chain Type</Text>
                 <Select
-                  options={["Mainnet", "Testnet"]}
+                  options={["mainnet", "testnet"]}
                   value={this.state.chainType}
                   onChange={({ option }) =>
                     this.setState({ ...this.state, chainType: option })
