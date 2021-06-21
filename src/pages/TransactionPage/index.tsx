@@ -4,7 +4,7 @@ import { TransactionLogs } from "src/components/transaction/TransactionLogs";
 import { InternalTransaction, RPCStakingTransactionHarmony } from "src/types";
 import { BaseContainer, BasePage } from "src/components/ui";
 
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { Tabs, Tab, Text, Box, Spinner, Heading } from "grommet";
 import {
@@ -14,20 +14,31 @@ import {
   getByteCodeSignatureByHash,
 } from "src/api/client";
 import { AllBlocksTable } from "../AllBlocksPage/AllBlocksTable";
-import {revertErrorMessage} from 'src/web3/parseByteCode'
+import { revertErrorMessage } from "src/web3/parseByteCode";
 
 const extractError = (err: any) => {
-  const errorMessages = err!.split(':')
+  const errorMessages = err!.split(":");
   if (errorMessages[1]) {
-    const errorMessage = revertErrorMessage(errorMessages[1])
-    return errorMessage || err
+    const errorMessage = revertErrorMessage(errorMessages[1]);
+    return errorMessage || err;
   }
 
-  const errorMessage = revertErrorMessage(err)
-  return errorMessage || err
-}
+  const errorMessage = revertErrorMessage(err);
+  return errorMessage || err;
+};
 
 export const TransactionPage = () => {
+  const history = useHistory();
+  const tabParamName = "activeTab=";
+  let activeTab = 0;
+  try {
+    activeTab = +history.location.search.slice(
+      history.location.search.indexOf("activeTab=") + tabParamName.length
+    );
+  } catch {
+    activeTab = 0;
+  }
+  
   // hash or number
   // @ts-ignore
   const { id } = useParams();
@@ -38,6 +49,7 @@ export const TransactionPage = () => {
   const [logs, setLogs] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [txrsLoading, setTxrsLoading] = useState<boolean>(true);
+  const [activeIndex, setActiveIndex] = useState(+activeTab);
 
   const availableShards = (process.env.REACT_APP_AVAILABLE_SHARDS as string)
     .split(",")
@@ -69,7 +81,7 @@ export const TransactionPage = () => {
   }, [id]);
 
   useEffect(() => {
-    const getInternalTxs = async () => { 
+    const getInternalTxs = async () => {
       if (tx.hash && tx.shardID === 0) {
         try {
           //@ts-ignore
@@ -151,7 +163,18 @@ export const TransactionPage = () => {
         Transaction
       </Heading>
       <BasePage>
-        <Tabs alignControls="start" justify="start">
+        <Tabs
+          alignControls="start"
+          justify="start"
+          activeIndex={activeIndex}
+          onActive={(newActive) => {
+            history.replace(
+              `${history.location.pathname}?activeTab=${newActive}`
+            );
+            console.log(history);
+            setActiveIndex(newActive);
+          }}
+        >
           <Tab title={<Text size="small">Transaction Details</Text>}>
             <TransactionDetails
               transaction={tx}

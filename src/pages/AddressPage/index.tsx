@@ -8,7 +8,7 @@ import {
   getUserERC721Assets,
   getTokenERC721Assets,
 } from "src/api/client";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { useERC20Pool } from "src/hooks/ERC20_Pool";
 import { useERC721Pool } from "src/hooks/ERC721_Pool";
 import { useERC1155Pool } from "src/hooks/ERC1155_Pool";
@@ -27,12 +27,24 @@ import { getAddress } from "src/utils";
 import { useCurrency } from "src/hooks/ONE-ETH-SwitcherHook";
 
 export function AddressPage() {
+  const history = useHistory();
+  const tabParamName = "activeTab=";
+  let activeTab = 0;
+  try {
+    activeTab = +history.location.search.slice(
+      history.location.search.indexOf("activeTab=") + tabParamName.length
+    );
+  } catch {
+    activeTab = 0;
+  }
+ 
+
   const [contracts, setContracts] = useState<AddressDetails | null>(null);
   const [sourceCode, setSourceCode] = useState<ISourceCode | null>(null);
   const [balance, setBalance] = useState<any>([]);
   const [tokens, setTokens] = useState<any>(null);
   const [inventory, setInventory] = useState<IUserERC721Assets[]>([]);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(+activeTab);
   const erc20Map = useERC20Pool();
   const erc721Map = useERC721Pool();
   const erc1155Map = useERC1155Pool();
@@ -58,7 +70,7 @@ export function AddressPage() {
 
   useEffect(() => {
     const getActiveIndex = () => {
-      setActiveIndex(0);
+      setActiveIndex(activeTab || 0);
     };
     getActiveIndex();
   }, [id]);
@@ -213,7 +225,13 @@ export function AddressPage() {
           alignControls="start"
           justify="start"
           activeIndex={activeIndex}
-          onActive={(newActive) => setActiveIndex(newActive)}
+          onActive={(newActive) => {
+            history.replace(
+              `${history.location.pathname}?activeTab=${newActive}`
+            );
+            console.log(history);
+            setActiveIndex(newActive);
+          }}
         >
           <Tab title={<Text size="small">Transactions</Text>}>
             <Transactions type={"transaction"} />
