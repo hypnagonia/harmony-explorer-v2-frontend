@@ -87,7 +87,7 @@ export function InventoryItem(props: IInventoryItemProps) {
             position: "relative",
             overflow: "hidden",
           }}
-          background={'backgroundBack'}
+          background={"backgroundBack"}
         >
           {isErrorLoading ? (
             <ErrorPreview
@@ -127,12 +127,14 @@ export function InventoryItem(props: IInventoryItemProps) {
             ? `${tokenID.slice(0, 5)}...${tokenID.slice(-5)}`
             : tokenID}
         </Text>
-        <Text>
-          <Text color="minorText" size="small">
-            Owner
-          </Text>{" "}
-          <Address address={ownerAddress} isShort={true} />
-        </Text>
+        {ownerAddress ? (
+          <Text>
+            <Text color="minorText" size="small">
+              Owner
+            </Text>{" "}
+            <Address address={ownerAddress} isShort={true} />
+          </Text>
+        ) : null}
       </Box>
     </InventItem>
   );
