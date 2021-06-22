@@ -14,6 +14,7 @@ export interface IInventoryItemProps {
 
 const InventItem = styled.div`
   width: 215px;
+  height: 270px;
   position: relative;
   margin: 10px;
 `;
@@ -26,8 +27,7 @@ const Loader = styled.div`
 `;
 
 const InventImg = styled.img`
-  width: 215px;
-  height: 270px;
+  width: 100%;
 `;
 
 const ErrorPreview = styled(Box)`
@@ -77,31 +77,48 @@ export function InventoryItem(props: IInventoryItemProps) {
         }
         style={{ cursor: "pointer" }}
       >
-        {isErrorLoading ? (
-          <ErrorPreview
-            direction={"column"}
-            justify={"center"}
-            align={"center"}
-          >
-            <Image style={{ marginBottom: "10px" }} />
-            <Text style={{ opacity: 0.7 }}>No Image</Text>
-          </ErrorPreview>
-        ) : url ? (
-          <InventImg
-            title={description}
-            src={url}
-            onLoad={() => setIsLoading(false)}
-            onError={() => {
-              setIsLoading(false);
-              setIsErrorLoading(true);
-            }}
-          />
-        ) : (
-          <EmptyImage direction={"column"} justify={"center"} align={"center"}>
-            <Image style={{ marginBottom: "10px" }} />
-            <Text style={{ opacity: 0.7 }}>No image</Text>
-          </EmptyImage>
-        )}
+        <Box
+          direction={"column"}
+          align={"center"}
+          justify={"center"}
+          style={{
+            minHeight: "225px",
+            maxHeight: "225px",
+            position: "relative",
+            overflow: "hidden",
+          }}
+          background={'backgroundBack'}
+        >
+          {isErrorLoading ? (
+            <ErrorPreview
+              direction={"column"}
+              justify={"center"}
+              align={"center"}
+            >
+              <Image style={{ marginBottom: "10px" }} />
+              <Text style={{ opacity: 0.7 }}>No Image</Text>
+            </ErrorPreview>
+          ) : url ? (
+            <InventImg
+              title={description}
+              src={url}
+              onLoad={() => setIsLoading(false)}
+              onError={() => {
+                setIsLoading(false);
+                setIsErrorLoading(true);
+              }}
+            />
+          ) : (
+            <EmptyImage
+              direction={"column"}
+              justify={"center"}
+              align={"center"}
+            >
+              <Image style={{ marginBottom: "10px" }} />
+              <Text style={{ opacity: 0.7 }}>No image</Text>
+            </EmptyImage>
+          )}
+        </Box>
       </a>
       <Box direction={"column"} flex align={"center"}>
         <Text title={tokenID} size="small">
