@@ -130,7 +130,14 @@ export function AddressPage() {
                   return item;
                 });
 
-          setInventory(inventory.filter((item) => item.meta));
+          setInventory(
+            inventory
+              .filter((item) => item.meta)
+              .map((item) => {
+                item.type = type;
+                return item;
+              })
+          );
         } else {
           setInventory([]);
         }

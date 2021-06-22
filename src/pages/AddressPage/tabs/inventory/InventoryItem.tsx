@@ -6,6 +6,7 @@ import { IUserERC721Assets } from "src/api/client.interface";
 import { Box, Spinner, Text } from "grommet";
 import { Address } from "src/components/ui";
 import { Alert } from "grommet-icons";
+import { useHistory } from "react-router-dom";
 
 export interface IInventoryItemProps {
   item: IUserERC721Assets;
@@ -54,13 +55,11 @@ const Image = styled(Box)`
 export function InventoryItem(props: IInventoryItemProps) {
   const [isLoading, setIsLoading] = useState(!!props.item?.meta?.image);
   const [isErrorLoading, setIsErrorLoading] = useState(false);
+  const history = useHistory();
 
   const url = props.item?.meta?.image || "";
   const description = props.item?.meta?.description || "";
   const { tokenID, ownerAddress } = props.item;
-
-  console.log(url)
-
   return (
     <InventItem>
       {isLoading ? (
@@ -70,27 +69,40 @@ export function InventoryItem(props: IInventoryItemProps) {
           </Box>
         </Loader>
       ) : null}
-      {isErrorLoading ? (
-        <ErrorPreview direction={"column"} justify={"center"} align={"center"}>
-          <Image style={{ marginBottom: "10px" }} />
-          <Text style={{ opacity: 0.7 }}>No Image</Text>
-        </ErrorPreview>
-      ) : url ? (
-        <InventImg
-          title={description}
-          src={url}
-          onLoad={() => setIsLoading(false)}
-          onError={() => {
-            setIsLoading(false);
-            setIsErrorLoading(true);
-          }}
-        />
-      ) : (
-        <EmptyImage direction={"column"} justify={"center"} align={"center"}>
-          <Image style={{ marginBottom: "10px" }} />
-          <Text style={{ opacity: 0.7 }}>No image</Text>
-        </EmptyImage>
-      )}
+      <a
+        onClick={() =>
+          history.push(
+            `/inventory/${props.item.type}/${props.item.tokenAddress}/${props.item.tokenID}`
+          )
+        }
+        style={{ cursor: "pointer" }}
+      >
+        {isErrorLoading ? (
+          <ErrorPreview
+            direction={"column"}
+            justify={"center"}
+            align={"center"}
+          >
+            <Image style={{ marginBottom: "10px" }} />
+            <Text style={{ opacity: 0.7 }}>No Image</Text>
+          </ErrorPreview>
+        ) : url ? (
+          <InventImg
+            title={description}
+            src={url}
+            onLoad={() => setIsLoading(false)}
+            onError={() => {
+              setIsLoading(false);
+              setIsErrorLoading(true);
+            }}
+          />
+        ) : (
+          <EmptyImage direction={"column"} justify={"center"} align={"center"}>
+            <Image style={{ marginBottom: "10px" }} />
+            <Text style={{ opacity: 0.7 }}>No image</Text>
+          </EmptyImage>
+        )}
+      </a>
       <Box direction={"column"} flex align={"center"}>
         <Text title={tokenID} size="small">
           #

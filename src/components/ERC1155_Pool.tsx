@@ -11,8 +11,6 @@ export function ERC1155_Pool() {
         erc1155Map[i.address] = i;
       });
 
-      console.log(erc1155)
-
       window.localStorage.setItem("ERC1155_Pool", JSON.stringify(erc1155Map));
       setERC1155Pool(erc1155Map);
     };

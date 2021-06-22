@@ -21,6 +21,7 @@ export interface IUserERC721Assets {
   tokenAddress: string;
   tokenID: string;
   tokenURI: string;
+  type?: string
 }
 
 export type TRelatedTransaction =
