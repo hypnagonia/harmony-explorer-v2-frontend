@@ -4,12 +4,19 @@ import { useParams } from "react-router-dom";
 import { getTokenERC1155Assets, getTokenERC721Assets } from "src/api/client";
 import { IUserERC721Assets } from "src/api/client.interface";
 import { BasePage } from "src/components/ui";
+import { useERC1155Pool } from "src/hooks/ERC1155_Pool";
+import { useERC721Pool } from "src/hooks/ERC721_Pool";
 
 export function InventoryDetailsPage() {
+  const erc721Map = useERC721Pool();
+  const erc1155Map = useERC1155Pool();
   const [inventory, setInventory] = useState<IUserERC721Assets>({} as any);
 
   //  @ts-ignore
   const { address, tokenID, type } = useParams();
+
+  const item = erc721Map[address] || erc1155Map[address];
+  const name = item.name || "";
 
   useEffect(() => {
     const getInventory = async () => {
@@ -41,7 +48,7 @@ export function InventoryDetailsPage() {
   return (
     <>
       <Heading size="xsmall" margin={{ top: "0" }}>
-        Inventory Details Page
+        {name} {tokenID} {inventory.meta?.name || ""}
       </Heading>
       <BasePage>
         <pre>{meta}</pre>

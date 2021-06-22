@@ -61,22 +61,23 @@ export function InventoryItem(props: IInventoryItemProps) {
   const description = props.item?.meta?.description || "";
   const { tokenID, ownerAddress } = props.item;
   return (
-    <InventItem>
-      {isLoading ? (
-        <Loader>
-          <Box align={"center"} justify={"center"} flex height={"100%"}>
-            <Spinner />
-          </Box>
-        </Loader>
-      ) : null}
-      <a
-        onClick={() =>
-          history.push(
-            `/inventory/${props.item.type}/${props.item.tokenAddress}/${props.item.tokenID}`
-          )
-        }
-        style={{ cursor: "pointer" }}
-      >
+    <a
+      onClick={() =>
+        history.push(
+          `/inventory/${props.item.type}/${props.item.tokenAddress}/${props.item.tokenID}`
+        )
+      }
+      style={{ cursor: "pointer" }}
+    >
+      <InventItem>
+        {isLoading ? (
+          <Loader>
+            <Box align={"center"} justify={"center"} flex height={"100%"}>
+              <Spinner />
+            </Box>
+          </Loader>
+        ) : null}
+
         <Box
           direction={"column"}
           align={"center"}
@@ -118,23 +119,24 @@ export function InventoryItem(props: IInventoryItemProps) {
             </EmptyImage>
           )}
         </Box>
-      </a>
-      <Box direction={"column"} flex align={"center"}>
-        <Text title={tokenID} size="small">
-          #
-          {tokenID.length > 8
-            ? `${tokenID.slice(0, 5)}...${tokenID.slice(-5)}`
-            : tokenID}
-        </Text>
-        {ownerAddress ? (
-          <Text>
-            <Text color="minorText" size="small">
-              Owner
-            </Text>{" "}
-            <Address address={ownerAddress} isShort={true} />
+
+        <Box direction={"column"} flex align={"center"}>
+          <Text title={tokenID} size="small">
+            #
+            {tokenID.length > 8
+              ? `${tokenID.slice(0, 5)}...${tokenID.slice(-5)}`
+              : tokenID}
           </Text>
-        ) : null}
-      </Box>
-    </InventItem>
+          {ownerAddress ? (
+            <Text>
+              <Text color="minorText" size="small">
+                Owner
+              </Text>{" "}
+              <Address address={ownerAddress} isShort={true} />
+            </Text>
+          ) : null}
+        </Box>
+      </InventItem>{" "}
+    </a>
   );
 }
