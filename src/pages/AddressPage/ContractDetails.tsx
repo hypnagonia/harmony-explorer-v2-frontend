@@ -113,7 +113,7 @@ export const VerifiedContractDetails = (props: {
             <Item
               label="Bytecode"
               value={
-                <StyledTextArea readOnly={true} rows={15} cols={100}>
+                <StyledTextArea readOnly={true} rows={7} cols={100}>
                   {props.contracts.bytecode || ""}
                 </StyledTextArea>
               }
