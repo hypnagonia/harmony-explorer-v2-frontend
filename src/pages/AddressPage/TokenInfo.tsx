@@ -17,7 +17,7 @@ import { useCurrency } from "src/hooks/ONE-ETH-SwitcherHook";
 import { getAddress } from "src/utils/getAddress/GetAddress";
 import { useHistory } from "react-router-dom";
 import { useERC1155Pool } from "../../hooks/ERC1155_Pool";
-import { CircleQuestion } from "grommet-icons";
+import { Alert } from "grommet-icons";
 
 interface Token {
   balance: string;
@@ -144,7 +144,7 @@ export function TokensInfo(props: { value: Token[] }) {
                     plain
                   >
                     <span>
-                      <CircleQuestion size="small" />
+                      <Alert size="small" />
                     </span>
                   </Tip>
                 ) : null}
