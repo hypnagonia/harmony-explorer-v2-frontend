@@ -128,7 +128,7 @@ export const TransactionDetails: FunctionComponent<TransactionDetailsProps> = ({
   logs = [],
   errorMsg,
 }) => {
-  const [showDetails, setShowDetails] = useState(true);
+  const [showDetails, setShowDetails] = useState(false);
 
   const newTransaction = {
     Status:
