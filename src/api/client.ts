@@ -124,6 +124,25 @@ export function getTokenERC721Assets(params: [string]) {
   >;
 }
 
+export function getTokenERC1155Assets(params: [string]) {
+  return transport("getTokenERC1155Assets", params) as Promise<
+    IUserERC721Assets[]
+  >;
+}
+
+export function getUserERC1155Balances(params: [string]) {
+  return transport("getUserERC1155Balances", params) as Promise<
+    {
+      tokenID: string;
+      ownerAddress: string;
+      tokenAddress: string;
+      amount: string;
+      needUpdate: boolean;
+      lastUpdateBlockNumber: number | null;
+    }[]
+  >;
+}
+
 export function getRelatedTransactionsByType(
   params: [0, string, TRelatedTransaction, any]
 ) {

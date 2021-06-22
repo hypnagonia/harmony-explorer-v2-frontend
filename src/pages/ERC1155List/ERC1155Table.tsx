@@ -161,7 +161,7 @@ function getColumns(props: any) {
           Address
         </Text>
       ),
-      render: (data: Erc20) => <Address address={data.address} displayHash />,
+      render: (data: Erc20) => <Address address={data.address}  />,
     },
     // {
     //   property: "totalSupply",

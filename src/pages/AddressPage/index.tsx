@@ -7,6 +7,8 @@ import {
   getUserERC20Balances,
   getUserERC721Assets,
   getTokenERC721Assets,
+  getTokenERC1155Assets,
+  getUserERC1155Balances,
 } from "src/api/client";
 import { useHistory, useParams } from "react-router-dom";
 import { useERC20Pool } from "src/hooks/ERC20_Pool";
@@ -37,7 +39,6 @@ export function AddressPage() {
   } catch {
     activeTab = 0;
   }
- 
 
   const [contracts, setContracts] = useState<AddressDetails | null>(null);
   const [sourceCode, setSourceCode] = useState<ISourceCode | null>(null);
@@ -56,11 +57,11 @@ export function AddressPage() {
   const erc20Token = erc20Map[id] || null;
   let oneAddress = id;
 
-  let type = erc721Map[id] ? "erc721" : getType(contracts, erc20Token);
-
-  if (erc1155Map[id]) {
-    type = "erc1155";
-  }
+  let type = erc721Map[id]
+    ? "erc721"
+    : erc1155Map[id]
+    ? "erc1155"
+    : getType(contracts, erc20Token);
 
   try {
     oneAddress = getAddress(oneAddress).bech32;
@@ -118,9 +119,21 @@ export function AddressPage() {
   useEffect(() => {
     const getInventory = async () => {
       try {
-        let inventory = await getTokenERC721Assets([id]);
+        if (type === "erc721" || type === "erc1155") {
+          let inventory =
+            type === "erc721"
+              ? await getTokenERC721Assets([id])
+              : await (await getTokenERC1155Assets([id])).map((item) => {
+                  if (item.meta && item.meta.image) {
+                    item.meta.image = `${process.env.REACT_APP_INDEXER_IPFS_GATEWAY}${item.meta.image}`;
+                  }
+                  return item;
+                });
 
-        setInventory(inventory);
+          setInventory(inventory.filter((item) => item.meta));
+        } else {
+          setInventory([]);
+        }
       } catch (err) {
         setInventory([]);
       }
@@ -133,6 +146,7 @@ export function AddressPage() {
       try {
         let erc721Tokens = await getUserERC721Assets([id]);
         let tokens = await getUserERC20Balances([id]);
+        let erc1155tokens = await getUserERC1155Balances([id]);
 
         const erc721BalanceMap = erc721Tokens.reduce((prev, cur) => {
           if (prev[cur.tokenAddress]) {
@@ -150,6 +164,11 @@ export function AddressPage() {
             ...token,
             balance: erc721BalanceMap[token.tokenAddress].toString(),
             isERC721: true,
+          })),
+          ...erc1155tokens.map((item) => ({
+            ...item,
+            balance: item.amount,
+            isERC1155: true,
           })),
         ]);
       } catch (err) {
@@ -229,7 +248,6 @@ export function AddressPage() {
             history.replace(
               `${history.location.pathname}?activeTab=${newActive}`
             );
-            console.log(history);
             setActiveIndex(newActive);
           }}
         >
@@ -253,7 +271,7 @@ export function AddressPage() {
             <Transactions type={"erc721"} />
           </Tab>
 
-          {type === "erc721" && inventory.length ? (
+          {(type === "erc721" || type === "erc1155") && inventory.length ? (
             <Tab
               title={<Text size="small">Inventory ({inventory.length})</Text>}
             >

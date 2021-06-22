@@ -1,6 +1,6 @@
 export interface IUserERC721Assets {
   lastUpdateBlockNumber: null | number;
-  meta: {
+  meta?: {
     attributes: { value: string; trait_type: string }[];
     collection_id: string;
     collection_url: string;
@@ -11,7 +11,10 @@ export interface IUserERC721Assets {
     image: string;
     license: string;
     name: string;
-    youtube_url: string;
+    type?: string
+    youtube_url?: string;
+    symbol?: string;
+    external_link?: string;
   };
   needUpdate: boolean;
   ownerAddress: string;

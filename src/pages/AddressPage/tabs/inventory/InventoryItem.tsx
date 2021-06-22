@@ -59,6 +59,8 @@ export function InventoryItem(props: IInventoryItemProps) {
   const description = props.item?.meta?.description || "";
   const { tokenID, ownerAddress } = props.item;
 
+  console.log(url)
+
   return (
     <InventItem>
       {isLoading ? (

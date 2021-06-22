@@ -9,6 +9,7 @@ import { BinancePairs } from "src/hooks/BinancePairHistoricalPrice";
 import { getBinancePairPrice } from "src/api/client";
 import { IPairPrice } from "src/api/client.interface";
 import { AnchorLink } from "./AnchorLink";
+import { useERC1155Pool } from "src/hooks/ERC1155_Pool";
 
 interface ONEValueProps {
   value: string | number;
@@ -28,6 +29,7 @@ export const TokenValueBalanced = (props: ONEValueProps) => {
   const { value, tokenAddress = "", style, formatNumber } = props;
   const erc20Map = useERC20Pool();
   const erc721Map = useERC721Pool();
+  const erc1155Map = useERC1155Pool();
   const { direction = "column" } = props;
 
   let pairSymbol = BinancePairs.find(
@@ -51,7 +53,8 @@ export const TokenValueBalanced = (props: ONEValueProps) => {
 
   //TODO remove hardcode
   const tokenInfo: any = erc20Map[tokenAddress] ||
-    erc721Map[tokenAddress] || { decimals: 14, symbol: "" };
+    erc721Map[tokenAddress] ||
+    erc1155Map[tokenAddress] || { decimals: 14, symbol: "" };
 
   if (!("decimals" in tokenInfo)) {
     tokenInfo.decimals = 0;
@@ -77,7 +80,7 @@ export const TokenValueBalanced = (props: ONEValueProps) => {
         {dollar && dollar.lastPrice ? (
           <Box direction={direction}>
             <Text size={"small"}>
-              {`${v}`} 
+              {`${v}`}
               <AnchorLink to={"/hrc20"} label={`${tokenInfo.symbol}`} />
             </Text>
             <Text size={"small"} style={{ paddingLeft: "0.3em" }}>
@@ -86,7 +89,11 @@ export const TokenValueBalanced = (props: ONEValueProps) => {
           </Box>
         ) : (
           <Text size={"small"}>
-            {`${v}`} <AnchorLink to={`/address/${tokenInfo.address}`} label={`${tokenInfo.symbol}`} />
+            {`${v}`}{" "}
+            <AnchorLink
+              to={`/address/${tokenInfo.address}`}
+              label={`${tokenInfo.symbol}`}
+            />
           </Text>
         )}
       </b>
