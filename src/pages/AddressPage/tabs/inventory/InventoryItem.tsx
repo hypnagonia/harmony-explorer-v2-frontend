@@ -84,7 +84,6 @@ export function InventoryItem(props: IInventoryItemProps) {
           style={{
             minHeight: "225px",
             maxHeight: "225px",
-            position: "relative",
             overflow: "hidden",
           }}
           background={"backgroundBack"}
