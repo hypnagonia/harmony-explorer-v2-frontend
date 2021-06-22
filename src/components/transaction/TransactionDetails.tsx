@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { Log, RPCStakingTransactionHarmony } from "src/types";
 
 import {
@@ -8,11 +8,11 @@ import {
   transactionPropertyDescriptions,
 } from "./helpers";
 import { Address, CalculateFee, TipContent } from "src/components/ui";
-import { Box, DataTable, Text, Tip } from "grommet";
+import { Anchor, Box, DataTable, Text, Tip } from "grommet";
 import { TransactionSubType } from "src/components/transaction/helpers";
 import { parseSuggestedEvent, DisplaySignature } from "src/web3/parseByteCode";
 
-import { CircleQuestion } from "grommet-icons";
+import { CaretDownFill, CaretUpFill, CircleQuestion } from "grommet-icons";
 import { ERC20Value } from "../ERC20Value";
 import { TokenValueBalanced } from "../ui/TokenValueBalanced";
 import { TxStatusComponent } from "../ui/TxStatusComponent";
@@ -128,6 +128,8 @@ export const TransactionDetails: FunctionComponent<TransactionDetailsProps> = ({
   logs = [],
   errorMsg,
 }) => {
+  const [showDetails, setShowDetails] = useState(true);
+
   const newTransaction = {
     Status:
       errorMsg === undefined ? <> </> : <TxStatusComponent msg={errorMsg} />,
@@ -136,9 +138,9 @@ export const TransactionDetails: FunctionComponent<TransactionDetailsProps> = ({
     gasPrice: <Box justify="center">{CalculateFee(transaction)}</Box>,
   };
   const keys = Object.keys(newTransaction);
-  const sortedKeys = keys.sort(
-    (a, b) => transactionPropertySort[b] - transactionPropertySort[a]
-  );
+  const sortedKeys = keys
+    .sort((a, b) => transactionPropertySort[b] - transactionPropertySort[a])
+    .filter((k) => showDetails || ["r", "s", "v"].indexOf(k) === -1);
 
   const txData = sortedKeys.reduce((arr, key) => {
     // @ts-ignore
@@ -179,6 +181,24 @@ export const TransactionDetails: FunctionComponent<TransactionDetailsProps> = ({
             },
           }}
         />
+      </Box>
+      <Box align="center" justify="center" style={{ userSelect: "none" }}>
+        <Anchor
+          onClick={() => setShowDetails(!showDetails)}
+          margin={{ top: "medium" }}
+        >
+          {showDetails ? (
+            <>
+              Show less&nbsp;
+              <CaretUpFill size="small" />
+            </>
+          ) : (
+            <>
+              Show more&nbsp;
+              <CaretDownFill size="small" />
+            </>
+          )}
+        </Anchor>
       </Box>
     </>
   );
