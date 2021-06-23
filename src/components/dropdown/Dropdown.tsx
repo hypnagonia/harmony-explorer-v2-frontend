@@ -164,7 +164,22 @@ export class Dropdown<T = {}> extends React.Component<
           flex
         >
           <Box flex>{this.props.renderValue(this.selectedValue)}</Box>
-          {this.state.isOpen ? <CaretUpFill /> : <CaretDownFill />}
+          {this.state.isOpen ? (
+            <CaretUpFill
+              onClick={(e) => {
+                console.log('CLICK') 
+                e.stopPropagation()
+                this.setState({ ...this.state, isOpen: false });
+              }}
+            />
+          ) : (
+            <CaretDownFill
+              onClick={(e) => {
+                e.stopPropagation()
+                this.setState({ ...this.state, isOpen: true });
+              }}
+            />
+          )}
         </Value>
         {this.state.isOpen ? (
           <DataList
