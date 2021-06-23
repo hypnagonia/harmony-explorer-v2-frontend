@@ -26,41 +26,49 @@ export const BlockPage = () => {
       if ("" + +id === id) {
         try {
           block = await getBlockByNumber([0, +id]);
-          setBlockNumber(0)
+          setBlockNumber(0);
         } catch {
-          if (!block && availableShards.find((i) => i === 1)) {
-            block = await getBlockByNumber([1, +id]);
-            setBlockNumber(1)
-          }
-
-          if (!block && availableShards.find((i) => i === 2)) {
-            block = await getBlockByNumber([2, +id]);
-            setBlockNumber(2)
-          }
-
-          if (!block && availableShards.find((i) => i === 3)) {
-            block = await getBlockByNumber([3, +id]);
-            setBlockNumber(3)
+          try {
+            if (!block && availableShards.find((i) => i === 1)) {
+              block = await getBlockByNumber([1, +id]);
+              setBlockNumber(1);
+            }
+          } catch {
+            try {
+              if (!block && availableShards.find((i) => i === 2)) {
+                block = await getBlockByNumber([2, +id]);
+                setBlockNumber(2);
+              }
+            } catch {
+              if (!block && availableShards.find((i) => i === 3)) {
+                block = await getBlockByNumber([3, +id]);
+                setBlockNumber(3);
+              }
+            }
           }
         }
       } else {
         try {
           block = await getBlockByHash([0, id]);
-          setBlockNumber(0)
+          setBlockNumber(0);
         } catch {
-          if (!block && availableShards.find((i) => i === 1)) {
-            block = await getBlockByHash([1, id]);
-            setBlockNumber(1)
-          }
-
-          if (!block && availableShards.find((i) => i === 2)) {
-            block = await getBlockByHash([2, id]);
-            setBlockNumber(2)
-          }
-
-          if (!block && availableShards.find((i) => i === 3)) {
-            block = await getBlockByHash([3, id]);
-            setBlockNumber(3)
+          try {
+            if (!block && availableShards.find((i) => i === 1)) {
+              block = await getBlockByHash([1, id]);
+              setBlockNumber(1);
+            }
+          } catch {
+            try {
+              if (!block && availableShards.find((i) => i === 2)) {
+                block = await getBlockByHash([2, id]);
+                setBlockNumber(2);
+              }
+            } catch {
+              if (!block && availableShards.find((i) => i === 3)) {
+                block = await getBlockByHash([3, id]);
+                setBlockNumber(3);
+              }
+            }
           }
         }
       }
@@ -78,8 +86,6 @@ export const BlockPage = () => {
   if (!block) {
     return null;
   }
-
-  console.log(blockNumber)
 
   return (
     <>

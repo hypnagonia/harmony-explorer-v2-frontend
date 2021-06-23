@@ -19,7 +19,12 @@ export const ContractDetails = (props: {
   sourceCode?: ISourceCode | null;
 }) => {
   if (!!props.sourceCode) {
-    return <VerifiedContractDetails sourceCode={props.sourceCode} />;
+    return (
+      <VerifiedContractDetails
+        sourceCode={props.sourceCode}
+        contracts={props.contracts}
+      />
+    );
   }
 
   if (!!props.contracts) {
@@ -72,7 +77,10 @@ export const NoVerifiedContractDetails = (props: {
   );
 };
 
-export const VerifiedContractDetails = (props: { sourceCode: ISourceCode }) => {
+export const VerifiedContractDetails = (props: {
+  sourceCode: ISourceCode;
+  contracts?: AddressDetails | null;
+}) => {
   if (!props.sourceCode) {
     return null;
   }
@@ -86,10 +94,11 @@ export const VerifiedContractDetails = (props: { sourceCode: ISourceCode }) => {
           <Item
             label="Optimization Enabled"
             value={
-              props.sourceCode.optimizer || 'No' +
-              (Number(props.sourceCode.optimizerTimes)
-                ? ` with ${props.sourceCode.optimizerTimes} runs`
-                : "")
+              props.sourceCode.optimizer ||
+              "No" +
+                (Number(props.sourceCode.optimizerTimes)
+                  ? ` with ${props.sourceCode.optimizerTimes} runs`
+                  : "")
             }
           />
           <Item
@@ -100,6 +109,16 @@ export const VerifiedContractDetails = (props: { sourceCode: ISourceCode }) => {
               </StyledTextArea>
             }
           />
+          {props.contracts ? (
+            <Item
+              label="Bytecode"
+              value={
+                <StyledTextArea readOnly={true} rows={7} cols={100}>
+                  {props.contracts.bytecode || ""}
+                </StyledTextArea>
+              }
+            />
+          ) : null}
         </Box>
       </Box>
     </Box>

@@ -6,6 +6,7 @@ import { IUserERC721Assets } from "src/api/client.interface";
 import { Box, Spinner, Text } from "grommet";
 import { Address } from "src/components/ui";
 import { Alert } from "grommet-icons";
+import { useHistory } from "react-router-dom";
 
 export interface IInventoryItemProps {
   item: IUserERC721Assets;
@@ -13,6 +14,7 @@ export interface IInventoryItemProps {
 
 const InventItem = styled.div`
   width: 215px;
+  height: 270px;
   position: relative;
   margin: 10px;
 `;
@@ -25,8 +27,7 @@ const Loader = styled.div`
 `;
 
 const InventImg = styled.img`
-  width: 215px;
-  height: 270px;
+  width: 100%;
 `;
 
 const ErrorPreview = styled(Box)`
@@ -54,55 +55,88 @@ const Image = styled(Box)`
 export function InventoryItem(props: IInventoryItemProps) {
   const [isLoading, setIsLoading] = useState(!!props.item?.meta?.image);
   const [isErrorLoading, setIsErrorLoading] = useState(false);
+  const history = useHistory();
 
   const url = props.item?.meta?.image || "";
   const description = props.item?.meta?.description || "";
   const { tokenID, ownerAddress } = props.item;
-
   return (
-    <InventItem>
-      {isLoading ? (
-        <Loader>
-          <Box align={"center"} justify={"center"} flex height={"100%"}>
-            <Spinner />
-          </Box>
-        </Loader>
-      ) : null}
-      {isErrorLoading ? (
-        <ErrorPreview direction={"column"} justify={"center"} align={"center"}>
-          <Image style={{ marginBottom: "10px" }} />
-          <Text style={{ opacity: 0.7 }}>No Image</Text>
-        </ErrorPreview>
-      ) : url ? (
-        <InventImg
-          title={description}
-          src={url}
-          onLoad={() => setIsLoading(false)}
-          onError={() => {
-            setIsLoading(false);
-            setIsErrorLoading(true);
+    <a
+      onClick={() =>
+        history.push(
+          `/inventory/${props.item.type}/${props.item.tokenAddress}/${props.item.tokenID}`
+        )
+      }
+      style={{ cursor: "pointer" }}
+    >
+      <InventItem>
+        {isLoading ? (
+          <Loader>
+            <Box align={"center"} justify={"center"} flex height={"100%"}>
+              <Spinner />
+            </Box>
+          </Loader>
+        ) : null}
+
+        <Box
+          direction={"column"}
+          align={"center"}
+          justify={"center"}
+          style={{
+            minHeight: "225px",
+            maxHeight: "225px",
+            overflow: "hidden",
           }}
-        />
-      ) : (
-        <EmptyImage direction={"column"} justify={"center"} align={"center"}>
-          <Image style={{ marginBottom: "10px" }} />
-          <Text style={{ opacity: 0.7 }}>No image</Text>
-        </EmptyImage>
-      )}
-      <Box direction={"column"} flex align={"center"}>
-        <Text title={tokenID} size="small">
-          #
-          {tokenID.length > 8
-            ? `${tokenID.slice(0, 5)}...${tokenID.slice(-5)}`
-            : tokenID}
-        </Text>
-        <Text>
-          <Text color="minorText" size="small">
-            Owner
-          </Text>{" "}
-          <Address address={ownerAddress} isShort={true} />
-        </Text>
-      </Box>
-    </InventItem>
+          background={"backgroundBack"}
+        >
+          {isErrorLoading ? (
+            <ErrorPreview
+              direction={"column"}
+              justify={"center"}
+              align={"center"}
+            >
+              <Image style={{ marginBottom: "10px" }} />
+              <Text style={{ opacity: 0.7 }}>No Image</Text>
+            </ErrorPreview>
+          ) : url ? (
+            <InventImg
+              title={description}
+              src={url}
+              onLoad={() => setIsLoading(false)}
+              onError={() => {
+                setIsLoading(false);
+                setIsErrorLoading(true);
+              }}
+            />
+          ) : (
+            <EmptyImage
+              direction={"column"}
+              justify={"center"}
+              align={"center"}
+            >
+              <Image style={{ marginBottom: "10px" }} />
+              <Text style={{ opacity: 0.7 }}>No image</Text>
+            </EmptyImage>
+          )}
+        </Box>
+
+        <Box direction={"column"} flex align={"center"}>
+          <Text title={tokenID} size="small">
+            #
+            {tokenID.length > 8
+              ? `${tokenID.slice(0, 5)}...${tokenID.slice(-5)}`
+              : tokenID}
+          </Text>
+          {ownerAddress ? (
+            <Text>
+              <Text color="minorText" size="small">
+                Owner
+              </Text>{" "}
+              <Address address={ownerAddress} isShort={true} />
+            </Text>
+          ) : null}
+        </Box>
+      </InventItem>{" "}
+    </a>
   );
 }

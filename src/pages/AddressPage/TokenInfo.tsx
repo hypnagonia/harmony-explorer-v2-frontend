@@ -1,6 +1,11 @@
 import React from "react";
-import { Box, Text } from "grommet";
-import { Address, formatNumber, TokenValue } from "src/components/ui";
+import { Box, Text, Tip } from "grommet";
+import {
+  Address,
+  formatNumber,
+  TipContent,
+  TokenValue,
+} from "src/components/ui";
 import { Dropdown } from "src/components/dropdown/Dropdown";
 import { BinancePairs } from "src/hooks/BinancePairHistoricalPrice";
 import Big from "big.js";
@@ -12,6 +17,7 @@ import { useCurrency } from "src/hooks/ONE-ETH-SwitcherHook";
 import { getAddress } from "src/utils/getAddress/GetAddress";
 import { useHistory } from "react-router-dom";
 import { useERC1155Pool } from "../../hooks/ERC1155_Pool";
+import { Alert } from "grommet-icons";
 
 interface Token {
   balance: string;
@@ -131,6 +137,17 @@ export function TokensInfo(props: { value: Token[] }) {
                   tokenAddress={item.tokenAddress}
                   style={{ flex: "1 1 50%", wordBreak: "break-word" }}
                 />
+                {item.isERC1155 && (item as any).needUpdate ? (
+                  <Tip
+                    dropProps={{ align: { left: "right" } }}
+                    content={<TipContent message={"Outdated"} />}
+                    plain
+                  >
+                    <span>
+                      <Alert size="small" />
+                    </span>
+                  </Tip>
+                ) : null}
               </Box>
             );
           }}
@@ -221,6 +238,23 @@ export function TokensInfo(props: { value: Token[] }) {
                   background={"backgroundBack"}
                 >
                   <Text>HRC721 tokens</Text>
+                </Box>
+              ),
+            },
+            {
+              groupBy: "isERC1155",
+              renderGroupItem: () => (
+                <Box
+                  style={{
+                    minHeight: "35px",
+                    borderRadius: "8px",
+                    marginBottom: "10px",
+                    marginTop: "10px",
+                  }}
+                  pad={"xsmall"}
+                  background={"backgroundBack"}
+                >
+                  <Text>HRC1155 tokens</Text>
                 </Box>
               ),
             },

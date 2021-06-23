@@ -28,7 +28,7 @@ const Icon = styled(StatusGood)`
 export const blockPropertyDisplayNames: Record<string, string> = {
   number: "Height",
   hash: "Hash",
-  miner: "Mined by",
+  miner: "Proposer",
   extraData: "Extra Data",
   gasLimit: "Gas Limit",
   gasUsed: "Gas Used",

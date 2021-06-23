@@ -7,8 +7,10 @@ import {
   getUserERC20Balances,
   getUserERC721Assets,
   getTokenERC721Assets,
+  getTokenERC1155Assets,
+  getUserERC1155Balances,
 } from "src/api/client";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { useERC20Pool } from "src/hooks/ERC20_Pool";
 import { useERC721Pool } from "src/hooks/ERC721_Pool";
 import { useERC1155Pool } from "src/hooks/ERC1155_Pool";
@@ -27,12 +29,23 @@ import { getAddress } from "src/utils";
 import { useCurrency } from "src/hooks/ONE-ETH-SwitcherHook";
 
 export function AddressPage() {
+  const history = useHistory();
+  const tabParamName = "activeTab=";
+  let activeTab = 0;
+  try {
+    activeTab = +history.location.search.slice(
+      history.location.search.indexOf("activeTab=") + tabParamName.length
+    );
+  } catch {
+    activeTab = 0;
+  }
+
   const [contracts, setContracts] = useState<AddressDetails | null>(null);
   const [sourceCode, setSourceCode] = useState<ISourceCode | null>(null);
   const [balance, setBalance] = useState<any>([]);
   const [tokens, setTokens] = useState<any>(null);
   const [inventory, setInventory] = useState<IUserERC721Assets[]>([]);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(+activeTab);
   const erc20Map = useERC20Pool();
   const erc721Map = useERC721Pool();
   const erc1155Map = useERC1155Pool();
@@ -44,11 +57,11 @@ export function AddressPage() {
   const erc20Token = erc20Map[id] || null;
   let oneAddress = id;
 
-  let type = erc721Map[id] ? "erc721" : getType(contracts, erc20Token);
-
-  if (erc1155Map[id]) {
-    type = "erc1155";
-  }
+  let type = erc721Map[id]
+    ? "erc721"
+    : erc1155Map[id]
+    ? "erc1155"
+    : getType(contracts, erc20Token);
 
   try {
     oneAddress = getAddress(oneAddress).bech32;
@@ -58,7 +71,7 @@ export function AddressPage() {
 
   useEffect(() => {
     const getActiveIndex = () => {
-      setActiveIndex(0);
+      setActiveIndex(activeTab || 0);
     };
     getActiveIndex();
   }, [id]);
@@ -106,9 +119,28 @@ export function AddressPage() {
   useEffect(() => {
     const getInventory = async () => {
       try {
-        let inventory = await getTokenERC721Assets([id]);
+        if (type === "erc721" || type === "erc1155") {
+          let inventory =
+            type === "erc721"
+              ? await getTokenERC721Assets([id])
+              : await (await getTokenERC1155Assets([id])).map((item) => {
+                  if (item.meta && item.meta.image) {
+                    item.meta.image = `${process.env.REACT_APP_INDEXER_IPFS_GATEWAY}${item.meta.image}`;
+                  }
+                  return item;
+                });
 
-        setInventory(inventory);
+          setInventory(
+            inventory
+              .filter((item) => item.meta)
+              .map((item) => {
+                item.type = type;
+                return item;
+              })
+          );
+        } else {
+          setInventory([]);
+        }
       } catch (err) {
         setInventory([]);
       }
@@ -121,6 +153,7 @@ export function AddressPage() {
       try {
         let erc721Tokens = await getUserERC721Assets([id]);
         let tokens = await getUserERC20Balances([id]);
+        let erc1155tokens = await getUserERC1155Balances([id]);
 
         const erc721BalanceMap = erc721Tokens.reduce((prev, cur) => {
           if (prev[cur.tokenAddress]) {
@@ -138,6 +171,11 @@ export function AddressPage() {
             ...token,
             balance: erc721BalanceMap[token.tokenAddress].toString(),
             isERC721: true,
+          })),
+          ...erc1155tokens.map((item) => ({
+            ...item,
+            balance: item.amount,
+            isERC1155: true,
           })),
         ]);
       } catch (err) {
@@ -213,7 +251,12 @@ export function AddressPage() {
           alignControls="start"
           justify="start"
           activeIndex={activeIndex}
-          onActive={(newActive) => setActiveIndex(newActive)}
+          onActive={(newActive) => {
+            history.replace(
+              `${history.location.pathname}?activeTab=${newActive}`
+            );
+            setActiveIndex(newActive);
+          }}
         >
           <Tab title={<Text size="small">Transactions</Text>}>
             <Transactions type={"transaction"} />
@@ -235,7 +278,7 @@ export function AddressPage() {
             <Transactions type={"erc721"} />
           </Tab>
 
-          {type === "erc721" && inventory.length ? (
+          {(type === "erc721" || type === "erc1155") && inventory.length ? (
             <Tab
               title={<Text size="small">Inventory ({inventory.length})</Text>}
             >

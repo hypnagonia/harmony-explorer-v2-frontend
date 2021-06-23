@@ -158,7 +158,7 @@ function getColumns(props: any) {
         </Text>
       ),
       render: (data: Erc20) => {
-        return <TokenValue value={data.totalSupply} formatNumber />;
+        return <TokenValue value={data.totalSupply} tokenAddress={data.address} formatNumber hideSymbol />;
       },
     },
     {
