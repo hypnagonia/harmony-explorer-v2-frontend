@@ -21,3 +21,7 @@ a {
 .g-table-no-header thead {
     display: none;
 }
+
+.g-table-header tbody tr td, .g-table-header tbody tr th  {
+    background: transparent !important;
+}
