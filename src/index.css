@@ -21,6 +21,9 @@ a {
 .g-table-no-header thead {
     display: none;
 }
+.g-table-body-last-col-right tbody tr td , .g-table-body-last-col-right tbody tr th {
+    background: transparent !important;
+}
 
 .g-table-header tbody tr td, .g-table-header tbody tr th  {
     background: transparent !important;
