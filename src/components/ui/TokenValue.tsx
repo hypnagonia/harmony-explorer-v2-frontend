@@ -11,6 +11,7 @@ interface ONEValueProps {
   tokenAddress?: string;
   style?: React.CSSProperties;
   formatNumber?: boolean;
+  hideSymbol?: boolean;
 }
 
 Big.DP = 21;
@@ -19,7 +20,13 @@ Big.PE = 15;
 
 // @ts-ignore
 export const TokenValue = (props: ONEValueProps) => {
-  const { value, tokenAddress = "", style, formatNumber } = props;
+  const {
+    value,
+    tokenAddress = "",
+    style,
+    formatNumber,
+    hideSymbol = false,
+  } = props;
   const erc20Map = useERC20Pool();
   const erc721Map = useERC721Pool();
   //TODO remove hardcode
@@ -39,7 +46,7 @@ export const TokenValue = (props: ONEValueProps) => {
 
   return (
     <Text size="small" style={style}>
-      <b>{v}</b> {tokenInfo.symbol}
+      <b>{v}</b> {hideSymbol ? null : tokenInfo.symbol}
     </Text>
   );
 };

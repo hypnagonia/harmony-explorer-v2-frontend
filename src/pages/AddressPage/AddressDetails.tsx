@@ -149,7 +149,14 @@ const addressPropertyDisplayValues: Record<
   name: (value) => value,
   symbol: (value) => value,
   decimals: (value) => value,
-  totalSupply: (value) => <TokenValue value={value} />,
+  totalSupply: (value, data) => (
+    <TokenValue
+      value={value}
+      tokenAddress={data.address}
+      hideSymbol
+      formatNumber
+    />
+  ),
   holders: (value: string) => formatNumber(+value),
   description: (value) => <>{value}</>,
 };
