@@ -26,15 +26,21 @@ function App() {
   );
 }
 
+let prevAddress = document.location.pathname;
+
 function AppWithHistory() {
   const themeMode = useThemeMode();
   const history = useHistory();
 
   useEffect(() => {
     const unlisten = history.listen((location, action) => {
-      const scrollBody = document.getElementById("scrollBody");
-      if (scrollBody) {
-        scrollBody.scrollTo({ top: 0 });
+      console.log(location);
+      if (prevAddress !== location.pathname) {
+        prevAddress = location.pathname;
+        const scrollBody = document.getElementById("scrollBody");
+        if (scrollBody) {
+          scrollBody.scrollTo({ top: 0 });
+        }
       }
     });
     return () => {
