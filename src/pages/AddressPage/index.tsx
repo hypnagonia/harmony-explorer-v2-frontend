@@ -205,7 +205,7 @@ export function AddressPage() {
     }
 
     if (type === "erc1155") {
-      const title = `ERC1155 ${data.name || ""}`;
+      const title = `HRC1155 ${data.name || ""}`;
       return meta.image ? (
         <Box direction={"row"} align={"center"}>
           <ERC1155Icon imageUrl={meta.image} />

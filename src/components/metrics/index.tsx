@@ -229,12 +229,16 @@ function BlockTransactionsHistory() {
     count: +i.count,
   }));
 
+  setInterval(() => {
+    console.log('test')
+  }, 3000)
+
   return (
     <Box>
       <Text size="small" color="minorText" style={{ flex: "1 0 auto" }}>
         {"TRANSACTION HISTORY"}
       </Text>
-      <Box style={{ flex: "1 1 100%" }}>
+      <Box style={{ flex: "1 1 100%", marginTop: "30px" }}>
         {isLoading && (
           <Box justify="center" align="center" height="110px">
             <Spinner />
@@ -243,6 +247,7 @@ function BlockTransactionsHistory() {
         {!isLoading && (
           <DataChart
             data={data}
+            detail
             axis={{
               x: {
                 granularity: "medium",
@@ -277,10 +282,10 @@ function BlockTransactionsHistory() {
             chart={[
               {
                 property: "count",
-                type: "line",
+                type: "bar",
                 color: "brand",
                 opacity: "medium",
-                thickness: "3px",
+                thickness: "small",
               },
             ]}
           />
