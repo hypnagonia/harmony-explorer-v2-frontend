@@ -57,7 +57,7 @@ export function MainPage() {
             .slice(0, 10)
         );
 
-        setBlockLatency(calculateSecondPerBlocks(blocksList));
+        setBlockLatency(calculateSecondPerBlocks(blocks));
       } catch (err) {
         console.log(err);
       }
