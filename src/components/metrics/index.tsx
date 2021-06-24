@@ -229,10 +229,6 @@ function BlockTransactionsHistory() {
     count: +i.count,
   }));
 
-  setInterval(() => {
-    console.log('test')
-  }, 3000)
-
   return (
     <Box>
       <Text size="small" color="minorText" style={{ flex: "1 0 auto" }}>
