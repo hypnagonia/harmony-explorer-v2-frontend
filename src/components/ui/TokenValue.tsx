@@ -37,6 +37,10 @@ export const TokenValue = (props: ONEValueProps) => {
     tokenInfo.decimals = 0;
   }
 
+  if (value === "0" || value === 0) {
+    return <Text size="small">—</Text>;
+  }
+
   if (!value) {
     return null;
   }

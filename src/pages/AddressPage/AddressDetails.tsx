@@ -120,6 +120,7 @@ const addressPropertyDisplayNames: Record<
   totalSupply: () => "Total Supply",
   holders: () => "Holders",
   description: () => "Description",
+  transactionHash: () => "Transaction Hash",
 };
 
 const addressPropertyDisplayValues: Record<
@@ -159,6 +160,7 @@ const addressPropertyDisplayValues: Record<
   ),
   holders: (value: string) => formatNumber(+value),
   description: (value) => <>{value}</>,
+  transactionHash: (value) => <Address address={value} type={'tx'} />
 };
 
 function sortByOrder(a: string, b: string) {
@@ -171,6 +173,7 @@ const addressPropertyOrder: Record<string, number> = {
   balance: 11,
   token: 12,
   creatorAddress: 13,
+  transactionHash: 14,
 
   name: 20,
   symbol: 21,

@@ -132,7 +132,15 @@ export const TransactionDetails: FunctionComponent<TransactionDetailsProps> = ({
 
   const newTransaction = {
     Status:
-      errorMsg === undefined ? <> </> : <TxStatusComponent msg={errorMsg} />,
+      errorMsg === undefined ? (
+        +transaction.shardID > 0 ? (
+          <TxStatusComponent msg={''} />
+        ) : (
+          <> </>
+        )
+      ) : (
+        <TxStatusComponent msg={errorMsg} />
+      ),
     ...transaction,
     tokenTransfers: tokenTransfers(logs),
     gasPrice: <Box justify="center">{CalculateFee(transaction)}</Box>,

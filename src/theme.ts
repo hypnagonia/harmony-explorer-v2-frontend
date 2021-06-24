@@ -16,6 +16,7 @@ export const theme = {
         color: "transparent",
       },
     },
+
     colors: {
       brand: palette.Purple,
       background: "white",

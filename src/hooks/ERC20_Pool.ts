@@ -28,6 +28,7 @@ export interface Erc20 {
   name: string;
   address: string;
   totalSupply: string;
+  circulating_supply: string
   holders: string;
   decimals: number;
   symbol: string;

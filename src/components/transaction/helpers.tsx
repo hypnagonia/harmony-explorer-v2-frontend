@@ -156,7 +156,7 @@ export const transactionPropertyDescriptions: Record<string, string> = {
 
 export const transactionPropertyDisplayValues: any = {
   // @ts-ignore
-  blockNumber: (value: any) => <BlockNumber number={value} />,
+  blockNumber: (value: any,data: any) => <BlockNumber number={value} hash={data['blockHash']} />,
   from: (value: any) => <Address address={value} />,
   value: (value: any, tx: any) => (
     <ONEValue value={value} timestamp={tx.timestamp} />

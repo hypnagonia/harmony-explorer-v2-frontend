@@ -154,6 +154,19 @@ function getColumns(props: any) {
       resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
+          Circulating Supply
+        </Text>
+      ),
+      render: (data: Erc20) => { 
+        return <TokenValue value={data.circulating_supply} tokenAddress={data.address} formatNumber hideSymbol />;
+      },
+    },
+    {
+      property: "totalSupply",
+      size: 'small',
+      resizeable: false,
+      header: (
+        <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
           Total supply
         </Text>
       ),
