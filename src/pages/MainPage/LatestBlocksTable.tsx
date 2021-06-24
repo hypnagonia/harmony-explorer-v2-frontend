@@ -1,12 +1,8 @@
-import React, { useEffect, useState } from "react";
-import dayjs from "dayjs";
-
-import { useMediaQuery } from "react-responsive";
+import React from "react";
 import { Box, DataTable, Spinner, Text } from "grommet";
 import { Block } from "src/types";
 import { useHistory } from "react-router-dom";
 import { formatNumber, RelativeTimer } from "src/components/ui";
-import { getBlocks } from "src/api/client";
 
 function getColumns(props: any) {
   const { history } = props;
@@ -85,62 +81,10 @@ function getColumns(props: any) {
   ];
 }
 
-const filter = {
-  offset: 0,
-  limit: 10,
-  orderBy: "number",
-  orderDirection: "desc",
-  value: 0,
-  filters: [],
-};
-
-export function LatestBlocksTable() {
+export const LatestBlocksTable = (params: { blocks: Block[] }) => {
   const history = useHistory();
-  const [blocks, setBlocks] = useState<Block[]>([]);
-  const isLess1110 = useMediaQuery({ maxDeviceWidth: "1110px" });
-  const availableShards = (process.env
-    .REACT_APP_AVAILABLE_SHARDS as string).split(",");
 
-  useEffect(() => {
-    let tId = 0 as any;
-    const exec = async () => {
-      try {
-        let blocks = await Promise.all(
-          availableShards.map((shardNumber) =>
-            getBlocks([+shardNumber, filter])
-          )
-        );
-
-        const blocksList = blocks.reduce((prev, cur, index) => {
-          prev = [
-            ...prev,
-            ...cur.map((item) => ({
-              ...item,
-              shardNumber: +availableShards[index],
-            })),
-          ];
-          return prev;
-        }, []);
-
-        setBlocks(
-          blocksList
-            .sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1))
-            .slice(0, 10)
-        );
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    exec();
-    tId = window.setInterval(exec, 3000);
-
-    return () => {
-      clearTimeout(tId);
-    };
-  }, []);
-
-  if (!blocks.length) {
+  if (!params.blocks.length) {
     return (
       <Box style={{ height: "700px" }} justify="center" align="center">
         <Spinner />
@@ -154,7 +98,7 @@ export function LatestBlocksTable() {
         className={"g-table-header"}
         style={{ width: "100%", minWidth: "620px" }}
         columns={getColumns({ history })}
-        data={blocks}
+        data={params.blocks}
         step={10}
         border={{
           header: {
@@ -169,4 +113,4 @@ export function LatestBlocksTable() {
       />
     </Box>
   );
-}
+};

@@ -121,6 +121,7 @@ const addressPropertyDisplayNames: Record<
   holders: () => "Holders",
   description: () => "Description",
   transactionHash: () => "Transaction Hash",
+  circulating_supply: () => "Circulating Supply",
 };
 
 const addressPropertyDisplayValues: Record<
@@ -160,7 +161,15 @@ const addressPropertyDisplayValues: Record<
   ),
   holders: (value: string) => formatNumber(+value),
   description: (value) => <>{value}</>,
-  transactionHash: (value) => <Address address={value} type={'tx'} />
+  transactionHash: (value) => <Address address={value} type={"tx"} />,
+  circulating_supply: (value, data) => (
+    <TokenValue
+      value={value}
+      tokenAddress={data.address}
+      hideSymbol
+      formatNumber
+    />
+  ),
 };
 
 function sortByOrder(a: string, b: string) {
@@ -172,6 +181,7 @@ const addressPropertyOrder: Record<string, number> = {
   value: 10,
   balance: 11,
   token: 12,
+  transactionHash: 10,
   creatorAddress: 13,
   transactionHash: 14,
 
@@ -179,6 +189,7 @@ const addressPropertyOrder: Record<string, number> = {
   symbol: 21,
   decimals: 22,
   totalSupply: 23,
+  circulating_supply: 23,
   holders: 24,
 
   solidityVersion: 31,

@@ -13,7 +13,7 @@ import { getTransactionCountLast14Days } from "src/api/client";
 
 import { getCount } from "src/api/client";
 
-export function Metrics() {
+export const Metrics = (params: { latency: number }) => {
   const isLessLaptop = useMediaQuery({ maxDeviceWidth: "852px" });
   const isLessTablet = useMediaQuery({ maxDeviceWidth: breakpoints.tablet });
   const isLessMobileM = useMediaQuery({ maxDeviceWidth: "468px" });
@@ -58,7 +58,7 @@ export function Metrics() {
       >
         <ShardCount />
         {!isLessMobileM && <Line horizontal />}
-        <BlockLatency />
+        <BlockLatency latency={params.latency} />
       </Box>
       {isLessLaptop && (
         <Line
@@ -78,7 +78,7 @@ export function Metrics() {
       </Box>
     </BasePage>
   );
-}
+};
 
 function ONEPrice() {
   const { lastPrice = 0, priceChangePercent = 0 } = useONEExchangeRate();
@@ -180,9 +180,7 @@ function ShardCount() {
   );
 }
 
-function BlockLatency() {
-  const latency = 2.02;
-
+function BlockLatency(params: { latency: number }) {
   return (
     <Box direction="row" align="stretch">
       <Box
@@ -197,7 +195,7 @@ function BlockLatency() {
           {"BLOCK LATENCY"}
         </Text>
         <Text size="small" weight="bold">
-          {formatNumber(latency)}s
+          {params.latency.toFixed(2)}s
         </Text>
       </Box>
     </Box>
