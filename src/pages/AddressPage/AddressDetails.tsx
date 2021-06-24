@@ -183,6 +183,7 @@ const addressPropertyOrder: Record<string, number> = {
   token: 12,
   transactionHash: 10,
   creatorAddress: 13,
+  transactionHash: 14,
 
   name: 20,
   symbol: 21,
