@@ -28,11 +28,53 @@ export const SearchInput = () => {
   const erc721Map = useERC721Pool();
   const erc1155Map = useERC1155Pool();
 
+  const dataTest = [
+    ...Object.keys(erc1155Map).map((address) => ({
+      symbol: erc1155Map[address].symbol,
+      name: erc1155Map[address].name,
+      type: "erc1155",
+      item: erc1155Map[address],
+    })),
+    ...Object.keys(erc20Map).map((address) => ({
+      symbol: erc20Map[address].symbol,
+      name: erc20Map[address].name,
+      type: "erc20",
+      item: erc20Map[address],
+    })),
+    ...Object.keys(erc721Map).map((address) => ({
+      symbol: erc721Map[address].symbol,
+      name: erc721Map[address].name,
+      type: "erc721",
+      item: erc721Map[address],
+    })),
+  ];
+
   const availableShards = (process.env.REACT_APP_AVAILABLE_SHARDS as string)
     .split(",")
     .map((t) => +t);
 
   const history = useHistory();
+  const onChange = useCallback((event) => {
+    const { value: newValue } = event.target;
+
+    setValue(newValue);
+
+    clearTimeout(timeoutID);
+    timeoutID = setTimeout(() => setReadySubmit(true), 200);
+  }, []);
+
+  useEffect(() => {
+    setResults(
+      dataTest.filter((item) => {
+        if (
+          item.name.toLowerCase().indexOf(value.toLowerCase()) >= 0 ||
+          item.symbol.toLowerCase().indexOf(value.toLowerCase()) >= 0
+        ) {
+          return true;
+        }
+      })
+    );
+  }, [value]);
 
   useEffect(() => {
     const exec = async () => {
@@ -141,46 +183,6 @@ export const SearchInput = () => {
     exec();
   }, [readySubmit]);
 
-  const onChange = useCallback((event) => {
-    const { value: newValue } = event.target;
-
-    const dataTest = [
-      ...Object.keys(erc1155Map).map((address) => ({
-        symbol: erc1155Map[address].symbol,
-        name: erc1155Map[address].name,
-        type: "erc1155",
-        item: erc1155Map[address],
-      })),
-      ...Object.keys(erc20Map).map((address) => ({
-        symbol: erc20Map[address].symbol,
-        name: erc20Map[address].name,
-        type: "erc20",
-        item: erc20Map[address],
-      })),
-      ...Object.keys(erc721Map).map((address) => ({
-        symbol: erc721Map[address].symbol,
-        name: erc721Map[address].name,
-        type: "erc721",
-        item: erc721Map[address],
-      })),
-    ];
-    setResults(
-      dataTest.filter((item) => {
-        if (
-          item.name.toLowerCase().indexOf(newValue.toLowerCase()) >= 0 ||
-          item.symbol.toLowerCase().indexOf(newValue.toLowerCase()) >= 0
-        ) {
-          return true;
-        }
-      })
-    );
-
-    setValue(newValue);
-
-    clearTimeout(timeoutID);
-    timeoutID = setTimeout(() => setReadySubmit(true), 200);
-  }, []);
-
   const Row = (options: { index: number; style: any }) => {
     const { index, style } = options;
     return (
@@ -249,7 +251,7 @@ export const SearchInput = () => {
         >
           <Box height={"40px"} pad={"small"}>
             <Text size={"small"}>
-               <b>{results.length}</b> found
+              <b>{results.length}</b> found
             </Text>
           </Box>
           <AutoSizer>

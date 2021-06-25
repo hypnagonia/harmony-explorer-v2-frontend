@@ -34,7 +34,6 @@ function AppWithHistory() {
 
   useEffect(() => {
     const unlisten = history.listen((location, action) => {
-      console.log(location)
       if (prevAddress !== location.pathname) {
         prevAddress = location.pathname;
         const scrollBody = document.getElementById("scrollBody");
@@ -58,6 +57,9 @@ function AppWithHistory() {
       id="scrollBody"
     >
       <ToasterComponent toaster={toaster} />
+      <ERC20_Pool />
+      <ERC721_Pool />
+      <ERC1155_Pool />
       <Box
         background="backgroundBack"
         style={{ margin: "auto", minHeight: "100%" }}
@@ -71,9 +73,6 @@ function AppWithHistory() {
         </Box>
         <AppFooter style={{ flex: "0 0 auto" }} />
         <ONE_USDT_Rate />
-        <ERC20_Pool />
-        <ERC721_Pool />
-        <ERC1155_Pool />
       </Box>
     </Grommet>
   );
