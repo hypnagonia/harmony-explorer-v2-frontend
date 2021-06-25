@@ -15,12 +15,14 @@ import { useERC1155Pool } from "src/hooks/ERC1155_Pool";
 
 import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
+import { Address } from "./Address";
 
 let timeoutID: any | null = null;
 
 export const SearchInput = () => {
   const [value, setValue] = useState("");
   const [readySubmit, setReadySubmit] = useState(false);
+  const [focus, setFocus] = useState(false);
   const [results, setResults] = useState<any[]>([]);
   const themeMode = useThemeMode();
 
@@ -189,14 +191,19 @@ export const SearchInput = () => {
       <div style={style}>
         <Box
           key={`${results[index].item.address}_${results[index].type}`}
-          direction={"column"}
+          direction={"row"}
           pad={"xsmall"}
           style={{
             cursor: "pointer",
-            minHeight: "50px",
+            minHeight: "40px",
             borderStyle: "solid",
-            borderWidth: "1px",
+            borderBottomWidth: "1px",
+            borderTopWidth: "0px",
+            borderLeftWidth: "0px",
+            borderRightWidth: "0px",
+            paddingLeft: "10px",
           }}
+          align={"center"}
           border={{
             color: "backgroundBack",
             size: "xsmall",
@@ -206,8 +213,17 @@ export const SearchInput = () => {
             setValue("");
           }}
         >
-          <Text size={"small"}>Name: {results[index].name}</Text>
-          <Text size={"small"}>Symbol: {results[index].symbol}</Text>
+          <Text size={"small"} style={{ paddingRight: "5px" }}>
+            Name {results[index].name} |
+          </Text>
+          <Text size={"small"} style={{ paddingRight: "5px" }}>
+            Symbol {results[index].symbol} |
+          </Text>
+          <Address
+            address={results[index].item.address}
+            noHistoryPush
+            displayHash
+          />
         </Box>
       </div>
     );
@@ -222,6 +238,12 @@ export const SearchInput = () => {
       <TextInput
         value={value}
         onChange={onChange}
+        onFocus={() => setFocus(true)}
+        onBlur={() => {
+          setTimeout(() => {
+            setFocus(false);
+          }, 100);
+        }}
         onKeyDown={(e) => {
           if (e.keyCode === 13) {
             onChange(e);
@@ -235,17 +257,22 @@ export const SearchInput = () => {
         }}
         placeholder="Search by Address / Transaction Hash / Block / Token"
       />
-      {results.length && value ? (
+      {focus && results.length && value ? (
         <Box
           style={{
             borderRadius: "6px",
             position: "absolute",
-            marginTop: "42px",
+            marginTop: "43px",
             width: "100%",
             zIndex: 9,
             maxHeight: "350px",
             minHeight: "350px",
-            overflow: "auto",
+            overflowY: "auto",
+            overflowX: "hidden",
+            boxShadow:
+              themeMode === "light"
+                ? "0 0 10px 1px rgba(0,0,0,0.05)"
+                : "0 0 10px 1px rgba(255,255,255,0.09)",
           }}
           background={"background"}
         >
@@ -260,7 +287,7 @@ export const SearchInput = () => {
                 className="List"
                 height={height}
                 itemCount={results.length}
-                itemSize={50}
+                itemSize={40}
                 width={width}
               >
                 {Row}
