@@ -34,6 +34,7 @@ function AppWithHistory() {
 
   useEffect(() => {
     const unlisten = history.listen((location, action) => {
+      console.log(location)
       if (prevAddress !== location.pathname) {
         prevAddress = location.pathname;
         const scrollBody = document.getElementById("scrollBody");

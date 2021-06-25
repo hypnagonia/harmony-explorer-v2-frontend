@@ -5,8 +5,6 @@ const getLatency = (blocks: Block[]) => {
     .map((b) => new Date(b.timestamp).getTime())
     .sort((a, b) => (a < b ? -1 : 1));
 
-  console.log(blocksTimestamp, blocks);
-
   const diffs = [];
 
   for (let i = blocksTimestamp.length - 1; i > 0; i--) {

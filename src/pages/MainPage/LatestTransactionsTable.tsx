@@ -45,7 +45,7 @@ function getColumns(props: any) {
           }}
           color="brand"
         >
-          <Address address={data.hash} isShort />
+          <Address address={data.hash} isShort noHistoryPush />
         </Text>
       ),
     },

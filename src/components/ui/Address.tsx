@@ -23,6 +23,7 @@ interface IAddress {
   style?: CSSProperties;
   color?: string;
   displayHash?: boolean;
+  noHistoryPush?: boolean;
 }
 
 export const Address = (props: IAddress) => {
@@ -107,6 +108,8 @@ export const Address = (props: IAddress) => {
           }}
           onClick={
             address === EMPTY_ADDRESS
+              ? undefined
+              : props.noHistoryPush
               ? undefined
               : () => history.push(`/${type}/${address}`)
           }
