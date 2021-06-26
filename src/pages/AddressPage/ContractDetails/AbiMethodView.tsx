@@ -57,6 +57,7 @@ export const AbiMethodsView = (props: {
   const [inputsValue, setInputsValue] = useState<string[]>(
     [...new Array(abiMethod.inputs?.length)].map(() => "")
   );
+  const [amount, setAmount] = useState("");
   const [error, setError] = useState("");
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
@@ -93,7 +94,12 @@ export const AbiMethodsView = (props: {
 
           res = await contract.methods[abiMethod.name]
             .apply(contract, convertInputs(inputsValue, abiMethod.inputs || []))
-            .send({ gasLimit: GAS_LIMIT, gasPrice: GAS_PRICE, from: account });
+            .send({
+              gasLimit: GAS_LIMIT,
+              gasPrice: GAS_PRICE,
+              from: account,
+              value: Number(amount) * 1e18,
+            });
         }
 
         setResult(typeof res === "object" ? res.status.toString() : res);
@@ -106,7 +112,10 @@ export const AbiMethodsView = (props: {
   };
 
   useEffect(() => {
-    if (!abiMethod.inputs || !abiMethod.inputs.length) {
+    if (
+      abiMethod.stateMutability !== "payable" &&
+      (!abiMethod.inputs || !abiMethod.inputs.length)
+    ) {
       query();
     }
   }, []);
@@ -125,6 +134,20 @@ export const AbiMethodsView = (props: {
       </NameWrapper>
 
       <Box pad="20px">
+        {abiMethod.stateMutability === "payable" ? (
+          <Field gap="5px">
+            <Text size="small">
+              payableAmount <span>ONE</span>
+            </Text>
+            <SmallTextInput
+              value={amount}
+              placeholder={`payableAmount (ONE)`}
+              onChange={(evt: React.ChangeEvent<HTMLInputElement>) =>
+                setAmount(evt.currentTarget.value)
+              }
+            />
+          </Field>
+        ) : null}
         {abiMethod.inputs && abiMethod.inputs.length ? (
           <Box gap="12px">
             {abiMethod.inputs.map((input, idx) => {

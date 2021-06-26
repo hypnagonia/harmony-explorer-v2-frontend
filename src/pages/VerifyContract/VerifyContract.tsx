@@ -17,9 +17,10 @@ import { toaster } from "src/App";
 const Field = styled(Box)``;
 
 const Wrapper = styled(Box)`
-    & * input, & * textarea {
-        font-weight: 400 !important;
-    }
+  & * input,
+  & * textarea {
+    font-weight: 400 !important;
+  }
 `;
 
 export function uniqid(prefix = "", random = false) {
@@ -55,12 +56,16 @@ export class VerifyContract extends React.Component<
     const { isLoading, statusText, ...state } = this.state;
 
     try {
-      await verifyContractCode({
+      const res = await verifyContractCode({
         ...state,
         libraries: this.state.libraries.map((i) => i.value),
       });
 
-      this.setState({ ...this.state, statusText: "Success" });
+      if (res === true) {
+        this.setState({ ...this.state, statusText: "Success" });
+      } else {
+        this.setState({ ...this.state, statusText: "Error" });
+      }
     } catch {
       this.setState({ ...this.state, statusText: "Error" });
     } finally {
