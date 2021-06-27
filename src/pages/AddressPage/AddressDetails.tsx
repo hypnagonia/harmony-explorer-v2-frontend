@@ -1,10 +1,11 @@
 import React from "react";
-import { Box, Text } from "grommet";
+import { Box, Text, Tip } from "grommet";
 import {
   Address,
   ExpandString,
   formatNumber,
   ONEValue,
+  TipContent,
   TokenValue,
 } from "src/components/ui";
 import { AddressDetails } from "src/types";
@@ -13,6 +14,7 @@ import { Erc20, useERC20Pool } from "src/hooks/ERC20_Pool";
 import { ONEValueDropdown } from "src/components/ui/OneValueDropdown";
 import { binanceAddressMap } from "src/config/BinanceAddressMap";
 import { useERC1155Pool } from "src/hooks/ERC1155_Pool";
+import { CircleQuestion } from "grommet-icons";
 
 interface AddressDetailsProps {
   address: string;
@@ -152,23 +154,80 @@ const addressPropertyDisplayValues: Record<
   symbol: (value) => value,
   decimals: (value) => value,
   totalSupply: (value, data) => (
-    <TokenValue
-      value={value}
-      tokenAddress={data.address}
-      hideSymbol
-      formatNumber
-    />
+    <Box direction={"row"}>
+      <TokenValue
+        value={value}
+        tokenAddress={data.address}
+        hideSymbol
+        formatNumber
+      />
+      <Tip
+        dropProps={{ align: { left: "right" } }}
+        content={
+          <TipContent
+            message={`last update block height ${formatNumber(
+              +data.lastUpdateBlockNumber
+            )}`}
+          />
+        }
+        plain
+      >
+        <span style={{ marginLeft: "5px" }}>
+          <CircleQuestion size="small" />
+        </span>
+      </Tip>
+    </Box>
   ),
-  holders: (value: string) => formatNumber(+value),
+  holders: (value: string, data: any) => {
+    return (
+      <Box direction={"row"}>
+        <>{formatNumber(+value)}</>
+        <Tip
+          dropProps={{ align: { left: "right" } }}
+          content={
+            <TipContent
+              message={`last update block height ${formatNumber(
+                +data.lastUpdateBlockNumber
+              )}`}
+            />
+          }
+          plain
+        >
+          <span style={{ marginLeft: "5px" }}>
+            <CircleQuestion size="small" />
+          </span>
+        </Tip>
+      </Box>
+    );
+  },
   description: (value) => <>{value}</>,
   transactionHash: (value) => <Address address={value} type={"tx"} />,
   circulating_supply: (value, data) => (
-    <TokenValue
-      value={value}
-      tokenAddress={data.address}
-      hideSymbol
-      formatNumber
-    />
+
+    <Box direction={"row"}>
+      <TokenValue
+        value={value}
+        tokenAddress={data.address}
+        hideSymbol
+        formatNumber
+      />
+      <Tip
+        dropProps={{ align: { left: "right" } }}
+        content={
+          <TipContent
+            message={`last update block height ${formatNumber(
+              +data.lastUpdateBlockNumber
+            )}`}
+          />
+        }
+        plain
+      >
+        <span style={{ marginLeft: "5px" }}>
+          <CircleQuestion size="small" />
+        </span>
+      </Tip>
+    </Box>
+
   ),
 };
 

@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { Search } from "grommet-icons";
-import { Box, TextInput } from "grommet";
+import { Box, TextInput, Text } from "grommet";
 import { useHistory } from "react-router-dom";
 import {
   getBlockByHash,
@@ -9,19 +9,74 @@ import {
 } from "src/api/client";
 import { useThemeMode } from "../../hooks/themeSwitcherHook";
 import { getAddress } from "src/utils";
+import { useERC20Pool } from "src/hooks/ERC20_Pool";
+import { useERC721Pool } from "src/hooks/ERC721_Pool";
+import { useERC1155Pool } from "src/hooks/ERC1155_Pool";
+
+import { FixedSizeList as List } from "react-window";
+import AutoSizer from "react-virtualized-auto-sizer";
+import { Address } from "./Address";
 
 let timeoutID: any | null = null;
 
 export const SearchInput = () => {
   const [value, setValue] = useState("");
   const [readySubmit, setReadySubmit] = useState(false);
+  const [focus, setFocus] = useState(false);
+  const [results, setResults] = useState<any[]>([]);
   const themeMode = useThemeMode();
+
+  const erc20Map = useERC20Pool();
+  const erc721Map = useERC721Pool();
+  const erc1155Map = useERC1155Pool();
+
+  const dataTest = [
+    ...Object.keys(erc1155Map).map((address) => ({
+      symbol: erc1155Map[address].symbol,
+      name: erc1155Map[address].name,
+      type: "erc1155",
+      item: erc1155Map[address],
+    })),
+    ...Object.keys(erc20Map).map((address) => ({
+      symbol: erc20Map[address].symbol,
+      name: erc20Map[address].name,
+      type: "erc20",
+      item: erc20Map[address],
+    })),
+    ...Object.keys(erc721Map).map((address) => ({
+      symbol: erc721Map[address].symbol,
+      name: erc721Map[address].name,
+      type: "erc721",
+      item: erc721Map[address],
+    })),
+  ];
 
   const availableShards = (process.env.REACT_APP_AVAILABLE_SHARDS as string)
     .split(",")
     .map((t) => +t);
 
   const history = useHistory();
+  const onChange = useCallback((event) => {
+    const { value: newValue } = event.target;
+
+    setValue(newValue);
+
+    clearTimeout(timeoutID);
+    timeoutID = setTimeout(() => setReadySubmit(true), 200);
+  }, []);
+
+  useEffect(() => {
+    setResults(
+      dataTest.filter((item) => {
+        if (
+          item.name.toLowerCase().indexOf(value.toLowerCase()) >= 0 ||
+          item.symbol.toLowerCase().indexOf(value.toLowerCase()) >= 0
+        ) {
+          return true;
+        }
+      })
+    );
+  }, [value]);
 
   useEffect(() => {
     const exec = async () => {
@@ -66,7 +121,7 @@ export const SearchInput = () => {
                     return;
                   }
                   history.push(`/block/${v}`);
-                  setValue('')
+                  setValue("");
                 })
                 .catch(),
               getTransactionByField([0, "hash", v])
@@ -130,18 +185,65 @@ export const SearchInput = () => {
     exec();
   }, [readySubmit]);
 
-  const onChange = useCallback((event) => {
-    const { value: newValue } = event.target;
-    setValue(newValue);
-    clearTimeout(timeoutID);
-    timeoutID = setTimeout(() => setReadySubmit(true), 200);
-  }, []);
+  const Row = (options: { index: number; style: any }) => {
+    const { index, style } = options;
+    return (
+      <div style={style}>
+        <Box
+          key={`${results[index].item.address}_${results[index].type}`}
+          direction={"row"}
+          pad={"xsmall"}
+          style={{
+            cursor: "pointer",
+            minHeight: "40px",
+            borderStyle: "solid",
+            borderBottomWidth: "1px",
+            borderTopWidth: "0px",
+            borderLeftWidth: "0px",
+            borderRightWidth: "0px",
+            paddingLeft: "10px",
+          }}
+          align={"center"}
+          border={{
+            color: "backgroundBack",
+            size: "xsmall",
+          }}
+          onClick={() => {
+            history.push(`/address/${results[index].item.address}`);
+            setValue("");
+          }}
+        >
+          <Text size={"small"} style={{ paddingRight: "5px" }}>
+            Name {results[index].name} |
+          </Text>
+          <Text size={"small"} style={{ paddingRight: "5px" }}>
+            Symbol {results[index].symbol} |
+          </Text>
+          <Address
+            address={results[index].item.address}
+            noHistoryPush
+            displayHash
+          />
+        </Box>
+      </div>
+    );
+  };
 
   return (
-    <Box width="100%" pad={{ vertical: "medium" }}>
+    <Box
+      width="100%"
+      pad={{ vertical: "medium" }}
+      style={{ position: "relative" }}
+    >
       <TextInput
         value={value}
         onChange={onChange}
+        onFocus={() => setFocus(true)}
+        onBlur={() => {
+          setTimeout(() => {
+            setFocus(false);
+          }, 100);
+        }}
         onKeyDown={(e) => {
           if (e.keyCode === 13) {
             onChange(e);
@@ -155,6 +257,45 @@ export const SearchInput = () => {
         }}
         placeholder="Search by Address / Transaction Hash / Block / Token"
       />
+      {focus && results.length && value ? (
+        <Box
+          style={{
+            borderRadius: "6px",
+            position: "absolute",
+            marginTop: "43px",
+            width: "100%",
+            zIndex: 9,
+            maxHeight: "350px",
+            minHeight: "350px",
+            overflowY: "auto",
+            overflowX: "hidden",
+            boxShadow:
+              themeMode === "light"
+                ? "0 0 10px 1px rgba(0,0,0,0.05)"
+                : "0 0 10px 1px rgba(255,255,255,0.09)",
+          }}
+          background={"background"}
+        >
+          <Box height={"40px"} pad={"small"}>
+            <Text size={"small"}>
+              <b>{results.length}</b> found
+            </Text>
+          </Box>
+          <AutoSizer>
+            {({ height, width }) => (
+              <List
+                className="List"
+                height={height}
+                itemCount={results.length}
+                itemSize={40}
+                width={width}
+              >
+                {Row}
+              </List>
+            )}
+          </AutoSizer>
+        </Box>
+      ) : null}
     </Box>
   );
 };

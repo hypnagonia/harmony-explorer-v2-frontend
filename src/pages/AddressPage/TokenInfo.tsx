@@ -26,6 +26,7 @@ interface Token {
   isERC721?: boolean;
   isERC1155?: boolean;
   symbol: string;
+  tokenID?: string;
 }
 
 export function TokensInfo(props: { value: Token[] }) {
@@ -76,7 +77,7 @@ export function TokensInfo(props: { value: Token[] }) {
     <Box>
       <Box style={{ width: "550px" }}>
         <Dropdown<Token>
-          keyField={"tokenAddress"}
+          keyField={"tokenID"}
           itemHeight={"55px"}
           itemStyles={{ padding: "5px", marginBottom: "10px" }}
           searchable={(item, searchText) => {
@@ -107,6 +108,7 @@ export function TokensInfo(props: { value: Token[] }) {
             history.push(`/address/${item.tokenAddress}`);
           }}
           renderItem={(item) => {
+            console.log(item);
             const symbol =
               erc20Map[item.tokenAddress]?.symbol ||
               erc721Map[item.tokenAddress]?.symbol ||
@@ -114,7 +116,7 @@ export function TokensInfo(props: { value: Token[] }) {
 
             return (
               <Box
-                direction="row"
+                direction="column"
                 style={{
                   width: "100%",
                   flex: "0 0 auto",
@@ -123,30 +125,41 @@ export function TokensInfo(props: { value: Token[] }) {
                   padding: "5px",
                 }}
               >
-                <Box style={{ flex: "1 1 50%" }}>
-                  <Address
-                    address={item.tokenAddress}
-                    style={{ flex: "1 1 50%" }}
+                <Box direction={"row"}>
+                  <Box style={{ flex: "1 1 50%" }} direction={'row'}>
+                    <Address
+                      address={item.tokenAddress}
+                      style={{ flex: "1 1 50%" }}
+                    />
+                    <Text
+                      size={"small"}
+                      color={"minorText"}
+                      style={{ marginLeft: "5px" }}
+                    >
+                      ({symbol})
+                    </Text>
+                  </Box>
+                  <TokenValueBalanced
+                    value={item.balance}
+                    tokenAddress={item.tokenAddress}
+                    style={{ flex: "1 1 50%", wordBreak: "break-word" }}
                   />
-                  <Text size={"small"} color={"minorText"}>
-                    {symbol}
-                  </Text>
+                  {item.isERC1155 && (item as any).needUpdate ? (
+                    <Tip
+                      dropProps={{ align: { left: "right" } }}
+                      content={<TipContent message={"Outdated"} />}
+                      plain
+                    >
+                      <span>
+                        <Alert size="small" />
+                      </span>
+                    </Tip>
+                  ) : null}
                 </Box>
-                <TokenValueBalanced
-                  value={item.balance}
-                  tokenAddress={item.tokenAddress}
-                  style={{ flex: "1 1 50%", wordBreak: "break-word" }}
-                />
-                {item.isERC1155 && (item as any).needUpdate ? (
-                  <Tip
-                    dropProps={{ align: { left: "right" } }}
-                    content={<TipContent message={"Outdated"} />}
-                    plain
-                  >
-                    <span>
-                      <Alert size="small" />
-                    </span>
-                  </Tip>
+                {item.isERC1155 ? (
+                  <Text size={"small"} color={"minorText"}>
+                    Token ID: {item.tokenID}{" "}
+                  </Text>
                 ) : null}
               </Box>
             );

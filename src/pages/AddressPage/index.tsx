@@ -101,7 +101,6 @@ export function AddressPage() {
   useEffect(() => {
     const getContracts = async () => {
       try {
-        console.log("test");
         let contracts: any = await getContractsByField([0, "address", id]);
 
         const mergedContracts: AddressDetails = erc721Map[contracts.address]

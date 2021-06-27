@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Box, DataTable, Text, Spinner } from "grommet";
+import { Box, DataTable, Text, Spinner, Tip } from "grommet";
 import { Filter } from "src/types";
 import { useHistory } from "react-router-dom";
 import {
@@ -8,10 +8,12 @@ import {
   formatNumber,
   PaginationNavigator,
   PaginationRecordsPerPage,
+  TipContent,
   TokenValue,
   TPaginationAction,
 } from "src/components/ui";
 import { Erc20 } from "../../hooks/ERC20_Pool";
+import { CircleQuestion } from "grommet-icons";
 
 interface TransactionTableProps {
   data: any[];
@@ -118,7 +120,7 @@ function getColumns(props: any) {
   return [
     {
       property: "name",
-      size: 'small',
+      size: "small",
       resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
@@ -129,7 +131,7 @@ function getColumns(props: any) {
     },
     {
       property: "symbol",
-      size: 'xsmall',
+      size: "xsmall",
       resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
@@ -150,20 +152,45 @@ function getColumns(props: any) {
     },
     {
       property: "totalSupply",
-      size: 'small',
+      size: "small",
       resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
           Circulating Supply
         </Text>
       ),
-      render: (data: Erc20) => { 
-        return <TokenValue value={data.circulating_supply} tokenAddress={data.address} formatNumber hideSymbol />;
+      render: (data: Erc20) => {
+        console.log(data);
+        return (
+          <Box direction={"row"}>
+            <TokenValue
+              value={data.circulating_supply}
+              tokenAddress={data.address}
+              formatNumber
+              hideSymbol
+            />
+            <Tip
+              dropProps={{ align: { left: "right" } }}
+              content={
+                <TipContent
+                  message={`last update block height ${formatNumber(
+                    +data.lastUpdateBlockNumber
+                  )}`}
+                />
+              }
+              plain
+            >
+              <span style={{ marginLeft: "5px" }}>
+                <CircleQuestion size="small" />
+              </span>
+            </Tip>
+          </Box>
+        );
       },
     },
     {
       property: "totalSupply",
-      size: 'small',
+      size: "small",
       resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
@@ -171,12 +198,36 @@ function getColumns(props: any) {
         </Text>
       ),
       render: (data: Erc20) => {
-        return <TokenValue value={data.totalSupply} tokenAddress={data.address} formatNumber hideSymbol />;
+        return (
+          <Box direction={"row"}>
+            <TokenValue
+              value={data.totalSupply}
+              tokenAddress={data.address}
+              formatNumber
+              hideSymbol
+            />
+            <Tip
+              dropProps={{ align: { right: "left" } }}
+              content={
+                <TipContent
+                  message={`last update block height ${formatNumber(
+                    +data.lastUpdateBlockNumber
+                  )}`}
+                />
+              }
+              plain
+            >
+              <span style={{ marginLeft: "5px" }}>
+                <CircleQuestion size="small" />
+              </span>
+            </Tip>
+          </Box>
+        );
       },
     },
     {
       property: "holders",
-      size: 'small',
+      size: "small",
       resizeable: false,
       header: (
         <Text color="minorText" size="small" style={{ fontWeight: 300 }}>
@@ -184,9 +235,26 @@ function getColumns(props: any) {
         </Text>
       ),
       render: (data: Erc20) => (
-        <Text size="small" style={{ fontWeight: 300 }}>
-          {formatNumber(+data.holders)}
-        </Text>
+        <Box direction={"row"} justify={"end"}>
+          <Text size="small" style={{ fontWeight: 300 }}>
+            {formatNumber(+data.holders)}
+          </Text>
+          <Tip
+            dropProps={{ align: { right: "left" } }}
+            content={
+              <TipContent
+                message={`last update block height ${formatNumber(
+                  +data.lastUpdateBlockNumber
+                )}`}
+              />
+            }
+            plain
+          >
+            <span style={{ marginLeft: "5px" }}>
+              <CircleQuestion size="small" />
+            </span>
+          </Tip>
+        </Box>
       ),
     },
   ];

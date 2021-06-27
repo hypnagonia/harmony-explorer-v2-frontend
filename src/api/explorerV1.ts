@@ -1,3 +1,5 @@
+import { AbiItem } from "web3-utils";
+
 export interface IVerifyContractData {
   contractAddress: string;
   compiler: string;
@@ -85,4 +87,5 @@ export interface ISourceCode {
   constructorArguments: string;
   chainType: string;
   contractName: string;
+  abi?: AbiItem[];
 }

@@ -32,6 +32,7 @@ export interface Erc20 {
   holders: string;
   decimals: number;
   symbol: string;
+  lastUpdateBlockNumber: string
   meta?: {
     name?: string
     image?: string;
