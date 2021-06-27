@@ -87,7 +87,7 @@ export const SearchInput = () => {
       if ("" + +v === v && +v > 0) {
         // is block number
         history.push(`/block/${v}`);
-        setValue("");
+        setValue('')
         return;
       }
 
@@ -97,7 +97,7 @@ export const SearchInput = () => {
       if (v.length === 42 && /^0x[a-f0-9]+$/.test(v)) {
         // address
         history.push(`/address/${v}`);
-        setValue("");
+        setValue('')
         return;
       }
 
@@ -106,7 +106,7 @@ export const SearchInput = () => {
         const ethAddress = getAddress(v).basicHex;
 
         history.push(`/address/${ethAddress}`);
-        setValue("");
+        setValue('')
         return;
       }
 
@@ -130,7 +130,7 @@ export const SearchInput = () => {
                     return;
                   }
                   history.push(`/tx/${v}`);
-                  setValue("");
+                  setValue('')
                 })
                 .catch(),
               getStakingTransactionByField([0, "hash", v]).then((res) => {
@@ -139,7 +139,7 @@ export const SearchInput = () => {
                 }
 
                 history.push(`/staking-tx/${v}`);
-                setValue("");
+                setValue('')
               }),
             ]);
           } catch {
@@ -153,14 +153,14 @@ export const SearchInput = () => {
                         return;
                       }
                       history.push(`/block/${v}`);
-                      setValue("");
+                      setValue('')
                     }),
                     getTransactionByField([shard, "hash", v]).then((res) => {
                       if (!res) {
                         return;
                       }
                       history.push(`/tx/${v}`);
-                      setValue("");
+                      setValue('')
                     }),
                     getStakingTransactionByField([shard, "hash", v]).then(
                       (res) => {
@@ -169,7 +169,7 @@ export const SearchInput = () => {
                         }
 
                         history.push(`/staking-tx/${v}`);
-                        setValue("");
+                        setValue('')
                       }
                     ),
                   ]);

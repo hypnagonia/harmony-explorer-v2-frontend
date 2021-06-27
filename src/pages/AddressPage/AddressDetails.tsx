@@ -203,6 +203,7 @@ const addressPropertyDisplayValues: Record<
   description: (value) => <>{value}</>,
   transactionHash: (value) => <Address address={value} type={"tx"} />,
   circulating_supply: (value, data) => (
+
     <Box direction={"row"}>
       <TokenValue
         value={value}
@@ -226,6 +227,7 @@ const addressPropertyDisplayValues: Record<
         </span>
       </Tip>
     </Box>
+
   ),
 };
 
